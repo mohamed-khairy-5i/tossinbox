@@ -1,0 +1,54 @@
+{
+  "name": "tossinbox",
+  "version": "0.1.0",
+  "description": "Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Mohamed Khairy <mohamed-khairy-5i@users.noreply.github.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamed-khairy-5i/tossinbox.git"
+  },
+  "homepage": "https://github.com/mohamed-khairy-5i/tossinbox#readme",
+  "bugs": "https://github.com/mohamed-khairy-5i/tossinbox/issues",
+  "keywords": [
+    "temp-email",
+    "disposable-email",
+    "temporary-inbox",
+    "otp",
+    "mcp",
+    "mcp-server",
+    "ai-agents",
+    "cli",
+    "email",
+    "testing",
+    "automation"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "tossinbox": "dist/cli.js",
+    "tossinbox-mcp": "dist/mcp.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "llms.txt"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "commander": "^12.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.4"
+  }
+}
