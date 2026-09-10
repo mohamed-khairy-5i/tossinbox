@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TossInbox — Disposable email for humans and AI agents</title>
+<meta name="description" content="Spawn a disposable email inbox, wait for the verification code, toss it. CLI + MCP server for AI agents.">
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #21262d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #10b981;
+    --accent-soft: rgba(16, 185, 129, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  nav {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--text); }
+  .brand img { width: 32px; height: 32px; border-radius: 8px; }
+  nav .links a { margin-left: 20px; color: var(--muted); font-size: 14px; }
+  nav .links a:hover { color: var(--text); }
+
+  .hero { padding: 64px 0 48px; text-align: center; }
+  .hero img.banner {
+    width: 100%; max-width: 720px; border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.15; letter-spacing: -0.02em; }
+  h1 .accent { color: var(--accent); }
+  .tagline { color: var(--muted); font-size: 18px; margin-top: 14px; }
+  .tagline-ar { direction: rtl; color: var(--muted); margin-top: 6px; font-size: 15px; }
+  .cta { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 12px 22px; border-radius: 10px;
+    font-weight: 600; font-size: 15px;
+  }
+  .btn-primary { background: var(--accent); color: #06281d; }
+  .btn-primary:hover { text-decoration: none; filter: brightness(1.1); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); background: var(--panel); }
+  .btn-ghost:hover { text-decoration: none; border-color: var(--muted); }
+
+  section { padding: 40px 0; border-top: 1px solid var(--border); }
+  h2 { font-size: 24px; margin-bottom: 18px; letter-spacing: -0.01em; }
+  p.lead { color: var(--muted); max-width: 640px; }
+
+  pre {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; overflow-x: auto;
+    font-size: 14px; margin: 14px 0; color: var(--text);
+  }
+  pre .c { color: var(--muted); }
+  pre .a { color: var(--accent); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+  .card .n {
+    display: inline-flex; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    align-items: center; justify-content: center; font-weight: 700; margin-bottom: 10px;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 14px; }
+  .card code { background: var(--bg); padding: 2px 6px; border-radius: 6px; font-size: 13px; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 48px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand"><img src="logo.png" alt="TossInbox logo"> TossInbox</span>
+    <span class="links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox#readme">Docs</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <img class="banner" src="banner.png" alt="An envelope being tossed into a trash bin">
+    <h1>Spawn an inbox.<br>Get the code. <span class="accent">Toss it.</span></h1>
+    <p class="tagline">Disposable email inboxes for humans and AI agents — CLI + MCP server.</p>
+    <p class="tagline-ar">صندوق بريد مؤقت… استخدمه واكتمه.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/mohamed-khairy-5i/tossinbox#readme">Get started</a>
+      <a class="btn btn-ghost" href="https://github.com/mohamed-khairy-5i/tossinbox">Star on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Install</h2>
+    <pre><span class="c"># Homebrew</span>
+<span class="a">brew install</span> mohamed-khairy-5i/tap/tossinbox
+
+<span class="c"># npm (from GitHub)</span>
+<span class="a">npm install -g</span> github:mohamed-khairy-5i/tossinbox
+
+<span class="c"># or run without installing</span>
+<span class="a">npx</span> github:mohamed-khairy-5i/tossinbox spawn</pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="n">1</span>
+        <h3>Spawn</h3>
+        <p>Create a brand-new disposable address in one command: <code>tossinbox spawn</code></p>
+      </div>
+      <div class="card">
+        <span class="n">2</span>
+        <h3>Wait</h3>
+        <p>Block until the verification email lands: <code>tossinbox wait --code</code></p>
+      </div>
+      <div class="card">
+        <span class="n">3</span>
+        <h3>Toss</h3>
+        <p>Delete it server-side and wipe local state: <code>tossinbox toss</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Built for AI agents</h2>
+    <p class="lead">TossInbox ships an MCP server, so Claude, Cursor, and any MCP client can create inboxes
+    and collect verification codes as native tools. Agent-first CLI: <code>--json</code> everywhere,
+    documented exit codes, zero interactive prompts.</p>
+<pre>{
+  "mcpServers": {
+    "tossinbox": {
+      "command": "npx",
+      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+    }
+  }
+}</pre>
+    <p class="lead">Tools: <code>create_inbox</code> · <code>list_messages</code> · <code>read_message</code> · <code>wait_for_code</code></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span><a href="https://github.com/mohamed-khairy-5i/tossinbox">github.com/mohamed-khairy-5i/tossinbox</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

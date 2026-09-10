@@ -1,6 +1,16 @@
 # TossInbox
 
+<p align="center">
+  <img src="docs/logo.png" width="140" alt="TossInbox logo">
+</p>
+
 **Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.**
+
+<p align="center">
+  <a href="https://mohamed-khairy-5i.github.io/tossinbox/">Website</a> ·
+  <a href="https://github.com/mohamed-khairy-5i/tossinbox#readme">Docs</a> ·
+  <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+</p>
 
 [![CI](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
@@ -41,7 +51,10 @@ $ tossinbox toss
 Requires Node.js 18+.
 
 ```bash
-# Install from GitHub (npm registry publish coming soon)
+# Homebrew
+brew install mohamed-khairy-5i/tap/tossinbox
+
+# npm from GitHub (npm registry publish coming soon)
 npm install -g github:mohamed-khairy-5i/tossinbox
 
 # Or run without installing
@@ -97,6 +110,22 @@ tossinbox wait --code --json
 | `1` | Error (provider / network / unexpected) |
 | `2` | Timeout (`wait` expired without a matching message) |
 | `3` | Not found (no saved inbox, unknown address, or message missing) |
+
+## GitHub Action (email verification in CI)
+
+Use TossInbox directly in your workflows:
+
+```yaml
+- uses: mohamed-khairy-5i/tossinbox@v1
+  id: mail
+  with:
+    args: "wait --code --json"
+    timeout: "180"
+
+- run: echo "Verification code: ${{ steps.mail.outputs.code }}"
+```
+
+Outputs: `address` (the disposable inbox) and `code` (the extracted OTP).
 
 ## MCP Server (for AI agents)
 
@@ -158,11 +187,12 @@ Adding a provider means implementing a small interface (`createInbox`,
 
 ## Roadmap
 
+- [x] GitHub Action: `mohamed-khairy-5i/tossinbox@v1`
+- [x] Homebrew tap: `brew install mohamed-khairy-5i/tap/tossinbox`
+- [x] Project website on GitHub Pages
 - [ ] Publish `tossinbox` + `tossinbox-mcp` to the npm registry
-- [ ] Homebrew tap and formula
-- [ ] GitHub Action: `tossinbox/wait-for-code@v1` for CI email-verification tests
+- [ ] Homebrew core formula (after community adoption)
 - [ ] More providers and provider failover
-- [ ] Project documentation site
 
 ## License
 

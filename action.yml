@@ -1,0 +1,54 @@
+name: "TossInbox"
+description: "Disposable email inboxes in CI — spawn an inbox, wait for the verification code, toss it"
+branding:
+  icon: "mail"
+  color: "green"
+
+inputs:
+  args:
+    description: "Arguments passed to the tossinbox CLI (defaults to waiting for a verification code)"
+    required: false
+    default: "wait --code --json"
+  timeout:
+    description: "Timeout in seconds passed to wait"
+    required: false
+    default: "120"
+
+outputs:
+  address:
+    description: "The disposable inbox address"
+    value: ${{ steps.spawn.outputs.address }}
+  code:
+    description: "Verification code extracted from the first matching message"
+    value: ${{ steps.wait.outputs.code }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install TossInbox
+      shell: bash
+      run: npm install --global "github:mohamed-khairy-5i/tossinbox#main"
+
+    - name: Spawn inbox
+      id: spawn
+      shell: bash
+      run: |
+        out="$(tossinbox spawn --json)"
+        addr="$(printf '%s' "$out" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).inbox.address))')"
+        echo "address=$addr" >> "$GITHUB_OUTPUT"
+
+    - name: Wait for message
+      id: wait
+      shell: bash
+      env:
+        TOSSINBOX_ARGS: ${{ inputs.args }}
+        TOSSINBOX_TIMEOUT: ${{ inputs.timeout }}
+      run: |
+        out="$(tossinbox $TOSSINBOX_ARGS --timeout "$TOSSINBOX_TIMEOUT")"
+        printf '%s\n' "$out"
+        c="$(printf '%s' "$out" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(j.code||"")}catch{console.log("")}})')"
+        echo "code=$c" >> "$GITHUB_OUTPUT"
