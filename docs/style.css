@@ -153,7 +153,7 @@ a.chip:hover { color: var(--text); border-color: var(--faint); text-decoration: 
 .page-lead b { color: var(--text); font-weight: 600; }
 .page-lead code { background: var(--panel-2); padding: 2px 7px; border-radius: 6px; color: var(--text); }
 /* links inside a text block must be distinguishable without color alone (axe: link-in-text-block) */
-.note a, .tbl-caption a, .answer a, .page-lead a, .crumbs a { text-decoration: underline; text-underline-offset: 3px; }
+.note a, .tbl-caption a, .answer a, .page-lead a, .crumbs a, .foot-legal a { text-decoration: underline; text-underline-offset: 3px; }
 .crumbs { font-family: ui-monospace, monospace; font-size: 12px; color: var(--faint); margin-bottom: 16px; }
 .crumbs a { color: var(--muted); }
 .crumbs .sep { margin: 0 7px; }
@@ -209,6 +209,12 @@ pre.block .s { color: var(--amber); }
 
 .flag { color: var(--muted); }
 .flag b { color: var(--text); font-weight: 600; font-family: ui-monospace, monospace; font-size: 13px; }
+
+/* short fact list (answer-engine extractable capabilities) */
+ul.facts { list-style: none; max-width: 680px; margin: 0 0 30px; padding: 0; display: grid; gap: 10px; }
+ul.facts li { color: var(--muted); font-size: 14.5px; line-height: 1.65; padding-left: 24px; position: relative; }
+ul.facts li::before { content: "→"; position: absolute; left: 0; top: 0; color: var(--accent); font-family: ui-monospace, monospace; }
+ul.facts code { background: var(--panel-2); padding: 2px 7px; border-radius: 6px; color: var(--text); font-size: 13px; white-space: nowrap; }
 
 /* agent flow */
 .agent-flow {

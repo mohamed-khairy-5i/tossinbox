@@ -32,19 +32,6 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Person",
-      "@id": "https://github.com/mohamed-khairy-5i",
-      "name": "Mohamed Khairy",
-      "url": "https://github.com/mohamed-khairy-5i"
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://mohamed-khairy-5i.github.io/tossinbox/#website",
-      "url": "https://mohamed-khairy-5i.github.io/tossinbox/",
-      "name": "TossInbox",
-      "publisher": {"@id": "https://github.com/mohamed-khairy-5i"}
-    },
-    {
       "@type": "SoftwareApplication",
       "@id": "https://mohamed-khairy-5i.github.io/tossinbox/#app",
       "name": "TossInbox",
@@ -61,7 +48,29 @@
       "publisher": {"@id": "https://github.com/mohamed-khairy-5i"},
       "isAccessibleForFree": true,
       "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-      "keywords": "disposable email CLI, temporary email MCP server, throwaway inbox, verification code automation"
+      "keywords": "disposable email CLI, temporary email MCP server, throwaway inbox, verification code automation",
+      "featureList": [
+        "Disposable inboxes from the terminal, no sign-up",
+        "Wait for the verification code with one command",
+        "Built-in MCP server for AI agents",
+        "--json output on every command",
+        "Documented exit codes 0 to 4",
+        "GitHub Action for CI flows",
+        "Homebrew tap, npm, npx"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mohamed-khairy-5i.github.io/tossinbox/#website",
+      "url": "https://mohamed-khairy-5i.github.io/tossinbox/",
+      "name": "TossInbox",
+      "publisher": {"@id": "https://github.com/mohamed-khairy-5i"}
+    },
+    {
+      "@type": "Person",
+      "@id": "https://github.com/mohamed-khairy-5i",
+      "name": "Mohamed Khairy",
+      "url": "https://github.com/mohamed-khairy-5i"
     }
   ]
 }
@@ -98,7 +107,7 @@
     <div class="wrap">
       <div>
         <p class="eyebrow">TossInbox · Disposable email for AI agents</p>
-        <h1><span class="sr-only">TossInbox — </span>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
+        <h1><span class="sr-only">TossInbox: disposable email CLI and MCP server for AI agents. </span>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
         <p class="hero-sub">Built <b>agent-first</b>: <code>--json</code> on every command,
         exit codes documented <code>0-4</code>, zero interactive prompts.</p>
         <div class="install-inline">
@@ -179,6 +188,11 @@
       <h2>Why TossInbox</h2>
       <p class="sec-lead">Disposable email already exists as ad-covered websites and as
       human-first CLI wrappers around a dead upstream API. TossInbox is the one built for programs.</p>
+      <ul class="facts">
+        <li><code>tossinbox spawn</code> gives you a real inbox on a live provider. No sign-up, no browser, no ads.</li>
+        <li><code>tossinbox wait --code</code> blocks until the verification email lands, prints the code, exits clean. Script it.</li>
+        <li><code>tossinbox toss</code> deletes the inbox. Gone from the server, gone from disk.</li>
+      </ul>
       <div class="tbl-wrap">
         <table class="tbl">
           <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
@@ -222,7 +236,7 @@
 
 <footer>
   <div class="wrap">
-    <span>MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-legal">MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
     <span class="foot-links">
       <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
