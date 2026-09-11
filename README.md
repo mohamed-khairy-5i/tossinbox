@@ -154,6 +154,16 @@ TossInbox ships with an MCP server exposing four tools:
 
 Or after a global install, simply use `tossinbox-mcp` as the command.
 
+### Works with any AI agent
+
+TossInbox is deliberately agent-agnostic — no lock-in to one vendor:
+
+- **Any MCP client**: Claude Desktop, Claude Code, Cursor, Windsurf, Cline,
+  Codex CLI, and every other MCP-compatible client
+- **Any shell-capable agent**: the CLI itself is the interface — `--json` on
+  every command, exit codes `0–4` documented, zero interactive prompts
+- **CI/CD**: the GitHub Action below needs no agent at all
+
 ## Using TossInbox with an agent (copy-paste flow)
 
 ```text
@@ -192,8 +202,10 @@ Adding a provider means implementing a small interface (`createInbox`,
 - [x] Homebrew tap: `brew install mohamed-khairy-5i/tap/tossinbox`
 - [x] Project website on GitHub Pages
 - [ ] Publish `tossinbox` + `tossinbox-mcp` to the npm registry
+- [ ] `mail.gw` provider (mail.tm-compatible API — small lift)
+- [ ] `tempmail.lol` provider (free API)
+- [ ] Provider failover: auto-switch when a provider is down
 - [ ] Homebrew core formula (after community adoption)
-- [ ] More providers and provider failover
 
 ## License
 
