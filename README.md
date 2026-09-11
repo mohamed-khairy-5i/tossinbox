@@ -1,7 +1,10 @@
 # TossInbox
 
 <p align="center">
-  <img src="docs/logo.png" width="140" alt="TossInbox logo">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-light.png">
+    <img src="docs/logo.png" width="140" alt="TossInbox logo">
+  </picture>
 </p>
 
 **Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.**
