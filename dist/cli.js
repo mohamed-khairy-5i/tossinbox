@@ -1,18 +1,19 @@
 #!/usr/bin/env node
-import { Command } from "commander";
+import { Command, CommanderError } from "commander";
 import { DEFAULT_PROVIDER, getProvider, listProviders, listSavedInboxes, removeInbox, clearInboxes, resolveInbox, saveInbox, statePath, waitForMessage, htmlToText, ProviderError, } from "./core/index.js";
-const VERSION = "0.1.0";
+import { VERSION } from "./version.js";
 /* Documented exit codes:
  * 0  success
  * 1  error (provider / network / unexpected)
  * 2  timeout (wait expired without a matching message)
  * 3  not found (no saved inbox, unknown address, or message missing)
- * 4  usage error (bad flags / unknown provider)
+ * 4  usage error (bad flags / unknown command / unknown provider)
  */
 const EXIT_OK = 0;
 const EXIT_ERROR = 1;
 const EXIT_TIMEOUT = 2;
 const EXIT_NOT_FOUND = 3;
+const EXIT_USAGE = 4;
 const program = new Command();
 program
     .name("tossinbox")
@@ -24,6 +25,15 @@ function jsonMode() {
 }
 function out(data) {
     console.log(JSON.stringify(data, null, 2));
+}
+/** Resolve a provider by name; an unknown provider is a usage error (exit 4). */
+function providerOrExit(name) {
+    try {
+        return getProvider(name);
+    }
+    catch (err) {
+        fail(err, EXIT_USAGE);
+    }
 }
 function fail(err, exitCode = EXIT_ERROR) {
     const message = err instanceof Error ? err.message : String(err);
@@ -73,7 +83,7 @@ program
     .option("-l, --label <label>", "optional label to identify this inbox")
     .action(async (opts) => {
     try {
-        const provider = getProvider(opts.provider);
+        const provider = providerOrExit(opts.provider);
         const inbox = await provider.createInbox({ label: opts.label });
         await saveInbox(inbox);
         if (jsonMode()) {
@@ -101,8 +111,8 @@ program
     try {
         const inbox = await resolveInbox(opts.address);
         if (!inbox)
-            fail(jsonMode() ? new Error("No saved inbox found. Run: tossinbox spawn") : new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
-        const provider = getProvider(inbox.provider);
+            fail(new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
+        const provider = providerOrExit(inbox.provider);
         const messages = await provider.listMessages(inbox);
         if (jsonMode()) {
             out({ ok: true, inbox: inbox.address, provider: inbox.provider, count: messages.length, messages });
@@ -129,7 +139,7 @@ program
         const inbox = await resolveInbox(opts.address);
         if (!inbox)
             fail(new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
-        const provider = getProvider(inbox.provider);
+        const provider = providerOrExit(inbox.provider);
         const message = await provider.readMessage(inbox, id);
         if (jsonMode()) {
             out({ ok: true, inbox: inbox.address, message: jsonMessage(message, true) });
@@ -152,13 +162,21 @@ program
     .option("-i, --interval <seconds>", "poll interval in seconds", "5")
     .action(async (opts) => {
     try {
+        const timeoutSeconds = Number(opts.timeout);
+        const intervalSeconds = Number(opts.interval);
+        if (!Number.isFinite(timeoutSeconds) || timeoutSeconds < 0) {
+            fail(new Error(`Invalid --timeout "${opts.timeout}" (expected a number of seconds)`), EXIT_USAGE);
+        }
+        if (!Number.isFinite(intervalSeconds) || intervalSeconds < 0) {
+            fail(new Error(`Invalid --interval "${opts.interval}" (expected a number of seconds)`), EXIT_USAGE);
+        }
         const inbox = await resolveInbox(opts.address);
         if (!inbox)
             fail(new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
-        const provider = getProvider(inbox.provider);
+        const provider = providerOrExit(inbox.provider);
         const { timedOut, message } = await waitForMessage(provider, inbox, {
-            timeoutSeconds: Number(opts.timeout),
-            intervalSeconds: Number(opts.interval),
+            timeoutSeconds,
+            intervalSeconds,
             from: opts.from,
             subject: opts.subject,
         });
@@ -228,7 +246,7 @@ program
             fail(new Error("Nothing to toss"), EXIT_NOT_FOUND);
         }
         for (const inbox of targets) {
-            const provider = getProvider(inbox.provider);
+            const provider = providerOrExit(inbox.provider);
             if (provider.destroyInbox) {
                 await provider.destroyInbox(inbox);
             }
@@ -276,4 +294,18 @@ program
     const { startMcpServer } = await import("./mcp.js");
     await startMcpServer();
 });
-program.parseAsync(process.argv).catch((err) => fail(err));
+program.exitOverride();
+// exitOverride is per-command: apply it to every subcommand too, so bad flags
+// surface as CommanderError (-> exit 4) instead of commander's default exit 1.
+for (const cmd of program.commands)
+    cmd.exitOverride();
+program.parseAsync(process.argv).catch((err) => {
+    if (err instanceof CommanderError) {
+        // --help / --version exit cleanly even under exitOverride
+        if (err.code === "commander.helpDisplayed" || err.code === "commander.help" || err.code === "commander.version") {
+            exitWith(EXIT_OK);
+        }
+        fail(err, EXIT_USAGE); // bad flags / unknown command = usage error
+    }
+    fail(err);
+});

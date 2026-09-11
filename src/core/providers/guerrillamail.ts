@@ -1,7 +1,9 @@
 import { ProviderError, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
 import { extractCode } from "../otp.js";
+import { VERSION } from "../../version.js";
 
 const BASE = "https://api.guerrillamail.com/ajax.php";
+const REQUEST_TIMEOUT_MS = 20_000;
 
 interface GuerrillaAddress {
   email_addr: string;
@@ -28,7 +30,11 @@ function timestampToIso(ts?: number): string | undefined {
 async function call(params: Record<string, string>): Promise<Record<string, unknown>> {
   const url = new URL(BASE);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-  const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "tossinbox/0.1.0" } });
+  // Hard timeout on every request — an agent must never hang forever.
+  const res = await fetch(url, {
+    headers: { Accept: "application/json", "User-Agent": `tossinbox/${VERSION}` },
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
   if (!res.ok) throw new ProviderError("guerrillamail", `HTTP ${res.status}`, res.status);
   return (await res.json()) as Record<string, unknown>;
 }

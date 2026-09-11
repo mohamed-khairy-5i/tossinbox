@@ -1,30 +1,35 @@
+import { randomBytes } from "node:crypto";
 import { ProviderError } from "../types.js";
 import { extractCode } from "../otp.js";
+import { VERSION } from "../../version.js";
 const BASE = "https://api.mail.tm";
-function randomUser(length = 12) {
-    const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+const REQUEST_TIMEOUT_MS = 20_000;
+function randomString(length, alphabet) {
+    const bytes = randomBytes(length);
     let out = "";
     for (let i = 0; i < length; i++) {
-        out += alphabet[Math.floor(Math.random() * alphabet.length)];
+        out += alphabet[bytes[i] % alphabet.length];
     }
     return out;
 }
+function randomUser(length = 12) {
+    return randomString(length, "abcdefghijklmnopqrstuvwxyz0123456789");
+}
 function randomPassword(length = 16) {
-    const alphabet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let out = "";
-    for (let i = 0; i < length; i++) {
-        out += alphabet[Math.floor(Math.random() * alphabet.length)];
-    }
-    return out;
+    return randomString(length, "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789");
 }
 function headers(token) {
     const h = {
         Accept: "application/json",
-        "User-Agent": "tossinbox/0.1.0",
+        "User-Agent": `tossinbox/${VERSION}`,
     };
     if (token)
         h.Authorization = `Bearer ${token}`;
     return h;
+}
+/** Hard timeout on every request — an agent must never hang forever. */
+function fetchJson(url, init) {
+    return fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
 }
 /** mail.tm allows ~8 requests per second; retry once on 429. */
 async function request(method, url, options = {}) {
@@ -33,10 +38,10 @@ async function request(method, url, options = {}) {
         headers: { ...headers(options.token), ...(options.body ? { "Content-Type": "application/json" } : {}) },
         body: options.body ? JSON.stringify(options.body) : undefined,
     };
-    let res = await fetch(url, init);
+    let res = await fetchJson(url, init);
     if (res.status === 429) {
         await new Promise((r) => setTimeout(r, 1200));
-        res = await fetch(url, init);
+        res = await fetchJson(url, init);
     }
     return res;
 }

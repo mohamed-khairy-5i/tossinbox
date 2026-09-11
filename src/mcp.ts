@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -12,10 +15,12 @@ import {
   type Inbox,
   type Message,
 } from "./core/index.js";
+import { VERSION } from "./version.js";
 
-function text(result: unknown) {
+function text(result: unknown, isError = false) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    ...(isError ? { isError: true } : {}),
   };
 }
 
@@ -41,7 +46,7 @@ async function requireInbox(address?: string): Promise<Inbox | null> {
 export async function startMcpServer(): Promise<void> {
   const server = new McpServer({
     name: "tossinbox",
-    version: "0.1.0",
+    version: VERSION,
   });
 
   server.registerTool(
@@ -66,7 +71,7 @@ export async function startMcpServer(): Promise<void> {
           hint: `Use address "${inbox.address}" in the sign-up form, then call wait_for_code after submitting it.`,
         });
       } catch (err) {
-        return text({ ok: false, error: err instanceof Error ? err.message : String(err) });
+        return text({ ok: false, error: err instanceof Error ? err.message : String(err) }, true);
       }
     }
   );
@@ -84,13 +89,13 @@ export async function startMcpServer(): Promise<void> {
     async ({ address }) => {
       try {
         const inbox = await requireInbox(address);
-        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." });
+        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." }, true);
 
         const p = getProvider(inbox.provider);
         const messages = await p.listMessages(inbox);
         return text({ ok: true, inbox: inbox.address, count: messages.length, messages });
       } catch (err) {
-        return text({ ok: false, error: err instanceof Error ? err.message : String(err) });
+        return text({ ok: false, error: err instanceof Error ? err.message : String(err) }, true);
       }
     }
   );
@@ -109,13 +114,13 @@ export async function startMcpServer(): Promise<void> {
     async ({ id, address }) => {
       try {
         const inbox = await requireInbox(address);
-        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." });
+        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." }, true);
 
         const p = getProvider(inbox.provider);
         const message = await p.readMessage(inbox, id);
         return text({ ok: true, message: messageJson(message, false) });
       } catch (err) {
-        return text({ ok: false, error: err instanceof Error ? err.message : String(err) });
+        return text({ ok: false, error: err instanceof Error ? err.message : String(err) }, true);
       }
     }
   );
@@ -136,7 +141,7 @@ export async function startMcpServer(): Promise<void> {
     async ({ address, timeout_seconds, from, subject }) => {
       try {
         const inbox = await requireInbox(address);
-        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." });
+        if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." }, true);
 
         const p = getProvider(inbox.provider);
         const { timedOut, message } = await waitForMessage(p, inbox, {
@@ -151,18 +156,18 @@ export async function startMcpServer(): Promise<void> {
             error: "timeout",
             detail: `No matching message within ${timeout_seconds ?? 120}s`,
             inbox: inbox.address,
-          });
+          }, true);
         }
         if (!message.code) {
           return text({
             ok: false,
             error: "message arrived but no code was detected",
             message: messageJson(message, false),
-          });
+          }, true);
         }
         return text({ ok: true, code: message.code, inbox: inbox.address, message: messageJson(message, false) });
       } catch (err) {
-        return text({ ok: false, error: err instanceof Error ? err.message : String(err) });
+        return text({ ok: false, error: err instanceof Error ? err.message : String(err) }, true);
       }
     }
   );
@@ -173,8 +178,22 @@ export async function startMcpServer(): Promise<void> {
   console.error("tossinbox MCP server running on stdio");
 }
 
-/* When executed directly, start the server. */
-if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
+/* When executed directly, start the server. This must also work when the file
+ * is launched through an npm/Homebrew bin symlink — resolve both paths before
+ * comparing, and fall back to the script name for exotic shim wrappers. */
+function isDirectRun(): boolean {
+  if (!process.argv[1]) return false;
+  try {
+    const arg = fs.realpathSync(process.argv[1]);
+    const self = fs.realpathSync(fileURLToPath(import.meta.url));
+    if (arg === self) return true;
+    return path.basename(arg) === "mcp.js";
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
   startMcpServer().catch((err) => {
     console.error(err);
     process.exit(1);

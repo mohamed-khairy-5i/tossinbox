@@ -110,6 +110,7 @@ tossinbox wait --code --json
 | `1` | Error (provider / network / unexpected) |
 | `2` | Timeout (`wait` expired without a matching message) |
 | `3` | Not found (no saved inbox, unknown address, or message missing) |
+| `4` | Usage error (bad flags, unknown command, or unknown provider) |
 
 ## GitHub Action (email verification in CI)
 
@@ -197,3 +198,7 @@ Adding a provider means implementing a small interface (`createInbox`,
 ## License
 
 [MIT](./LICENSE) © Mohamed Khairy
+
+Contributing: see [CONTRIBUTING.md](./CONTRIBUTING.md) ·
+Security: see [SECURITY.md](./SECURITY.md) ·
+Changes: see [CHANGELOG.md](./CHANGELOG.md)

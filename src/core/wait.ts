@@ -48,8 +48,16 @@ export async function waitForMessage(
     });
 
     if (matched) {
-      const message = await provider.readMessage(inbox, matched.id);
-      return { timedOut: false, message };
+      // One retry after a short delay — a transient read error should not
+      // throw away a wait that may have taken minutes.
+      try {
+        const message = await provider.readMessage(inbox, matched.id);
+        return { timedOut: false, message };
+      } catch {
+        await sleep(1500);
+        const message = await provider.readMessage(inbox, matched.id);
+        return { timedOut: false, message };
+      }
     }
 
     const remaining = deadline - Date.now();

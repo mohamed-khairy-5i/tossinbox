@@ -5,13 +5,26 @@ export function statePath() {
     return process.env.TOSSINBOX_STATE || path.join(os.homedir(), ".tossinbox", "state.json");
 }
 export async function loadState() {
+    let raw;
     try {
-        const raw = await fs.readFile(statePath(), "utf8");
+        raw = await fs.readFile(statePath(), "utf8");
+    }
+    catch (err) {
+        // Only a missing file means "no state yet" — anything else must be loud,
+        // otherwise the next write would silently destroy saved inboxes.
+        const code = err.code;
+        if (code === "ENOENT")
+            return { inboxes: [] };
+        throw new Error(`Cannot read state file ${statePath()} (${err.message}). ` +
+            "Fix its permissions or point TOSSINBOX_STATE at a writable path.");
+    }
+    try {
         const parsed = JSON.parse(raw);
         return { inboxes: Array.isArray(parsed.inboxes) ? parsed.inboxes : [] };
     }
     catch {
-        return { inboxes: [] };
+        throw new Error(`State file ${statePath()} is not valid JSON. ` +
+            "Refusing to overwrite it — fix or delete the file manually (it may contain inboxes you still need).");
     }
 }
 export async function saveInbox(inbox) {

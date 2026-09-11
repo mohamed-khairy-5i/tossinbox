@@ -19,7 +19,7 @@ inboxes when done. It is designed agent-first: every CLI command supports
 - `tossinbox providers` — list providers (default: `mailtm`, also `guerrillamail`)
 
 All commands accept `--json`. Exit codes: 0 success, 1 error, 2 timeout,
-3 not found.
+3 not found, 4 usage error (bad flags / unknown provider).
 
 ## MCP server (binary: `tossinbox-mcp`, or `tossinbox mcp`)
 

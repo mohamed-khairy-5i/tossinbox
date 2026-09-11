@@ -35,14 +35,16 @@ export function extractCode(input) {
     for (const line of lines) {
         if (!CODE_KEYWORDS.test(line))
             continue;
-        const tokens = line.match(/(?<![\w-])[A-Z0-9]{4,10}(?![\w-])/g);
+        // Case-insensitive on purpose: many services send lowercase codes (f4x9k2).
+        const tokens = line.match(/(?<![\w-])[A-Za-z0-9]{4,10}(?![\w-])/g);
         if (!tokens)
             continue;
         for (const token of tokens) {
             if (/^\d{4,8}$/.test(token))
                 return token;
-            if (/^[A-Z0-9]{5,8}$/.test(token) && /\d/.test(token) && /[A-Z]/.test(token)) {
-                return token;
+            const upper = token.toUpperCase();
+            if (/^[A-Z0-9]{5,8}$/.test(upper) && /\d/.test(upper) && /[A-Z]/.test(upper)) {
+                return upper;
             }
         }
     }
