@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents &amp; MCP · TossInbox</title>
+<meta name="description" content="Connect TossInbox to Claude Desktop, Claude Code, Cursor, Codex or any MCP client. Plus the GitHub Action for verification codes in CI.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://mohamed-khairy-5i.github.io/tossinbox/agents.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TossInbox">
+<meta property="og:title" content="Agents &amp; MCP · TossInbox">
+<meta property="og:description" content="Connect TossInbox to Claude Desktop, Claude Code, Cursor, Codex or any MCP client. Plus the GitHub Action for verification codes in CI.">
+<meta property="og:url" content="https://mohamed-khairy-5i.github.io/tossinbox/agents.html">
+<meta property="og:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<meta property="og:image:alt" content="TossInbox: disposable email CLI and MCP server">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agents &amp; MCP · TossInbox">
+<meta name="twitter:description" content="Connect TossInbox to Claude Desktop, Claude Code, Cursor, Codex or any MCP client. Plus the GitHub Action for verification codes in CI.">
+<meta name="twitter:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="logo.png" alt="" width="26" height="26"> TossInbox</a>
+    <span class="nav-links">
+      <a href="index.html#install">Install</a>
+      <a href="quickstart.html">Quickstart</a>
+      <a href="cli.html">CLI</a>
+      <a href="agents.html" aria-current="page">Agents</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">docs</a><span class="sep">/</span>agents</p>
+      <h1>For AI agents</h1>
+      <p class="page-lead">TossInbox ships a built-in <b>MCP server</b>, so any MCP client can create
+      inboxes and collect verification codes as native tools. The CLI is the same clean
+      contract (<code>--json</code>, exit codes <code>0-4</code>, zero prompts), so agents
+      that can only run shell commands get the exact same power.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <h2>MCP tools</h2>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">MCP tool</th><th scope="col">What it returns</th></tr></thead>
+          <tbody>
+            <tr><td><code>create_inbox</code></td><td class="desc">A fresh disposable address + provider name</td></tr>
+            <tr><td><code>list_messages</code></td><td class="desc">Messages currently in an inbox</td></tr>
+            <tr><td><code>read_message</code></td><td class="desc">Full message body, including any detected code</td></tr>
+            <tr><td><code>wait_for_code</code></td><td class="desc">Blocks until a verification code arrives, returns it</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="codeblock" style="margin-top:20px;">
+        <div class="code-head"><span>json: stdio, no network, no auth</span><button class="copy-chip" data-copy='{"mcpServers":{"tossinbox":{"command":"npx","args":["-y","github:mohamed-khairy-5i/tossinbox","mcp"]}}}' aria-label="Copy MCP config JSON">copy</button></div>
+        <pre class="block"><span class="k">{</span>
+  <span class="s">"mcpServers"</span><span class="k">:</span> <span class="k">{</span>
+    <span class="s">"tossinbox"</span><span class="k">:</span> <span class="k">{</span>
+      <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span>,
+      <span class="s">"args"</span><span class="k">:</span> [<span class="s">"-y"</span>, <span class="s">"github:mohamed-khairy-5i/tossinbox"</span>, <span class="s">"mcp"</span>]
+    <span class="k">}</span>
+  <span class="k">}</span>
+<span class="k">}</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Where the config goes</h2>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Client</th><th scope="col">Where to put the config</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Desktop</td><td class="desc">Settings → Developer → Edit Config (<code>claude_desktop_config.json</code>)</td></tr>
+            <tr><td>Claude Code</td><td class="desc"><code>claude mcp add tossinbox -- npx -y github:mohamed-khairy-5i/tossinbox mcp</code></td></tr>
+            <tr><td>Cursor</td><td class="desc"><code>~/.cursor/mcp.json</code></td></tr>
+            <tr><td>Windsurf</td><td class="desc"><code>~/.codeium/windsurf/mcp_config.json</code></td></tr>
+            <tr><td>Codex CLI</td><td class="desc"><code>~/.codex/config.toml</code> → <code>[mcp_servers.tossinbox]</code> with <code>command</code> / <code>args</code></td></tr>
+            <tr><td>Gemini CLI</td><td class="desc"><code>~/.gemini/settings.json</code> → <code>mcpServers</code></td></tr>
+            <tr><td>Cline / VS Code</td><td class="desc">MCP servers panel or workspace <code>.vscode/mcp.json</code></td></tr>
+            <tr><td>Anything else</td><td class="desc">Any MCP stdio client, same command + args, works unmodified</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tbl-caption">MCP is client-agnostic by design: one server, every agent</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>A full agent flow, no human in the loop</h2>
+      <div class="agent-flow">
+        <b>1.</b> "Create a disposable inbox" <span class="tool">→ create_inbox</span><br>
+        <b>2.</b> "Sign up at example.com with that address" <span class="tool">→ your agent's browser</span><br>
+        <b>3.</b> "Wait for the verification code" <span class="tool">→ wait_for_code</span><br>
+        <b>4.</b> "Finish the signup with the code" <span class="tool">→ your agent's browser</span><br>
+        <b>5.</b> "Toss the inbox" <span class="tool">→ tossinbox toss</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="action">
+    <div class="wrap">
+      <h2>Verification codes in CI</h2>
+      <p class="sec-lead">Use TossInbox as a GitHub Action to test real email flows in your
+      workflows: spawn an inbox, submit it from your own step, then wait for the code.
+      The address and the extracted verification code are exposed as step outputs.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>yaml: .github/workflows/verify.yml</span><button class="copy-chip" data-copy='# 1: create the inbox
+- uses: mohamed-khairy-5i/tossinbox@v1
+  id: inbox
+  with:
+    args: "spawn"
+
+# 2: your own step submits the signup form using the address
+- run: ./signup.sh "${{ steps.inbox.outputs.address }}"
+
+# 3: block until the verification code arrives
+- uses: mohamed-khairy-5i/tossinbox@v1
+  id: code
+  with:
+    args: "wait --code --json"
+    timeout: "180"
+
+- run: echo "code: ${{ steps.code.outputs.code }}"
+# outputs per step: steps.<id>.outputs.address, steps.<id>.outputs.code' aria-label="Copy the full GitHub Actions workflow">copy</button></div>
+        <pre class="block"><span class="c"># 1: create the inbox</span>
+<span class="k">- uses:</span> mohamed-khairy-5i/tossinbox@v1
+  <span class="k">id:</span> inbox
+  <span class="k">with:</span>
+    args: <span class="s">"spawn"</span>
+
+<span class="c"># 2: your own step submits the signup form using the address</span>
+<span class="k">- run:</span> ./signup.sh <span class="s">"${{ steps.inbox.outputs.address }}"</span>
+
+<span class="c"># 3: block until the verification code arrives</span>
+<span class="k">- uses:</span> mohamed-khairy-5i/tossinbox@v1
+  <span class="k">id:</span> code
+  <span class="k">with:</span>
+    args: <span class="s">"wait --code --json"</span>
+    timeout: <span class="s">"180"</span>
+
+<span class="k">- run:</span> echo <span class="s">"code: ${{ steps.code.outputs.code }}"</span>
+<span class="c"># outputs per step: steps.&lt;id&gt;.outputs.address, steps.&lt;id&gt;.outputs.code</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom: 44px;">
+    <nav class="pager" aria-label="Docs pagination">
+      <a class="prev" href="cli.html"><span class="dir">←</span>CLI reference</a>
+      <a class="next" href="faq.html">FAQ<span class="dir">→</span></a>
+    </nav>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/blob/main/llms.txt">llms.txt</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+      <a href="#main">top ↑</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

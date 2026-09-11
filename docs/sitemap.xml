@@ -4,4 +4,20 @@
     <loc>https://mohamed-khairy-5i.github.io/tossinbox/</loc>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://mohamed-khairy-5i.github.io/tossinbox/quickstart.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mohamed-khairy-5i.github.io/tossinbox/cli.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mohamed-khairy-5i.github.io/tossinbox/agents.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://mohamed-khairy-5i.github.io/tossinbox/faq.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>

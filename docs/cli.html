@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLI reference · TossInbox</title>
+<meta name="description" content="All nine TossInbox commands with flags, the exit-code contract 0-4, and the provider list. The table is the manual.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://mohamed-khairy-5i.github.io/tossinbox/cli.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TossInbox">
+<meta property="og:title" content="CLI reference · TossInbox">
+<meta property="og:description" content="All nine TossInbox commands with flags, the exit-code contract 0-4, and the provider list. The table is the manual.">
+<meta property="og:url" content="https://mohamed-khairy-5i.github.io/tossinbox/cli.html">
+<meta property="og:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<meta property="og:image:alt" content="TossInbox: disposable email CLI and MCP server">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CLI reference · TossInbox">
+<meta name="twitter:description" content="All nine TossInbox commands with flags, the exit-code contract 0-4, and the provider list. The table is the manual.">
+<meta name="twitter:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="logo.png" alt="" width="26" height="26"> TossInbox</a>
+    <span class="nav-links">
+      <a href="index.html#install">Install</a>
+      <a href="quickstart.html">Quickstart</a>
+      <a href="cli.html" aria-current="page">CLI</a>
+      <a href="agents.html">Agents</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">docs</a><span class="sep">/</span>cli</p>
+      <h1>CLI reference</h1>
+      <p class="page-lead">Nine commands. The table is the manual. Every command also accepts
+      <code>--json</code> and exits <code>0-4</code> — that contract is documented below, not discovered at runtime.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <h2>Commands</h2>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Command</th><th scope="col">What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>spawn</code></td><td class="desc">Create a new disposable inbox. Flags: <code>-p</code> provider, <code>-l</code> label</td></tr>
+            <tr><td><code>list</code></td><td class="desc">List messages in an inbox. Flags: <code>-a</code> address (defaults to most recent)</td></tr>
+            <tr><td><code>read &lt;id&gt;</code></td><td class="desc">Read a full message, including any detected verification code. Flags: <code>-a</code> address</td></tr>
+            <tr><td><code>wait</code></td><td class="desc">Poll until a message arrives. Flags: <code>-a</code> address, <code>-f</code> from, <code>-s</code> subject, <code>-c</code> extract code, <code>-t</code> timeout (max 600s), <code>-i</code> interval</td></tr>
+            <tr><td><code>inboxes</code></td><td class="desc">List locally saved inboxes</td></tr>
+            <tr><td><code>toss</code></td><td class="desc">Delete an inbox server-side + wipe local state. Flags: <code>-a</code> address, <code>--all</code></td></tr>
+            <tr><td><code>clear</code></td><td class="desc">Remove all inboxes from local state only (server accounts stay)</td></tr>
+            <tr><td><code>providers</code></td><td class="desc">List available email providers</td></tr>
+            <tr><td><code>mcp</code></td><td class="desc">Run the MCP server over stdio. This is what agents connect to</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Exit codes and providers</h2>
+      <div class="two-col">
+        <div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th scope="col">Exit code</th><th scope="col">Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><code>0</code></td><td class="desc">Success</td></tr>
+                <tr><td><code>1</code></td><td class="desc">Error: network, provider, unexpected failure</td></tr>
+                <tr><td><code>2</code></td><td class="desc">Timeout: <code>wait</code> expired with no matching message</td></tr>
+                <tr><td><code>3</code></td><td class="desc">Not found: no saved inbox, unknown address, missing message</td></tr>
+                <tr><td><code>4</code></td><td class="desc">Usage error: bad flags, unknown command or provider</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-caption">a stable contract: agents script against these, not against stdout</p>
+        </div>
+        <div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th scope="col">Provider</th><th scope="col">Notes</th></tr></thead>
+              <tbody>
+                <tr><td><code>mailtm</code></td><td class="desc">mail.tm, the default, no API key</td></tr>
+                <tr><td><code>guerrillamail</code></td><td class="desc">GuerrillaMail, classic fallback</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-caption">new provider = one small file implementing createInbox / listMessages / readMessage / destroyInbox (optional)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom: 44px;">
+    <nav class="pager" aria-label="Docs pagination">
+      <a class="prev" href="quickstart.html"><span class="dir">←</span>quickstart</a>
+      <a class="next" href="agents.html">Agents &amp; MCP<span class="dir">→</span></a>
+    </nav>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/blob/main/llms.txt">llms.txt</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+      <a href="#main">top ↑</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ · TossInbox</title>
+<meta name="description" content="Straight answers about TossInbox: privacy, providers, Windows, blocklists, uninstall.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://mohamed-khairy-5i.github.io/tossinbox/faq.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TossInbox">
+<meta property="og:title" content="FAQ · TossInbox">
+<meta property="og:description" content="Straight answers about TossInbox: privacy, providers, Windows, blocklists, uninstall.">
+<meta property="og:url" content="https://mohamed-khairy-5i.github.io/tossinbox/faq.html">
+<meta property="og:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<meta property="og:image:alt" content="TossInbox: disposable email CLI and MCP server">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAQ · TossInbox">
+<meta name="twitter:description" content="Straight answers about TossInbox: privacy, providers, Windows, blocklists, uninstall.">
+<meta name="twitter:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="logo.png" alt="" width="26" height="26"> TossInbox</a>
+    <span class="nav-links">
+      <a href="index.html#install">Install</a>
+      <a href="quickstart.html">Quickstart</a>
+      <a href="cli.html">CLI</a>
+      <a href="agents.html">Agents</a>
+      <a href="faq.html" aria-current="page">FAQ</a>
+      <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">docs</a><span class="sep">/</span>faq</p>
+      <h1>FAQ</h1>
+      <p class="page-lead">Short answers, no marketing.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <details>
+        <summary>Is it really free?</summary>
+        <div class="answer">Yes. The tool is MIT-licensed and both upstream providers (mail.tm, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to sign up for.</div>
+      </details>
+      <details>
+        <summary>Can it send email?</summary>
+        <div class="answer">No. Receive-only, by design. TossInbox exists for privacy and testing. It deliberately ships no bulk-send or bulk-signup mode. Please respect each provider's terms of service.</div>
+      </details>
+      <details>
+        <summary>Is a disposable inbox private?</summary>
+        <div class="answer">Treat any disposable inbox as public: anyone who guesses the address could read it. Your local state (<code>~/.tossinbox/state.json</code>, override with <code>TOSSINBOX_STATE</code>) holds provider tokens and is written with <code>0600</code> permissions. <code>toss</code> deletes the account on the provider when supported. Never use it for banking, government, or your real identity.</div>
+      </details>
+      <details>
+        <summary>Does it work on Windows?</summary>
+        <div class="answer">Yes. Anywhere Node.js 18+ runs. <code>npx github:mohamed-khairy-5i/tossinbox spawn</code> works in PowerShell exactly the same. Homebrew covers macOS and Linux.</div>
+      </details>
+      <details>
+        <summary>How is this different from tmpmail and friends?</summary>
+        <div class="answer">Most existing CLI temp-mail tools are human-first wrappers around the same dead upstream API (1secmail now returns 403). TossInbox is agent-first from day one: MCP server, <code>--json</code> everywhere, documented exit codes, hard 20-second request timeouts, and live providers.</div>
+      </details>
+      <details>
+        <summary>What happens to my inboxes between commands?</summary>
+        <div class="answer">They are saved in a local state file so <code>wait</code>, <code>list</code> and <code>toss</code> know which inbox to operate on. If the file is corrupted, TossInbox refuses to overwrite it and tells you. It never silently destroys your state.</div>
+      </details>
+      <details>
+        <summary>How long does an inbox live?</summary>
+        <div class="answer">Until you toss it, or until the upstream provider retires the account on its own. Treat every inbox as short-lived: create it, receive the code, toss it, in one session. TossInbox keeps no servers of its own; the only record is your local <code>~/.tossinbox/state.json</code>.</div>
+      </details>
+      <details>
+        <summary>A site blocked my disposable address</summary>
+        <div class="answer">Some sites keep blocklists of known disposable domains. That is their right, and no tool can promise around it. Try the other provider: <code>tossinbox spawn -p guerrillamail</code>. If both are blocked, the site wins that round.</div>
+      </details>
+      <details>
+        <summary>How do I uninstall it?</summary>
+        <div class="answer"><code>brew uninstall mohamed-khairy-5i/tap/tossinbox</code> or <code>npm uninstall -g github:mohamed-khairy-5i/tossinbox</code>, then delete <code>~/.tossinbox/</code> for the local state. Nothing was ever written anywhere else.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding-bottom: 44px;">
+    <nav class="pager" aria-label="Docs pagination">
+      <a class="prev" href="agents.html"><span class="dir">←</span>Agents &amp; MCP</a>
+      <a class="next" href="index.html#install">install<span class="dir">→</span></a>
+    </nav>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/blob/main/llms.txt">llms.txt</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+      <a href="#main">top ↑</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
