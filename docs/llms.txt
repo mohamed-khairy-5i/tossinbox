@@ -1,0 +1,52 @@
+# TossInbox
+
+> Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.
+
+TossInbox creates disposable email addresses from the command line or through
+an MCP server, collects verification codes (OTP) from them, and deletes the
+inboxes when done. It is designed agent-first: every CLI command supports
+`--json`, exit codes are documented, and there are no interactive prompts.
+
+## CLI (binary: `tossinbox`)
+
+- `tossinbox spawn` — create a new disposable inbox (flags: `-p provider`, `-l label`)
+- `tossinbox list` — list messages in an inbox (flag: `-a address`)
+- `tossinbox read <id>` — read a full message by id
+- `tossinbox wait --code` — poll until a message arrives and print its verification code
+  (flags: `-f sender`, `-s subject`, `-t timeout`, `-i interval`)
+- `tossinbox inboxes` — list locally saved inboxes
+- `tossinbox toss` — delete an inbox server-side and wipe local state (`--all` for all)
+- `tossinbox providers` — list providers (default: `mailtm`, also `guerrillamail`)
+
+All commands accept `--json`. Exit codes: 0 success, 1 error, 2 timeout,
+3 not found, 4 usage error (bad flags / unknown provider).
+
+## MCP server (binary: `tossinbox-mcp`, or `tossinbox mcp`)
+
+Stdio MCP server exposing four tools:
+
+- `create_inbox` — create a disposable inbox, returns its email address
+- `list_messages` — list messages in an inbox
+- `read_message` — read a full message including any detected code
+- `wait_for_code` — poll until a message arrives and return its verification code
+
+Typical agent flow: `create_inbox` -> use the address in a signup form ->
+`wait_for_code` -> submit the code -> delete the inbox from the CLI with
+`tossinbox toss`.
+
+## Installation
+
+```bash
+npm install -g github:mohamed-khairy-5i/tossinbox
+# or run without installing:
+npx github:mohamed-khairy-5i/tossinbox spawn
+```
+
+## Notes
+
+- Providers: `mailtm` (default) and `guerrillamail`; no API keys required.
+- Local state is stored in `~/.tossinbox/state.json` (override with the
+  `TOSSINBOX_STATE` environment variable) with 0600 permissions.
+- TossInbox intentionally has no bulk mode; use it for privacy and testing and
+  respect the providers' terms of service.
+- License: MIT. Repository: https://github.com/mohamed-khairy-5i/tossinbox

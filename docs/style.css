@@ -34,7 +34,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .skip { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--panel-2); color: var(--text); padding: 8px 14px; border-radius: 0 0 8px 0; }
 .skip:focus { left: 0; }
 code, pre { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
-code { font-size: 0.86em; }
+code { font-size: 0.9em; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 h1, h2, h3 { font-family: "Space Grotesk", -apple-system, sans-serif; }
 
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
@@ -53,7 +54,7 @@ nav .wrap { display: flex; align-items: center; gap: 24px; height: 58px; }
 .brand:hover { text-decoration: none; }
 .nav-links { display: flex; gap: 4px; margin-left: auto; align-items: center; }
 .nav-links a {
-  color: var(--muted); font-size: 13.5px; padding: 6px 10px; border-radius: 6px;
+  color: var(--muted); font-size: 14px; padding: 6px 10px; border-radius: 6px;
 }
 .nav-links a:hover { color: var(--text); background: var(--panel-2); text-decoration: none; }
 .nav-links a[aria-current="page"] { color: var(--text); background: var(--panel-2); }
@@ -85,7 +86,7 @@ h1 .accent { color: var(--accent); }
   display: flex; align-items: center; gap: 0; margin-top: 26px; max-width: 470px;
   border: 1px solid var(--border-strong); border-radius: 10px; background: var(--term-bg); overflow: hidden;
 }
-.install-inline code { flex: 1; padding: 12px 16px; font-size: 13.5px; color: var(--text); white-space: nowrap; overflow-x: auto; }
+.install-inline code { flex: 1; padding: 12px 16px; font-size: 14px; color: var(--text); white-space: nowrap; overflow-x: auto; }
 .install-inline code .dollar { color: var(--faint); }
 .copy-btn {
   background: var(--panel-2); border: none; border-left: 1px solid var(--border-strong);
@@ -127,7 +128,7 @@ a.chip:hover { color: var(--text); border-color: var(--faint); text-decoration: 
 /* terminal window */
 .term {
   background: var(--term-bg); border: 1px solid var(--border); border-radius: 10px;
-  overflow: hidden; font-size: 13.5px;
+  overflow: hidden; font-size: 14px;
 }
 .term-bar {
   display: flex; align-items: center; gap: 7px; padding: 11px 14px;
@@ -151,11 +152,13 @@ a.chip:hover { color: var(--text); border-color: var(--faint); text-decoration: 
 .page-lead { color: var(--muted); font-size: 17px; margin-top: 14px; max-width: 660px; }
 .page-lead b { color: var(--text); font-weight: 600; }
 .page-lead code { background: var(--panel-2); padding: 2px 7px; border-radius: 6px; color: var(--text); }
+/* links inside a text block must be distinguishable without color alone (axe: link-in-text-block) */
+.note a, .tbl-caption a, .answer a, .page-lead a, .crumbs a { text-decoration: underline; text-underline-offset: 3px; }
 .crumbs { font-family: ui-monospace, monospace; font-size: 12px; color: var(--faint); margin-bottom: 16px; }
 .crumbs a { color: var(--muted); }
 .crumbs .sep { margin: 0 7px; }
 .pager { display: flex; justify-content: space-between; gap: 12px; padding: 24px 0 8px; border-top: 1px solid var(--border-soft); flex-wrap: wrap; }
-.pager a { font-family: ui-monospace, monospace; font-size: 13px; }
+.pager a { font-family: ui-monospace, monospace; font-size: 14px; }
 .pager .dir { color: var(--faint); margin-right: 6px; }
 .pager .next .dir { margin-right: 0; margin-left: 6px; }
 .pager .next { text-align: right; margin-left: auto; }
@@ -169,7 +172,7 @@ h2 { font-size: 26px; letter-spacing: -0.015em; font-weight: 700; margin-bottom:
 
 pre.block {
   background: var(--term-bg); border: 1px solid var(--border); border-radius: 10px;
-  padding: 16px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.7; color: var(--text);
+  padding: 16px 18px; overflow-x: auto; font-size: 14px; line-height: 1.7; color: var(--text);
   position: relative;
 }
 pre.block .c { color: var(--faint); }
@@ -183,7 +186,7 @@ pre.block .s { color: var(--amber); }
 .il-label { font-family: ui-monospace, monospace; font-size: 12.5px; color: var(--text); display: flex; flex-direction: column; gap: 2px; }
 .il-label em { font-style: normal; color: var(--faint); font-size: 11.5px; }
 .il-row code { font-size: 13px; color: var(--text); white-space: nowrap; overflow-x: auto; }
-.note { color: var(--faint); font-size: 13.5px; margin-top: 14px; }
+.note { color: var(--faint); font-size: 14px; margin-top: 14px; }
 .note code { color: var(--muted); font-size: 13px; }
 
 /* tables */
@@ -233,7 +236,7 @@ details .answer { padding: 14px 18px; color: var(--muted); font-size: 14.5px; ma
 details .answer code { background: var(--panel-2); padding: 2px 6px; border-radius: 6px; color: var(--text); font-size: 13px; }
 
 /* footer */
-footer { border-top: 1px solid var(--border-soft); padding: 26px 0 40px; color: var(--faint); font-size: 13.5px; margin-top: auto; flex-shrink: 0; }
+footer { border-top: 1px solid var(--border-soft); padding: 26px 0 40px; color: var(--faint); font-size: 14px; margin-top: auto; flex-shrink: 0; }
 footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .foot-links { display: inline-flex; gap: 16px; flex-wrap: wrap; }
 footer a { color: var(--muted); }

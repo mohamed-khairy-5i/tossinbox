@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TossInbox: Disposable Email CLI &amp; MCP Server for AI Agents</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Spawn a disposable inbox, wait for the verification code, toss it. Agent-first CLI + MCP server: --json on every command, documented exit codes, zero prompts.">
 <meta name="color-scheme" content="dark">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -28,17 +30,40 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "TossInbox",
-  "operatingSystem": "macOS, Linux, Windows",
-  "applicationCategory": "DeveloperApplication",
-  "description": "Disposable email from the command line. Spawn an inbox, wait for the verification code, toss it. CLI + MCP server: --json on every command, documented exit codes, zero prompts.",
-  "url": "https://mohamed-khairy-5i.github.io/tossinbox/",
-  "codeRepository": "https://github.com/mohamed-khairy-5i/tossinbox",
-  "license": "https://opensource.org/licenses/MIT",
-  "author": {"@type": "Person", "name": "Mohamed Khairy", "url": "https://github.com/mohamed-khairy-5i"},
-  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-  "keywords": "disposable email CLI, temporary email MCP server, throwaway inbox, verification code automation"
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://github.com/mohamed-khairy-5i",
+      "name": "Mohamed Khairy",
+      "url": "https://github.com/mohamed-khairy-5i"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mohamed-khairy-5i.github.io/tossinbox/#website",
+      "url": "https://mohamed-khairy-5i.github.io/tossinbox/",
+      "name": "TossInbox",
+      "publisher": {"@id": "https://github.com/mohamed-khairy-5i"}
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://mohamed-khairy-5i.github.io/tossinbox/#app",
+      "name": "TossInbox",
+      "softwareVersion": "0.1.1",
+      "datePublished": "2026-09-10",
+      "dateModified": "2026-09-11",
+      "operatingSystem": "macOS, Linux, Windows",
+      "applicationCategory": "DeveloperApplication",
+      "description": "Disposable email from the command line. Spawn an inbox, wait for the verification code, toss it. CLI + MCP server: --json on every command, documented exit codes, zero prompts.",
+      "url": "https://mohamed-khairy-5i.github.io/tossinbox/",
+      "codeRepository": "https://github.com/mohamed-khairy-5i/tossinbox",
+      "license": "https://opensource.org/licenses/MIT",
+      "author": {"@id": "https://github.com/mohamed-khairy-5i"},
+      "publisher": {"@id": "https://github.com/mohamed-khairy-5i"},
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "keywords": "disposable email CLI, temporary email MCP server, throwaway inbox, verification code automation"
+    }
+  ]
 }
 </script>
 
@@ -54,7 +79,7 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="logo.png" alt="" width="26" height="26"> TossInbox</a>
+    <a class="brand" href="index.html"><img src="logo.png" alt="TossInbox logo" width="26" height="26"> TossInbox</a>
     <span class="nav-links">
       <a href="#install">Install</a>
       <a href="quickstart.html">Quickstart</a>
@@ -72,8 +97,8 @@
   <header class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">Disposable email for AI agents</p>
-        <h1>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
+        <p class="eyebrow">TossInbox · Disposable email for AI agents</p>
+        <h1><span class="sr-only">TossInbox — </span>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
         <p class="hero-sub">Built <b>agent-first</b>: <code>--json</code> on every command,
         exit codes documented <code>0-4</code>, zero interactive prompts.</p>
         <div class="install-inline">
@@ -156,7 +181,7 @@
       human-first CLI wrappers around a dead upstream API. TossInbox is the one built for programs.</p>
       <div class="tbl-wrap">
         <table class="tbl">
-          <thead><tr><th scope="col" aria-label="Feature"></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
+          <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
           <tbody>
             <tr><td class="prop">JSON on every command</td><td><code>--json</code></td><td class="desc">no</td><td class="desc">rarely</td></tr>
             <tr><td class="prop">Documented exit codes</td><td><code>0-4</code></td><td class="desc">none</td><td class="desc">no</td></tr>
@@ -201,27 +226,14 @@
     <span class="foot-links">
       <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
-      <a href="https://github.com/mohamed-khairy-5i/tossinbox/blob/main/llms.txt">llms.txt</a>
+      <a href="llms.txt">llms.txt</a>
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
       <a href="#main">top ↑</a>
     </span>
   </div>
 </footer>
 
-<script>
-  // old single-page anchors used to live here; send them to the right page
-  (function () {
-    var map = {
-      quickstart: "quickstart.html",
-      cli: "cli.html",
-      agents: "agents.html",
-      action: "agents.html#action",
-      faq: "faq.html"
-    };
-    var h = location.hash.replace("#", "");
-    if (map[h]) location.replace(map[h]);
-  })();
-</script>
+<script src="redirect.js" defer></script>
 
 </body>
 </html>

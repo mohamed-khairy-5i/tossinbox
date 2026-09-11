@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quickstart · TossInbox</title>
 <meta name="description" content="Four commands from install to a tossed inbox. Paste-runnable, comments included, --json everywhere.">
@@ -20,6 +22,16 @@
 <meta name="twitter:title" content="Quickstart · TossInbox">
 <meta name="twitter:description" content="Four commands from install to a tossed inbox. Paste-runnable, comments included, --json everywhere.">
 <meta name="twitter:image" content="https://mohamed-khairy-5i.github.io/tossinbox/banner.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "docs", "item": "https://mohamed-khairy-5i.github.io/tossinbox/"},
+    {"@type": "ListItem", "position": 2, "name": "quickstart", "item": "https://mohamed-khairy-5i.github.io/tossinbox/quickstart.html"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -32,7 +44,7 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="logo.png" alt="" width="26" height="26"> TossInbox</a>
+    <a class="brand" href="index.html"><img src="logo.png" alt="TossInbox logo" width="26" height="26"> TossInbox</a>
     <span class="nav-links">
       <a href="index.html#install">Install</a>
       <a href="quickstart.html" aria-current="page">Quickstart</a>
@@ -123,7 +135,7 @@ tossinbox toss" aria-label="Copy the full quickstart workflow">copy</button></di
     <span class="foot-links">
       <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
-      <a href="https://github.com/mohamed-khairy-5i/tossinbox/blob/main/llms.txt">llms.txt</a>
+      <a href="llms.txt">llms.txt</a>
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
       <a href="#main">top ↑</a>
     </span>
