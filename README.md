@@ -15,6 +15,9 @@
 [![CI](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
+> **Built by [Mohamed Khairy](https://github.com/mohamed-khairy-5i).**
+> If TossInbox saved you a signup form, consider starring the repo — it helps more people find it.
+
 TossInbox gives you a brand-new disposable email address in one command. Use it to
 sign up anywhere, then let `wait` collect the verification code for you — or let
 your **AI agent** do it through the built-in **MCP server**. When you are done,
