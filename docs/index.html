@@ -3,7 +3,7 @@
 <head>
 <title>TossInbox: Disposable Email CLI &amp; MCP Server for AI Agents</title>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Spawn a disposable inbox, wait for the verification code, toss it. Agent-first CLI + MCP server: --json on every command, documented exit codes, zero prompts.">
@@ -76,9 +76,7 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <script src="main.js" defer></script>
 </head>
@@ -218,7 +216,7 @@
       </div>
       <p class="tbl-caption">Checked September 2026. If a cell is wrong, open an issue and win the argument.</p>
 
-      <p class="sec-lead" style="margin-top:32px; margin-bottom:12px;"><b>Changelog</b>. What actually shipped:</p>
+      <p class="sec-lead sec-lead--changelog"><b>Changelog</b>. What actually shipped:</p>
       <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox changelog">
         <table class="tbl">
           <tbody>

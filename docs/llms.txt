@@ -7,6 +7,15 @@ an MCP server, collects verification codes (OTP) from them, and deletes the
 inboxes when done. It is designed agent-first: every CLI command supports
 `--json`, exit codes are documented, and there are no interactive prompts.
 
+## Site
+
+- [Home](https://tossinbox.pages.dev/): overview, install options, comparison table
+- [Quickstart](https://tossinbox.pages.dev/quickstart): first inbox in four commands
+- [CLI reference](https://tossinbox.pages.dev/cli): all commands, flags, exit codes
+- [Agents & MCP](https://tossinbox.pages.dev/agents): MCP server setup for AI agents
+- [FAQ](https://tossinbox.pages.dev/faq): privacy, providers, troubleshooting
+- [Source repository](https://github.com/mohamed-khairy-5i/tossinbox): code, issues, releases
+
 ## CLI (binary: `tossinbox`)
 
 - `tossinbox spawn` — create a new disposable inbox (flags: `-p provider`, `-l label`)
@@ -49,4 +58,4 @@ npx github:mohamed-khairy-5i/tossinbox spawn
   `TOSSINBOX_STATE` environment variable) with 0600 permissions.
 - TossInbox intentionally has no bulk mode; use it for privacy and testing and
   respect the providers' terms of service.
-- License: MIT. Repository: https://github.com/mohamed-khairy-5i/tossinbox
+- License: MIT. Repository: [mohamed-khairy-5i/tossinbox](https://github.com/mohamed-khairy-5i/tossinbox)
