@@ -1,0 +1,52 @@
+{
+  "serverInfo": {
+    "name": "tossinbox",
+    "title": "TossInbox",
+    "version": "0.1.1",
+    "description": "Disposable email inboxes for AI agents: create inboxes, list and read messages, wait for verification (OTP) codes."
+  },
+  "instructions": "Typical flow: create_inbox -> submit the returned address in the signup form -> wait_for_code -> finish the signup with the code -> remove the inbox from the shell with `tossinbox toss`. Receive-only: TossInbox never sends email.",
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "transports": [
+    {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+    }
+  ],
+  "tools": [
+    {
+      "name": "create_inbox",
+      "description": "Create a fresh disposable email inbox. Returns its address and the upstream provider name."
+    },
+    {
+      "name": "list_messages",
+      "description": "List the messages currently sitting in a TossInbox inbox."
+    },
+    {
+      "name": "read_message",
+      "description": "Read a full message body, including any automatically detected verification code."
+    },
+    {
+      "name": "wait_for_code",
+      "description": "Block until a message arrives in the inbox and return its extracted verification (OTP) code."
+    }
+  ],
+  "documentation": [
+    {
+      "name": "agents-guide",
+      "url": "https://tossinbox.pages.dev/agents.html"
+    },
+    {
+      "name": "cli-reference",
+      "url": "https://tossinbox.pages.dev/cli.html"
+    }
+  ],
+  "homepage": "https://tossinbox.pages.dev/",
+  "repository": "https://github.com/mohamed-khairy-5i/tossinbox",
+  "license": "MIT"
+}

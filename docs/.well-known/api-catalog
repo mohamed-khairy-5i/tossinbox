@@ -1,0 +1,39 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://tossinbox.pages.dev/",
+      "service-desc": [
+        {
+          "href": "https://tossinbox.pages.dev/.well-known/mcp/server-card.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://tossinbox.pages.dev/agents.html",
+          "type": "text/html"
+        },
+        {
+          "href": "https://tossinbox.pages.dev/agents.md",
+          "type": "text/markdown"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://tossinbox.pages.dev/llms.txt",
+          "type": "text/plain"
+        }
+      ],
+      "item": [
+        {
+          "href": "https://tossinbox.pages.dev/.well-known/agent-skills/index.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://tossinbox.pages.dev/.well-known/ard.json",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

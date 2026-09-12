@@ -1,0 +1,58 @@
+{
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:tossinbox.pages.dev:mcp:tossinbox",
+      "displayName": "TossInbox MCP Server",
+      "type": "application/mcp-server-card+json",
+      "url": "https://tossinbox.pages.dev/.well-known/mcp/server-card.json",
+      "description": "Stdio MCP server exposing four tools: create_inbox, list_messages, read_message, wait_for_code. Spawn disposable inboxes and collect verification (OTP) codes without a browser.",
+      "capabilities": ["create_inbox", "list_messages", "read_message", "wait_for_code"],
+      "representativeQueries": [
+        "create a disposable email inbox",
+        "wait for the verification code sent to this address",
+        "read the OTP from a temporary inbox",
+        "run an MCP server for disposable email"
+      ]
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:tossinbox.pages.dev:skill:tossinbox",
+      "displayName": "TossInbox",
+      "type": "application/ai-skill+md",
+      "url": "https://tossinbox.pages.dev/.well-known/agent-skills/tossinbox/SKILL.md",
+      "description": "Agent skill: install and drive the tossinbox CLI or MCP server to receive signup and verification emails, extract OTP codes, and delete the inbox afterwards.",
+      "representativeQueries": [
+        "get a throwaway email address for this signup",
+        "automate email verification in CI",
+        "receive an OTP without exposing my real inbox"
+      ]
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:tossinbox.pages.dev:docs:agents-guide",
+      "displayName": "TossInbox Agents & MCP guide",
+      "type": "text/html",
+      "url": "https://tossinbox.pages.dev/agents.html",
+      "description": "MCP setup for Claude Desktop, Claude Code, Cursor, Windsurf, Codex, Gemini CLI and any stdio MCP client, plus a full no-human-in-the-loop agent flow and CI usage.",
+      "representativeQueries": [
+        "how do I add TossInbox to Claude or Cursor",
+        "wire an MCP server for email verification",
+        "use disposable email in a GitHub Action"
+      ]
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:tossinbox.pages.dev:docs:llms-txt",
+      "displayName": "TossInbox llms.txt",
+      "type": "text/plain",
+      "url": "https://tossinbox.pages.dev/llms.txt",
+      "description": "Concise Markdown overview of TossInbox for LLM consumption: CLI commands, MCP tools, exit codes, install paths.",
+      "representativeQueries": [
+        "what CLI commands does TossInbox have",
+        "what are the TossInbox exit codes",
+        "summarize TossInbox for an agent"
+      ]
+    }
+  ]
+}
