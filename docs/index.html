@@ -79,7 +79,6 @@
 }
 </script>
 
-<link rel="preload" href="fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <script src="main.js" defer></script>
 </head>
@@ -110,7 +109,7 @@
   <header class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">TossInbox · Disposable email for AI agents</p>
+        <p class="eyebrow">tossinbox · disposable email for AI agents</p>
         <h1><span class="sr-only">TossInbox: disposable email CLI and MCP server for AI agents. </span>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
         <p class="hero-sub">Built <b>agent-first</b>: <code>--json</code> on every command,
         exit codes documented <code>0-4</code>, zero interactive prompts.</p>
@@ -125,7 +124,8 @@
       <div class="term">
         <div class="term-bar">
           <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-          <span class="title">agent@laptop: zsh</span>
+          <span class="title">tossinbox — demo</span>
+          <span class="term-dim">80×24</span>
         </div>
         <div class="term-body" tabindex="0">
 <span class="p">$</span> <span class="cmd">tossinbox spawn</span><br>
@@ -235,6 +235,28 @@
     </div>
   </section>
 
+  <!-- ============ DOCS DIRECTORY ============ -->
+  <section id="docs">
+    <div class="wrap">
+      <h2>The docs directory</h2>
+      <p class="sec-lead">Eight short pages, no fluff. Machines take the same list from
+      <code>llms.txt</code>.</p>
+      <div class="ls-dir" tabindex="0" role="region" aria-label="Site directory listing">
+        <p class="ls-cmd">$ ls docs/</p>
+        <div class="ls-row"><span class="ls-name"><a href="quickstart">quickstart/</a></span><span class="ls-desc">spawn your first inbox in 60 seconds</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="cli">cli/</a></span><span class="ls-desc">every command, flag, and exit code</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="agents">agents/</a></span><span class="ls-desc">MCP setup for Claude, Cursor, Codex and friends</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="examples">examples/</a></span><span class="ls-desc">copy-paste recipes: signup tests, OTP capture, CI</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="guide">guide/</a></span><span class="ls-desc">the full manual: providers, options, gotchas</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="changelog">changelog/</a></span><span class="ls-desc">what actually shipped, per version</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="roadmap">roadmap/</a></span><span class="ls-desc">what is planned, and what is deliberately not</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="faq">faq/</a></span><span class="ls-desc">short answers to real questions</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="ar/" hreflang="ar">ar/</a></span><span class="ls-desc">الموقع بالعربية</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="llms.txt">llms.txt</a></span><span class="ls-desc">the whole site as one plain-text file, for machines</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ END ============ -->
   <section class="end">
     <div class="wrap">
@@ -258,6 +280,7 @@
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
       <a href="#main">top ↑</a>
     </span>
+    <span class="foot-exit">exit <span class="accent">0</span></span>
   </div>
 </footer>
 

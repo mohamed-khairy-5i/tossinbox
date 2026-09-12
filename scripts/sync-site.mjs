@@ -98,7 +98,6 @@ function renderChangelogHtml(versions) {
   ]
 }
 </script>
-<link rel="preload" href="fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <script src="main.js" defer></script>
 </head>

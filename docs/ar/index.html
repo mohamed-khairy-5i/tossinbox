@@ -44,7 +44,6 @@
   ]
 }
 </script>
-<link rel="preload" href="/fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/ar.css">
 <script src="/main.js" defer></script>
@@ -90,7 +89,8 @@
       <div class="term">
         <div class="term-bar">
           <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-          <span class="title">agent@laptop: zsh</span>
+          <span class="title">tossinbox — demo</span>
+          <span class="term-dim">80×24</span>
         </div>
         <div class="term-body" tabindex="0" dir="ltr">
 <span class="p">$</span> <span class="cmd">tossinbox spawn</span><br>
@@ -199,6 +199,27 @@
     </div>
   </section>
 
+  <!-- ============ فهرس الدليل ============ -->
+  <section id="docs">
+    <div class="wrap">
+      <h2>فهرس الدليل</h2>
+      <p class="sec-lead">ثماني صفحات قصيرة من غير حشو، والأجهزة بتاخد نفس القايمة من <code>llms.txt</code>.</p>
+      <div class="ls-dir" tabindex="0" role="region" aria-label="فهرس الموقع" dir="ltr">
+        <p class="ls-cmd">$ ls docs/</p>
+        <div class="ls-row"><span class="ls-name"><a href="/quickstart">quickstart/</a></span><span class="ls-desc">أول إنبوكس في 60 ثانية</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/cli">cli/</a></span><span class="ls-desc">كل أمر وflag وكود خروج</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/agents">agents/</a></span><span class="ls-desc">إعداد MCP لـ Claude وCursor وCodex</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/examples">examples/</a></span><span class="ls-desc">وصفات جاهزة: اختبار التسجيل، كود التفعيل، CI</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/guide">guide/</a></span><span class="ls-desc">الدليل الكامل: المزودين والخيارات والفخاخ</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/changelog">changelog/</a></span><span class="ls-desc">اللي اتنشر فعلًا، إصدار بإصدار</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/roadmap">roadmap/</a></span><span class="ls-desc">المخطط له، واللي مستبعده عمدًا</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/faq">faq/</a></span><span class="ls-desc">إجابات قصيرة لأسئلة حقيقية</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/" hreflang="en">en/</a></span><span class="ls-desc">النسخة الإنجليزية</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/llms.txt">llms.txt</a></span><span class="ls-desc">الموقع كله في ملف نصي واحد، للأجهزة</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ END ============ -->
   <section class="end">
     <div class="wrap">
@@ -222,6 +243,7 @@
       <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
       <a href="#main">أعلى ↑</a>
     </span>
+    <span class="foot-exit">exit <span class="accent">0</span></span>
   </div>
 </footer>
 

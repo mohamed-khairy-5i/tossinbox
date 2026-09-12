@@ -9,7 +9,6 @@
 
 /* Arabic headings don't want the latin tight tracking */
 h1, h2, h3 { letter-spacing: 0; }
-.eyebrow { letter-spacing: 0.08em; }
 
 /* shell snippets and file paths stay LTR even on an RTL page */
 pre.block, .install-inline, .install-inline code, .term-body,

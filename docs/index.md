@@ -79,12 +79,33 @@ Checked September 2026. If a cell is wrong, open an issue and win the argument.
 
 Full diffs in the GitHub releases.
 
+## Docs directory
+
+```console
+$ ls docs/
+quickstart/   spawn your first inbox in 60 seconds
+cli/          every command, flag, and exit code
+agents/       MCP setup for Claude, Cursor, Codex and friends
+examples/     copy-paste recipes: signup tests, OTP capture, CI
+guide/        the full manual: providers, options, gotchas
+changelog/    what actually shipped, per version
+roadmap/      what is planned, and what is deliberately not
+faq/          short answers to real questions
+ar/           النسخة العربية من الموقع
+llms.txt      the whole site as one plain-text file, for machines
+```
+
 ## Where next
 
 - Quickstart: https://tossinbox.pages.dev/quickstart.html
 - CLI reference: https://tossinbox.pages.dev/cli.html
 - Agents & MCP: https://tossinbox.pages.dev/agents.html
+- Examples: https://tossinbox.pages.dev/examples.html
+- Guide: https://tossinbox.pages.dev/guide.html
+- Changelog: https://tossinbox.pages.dev/changelog.html
+- Roadmap: https://tossinbox.pages.dev/roadmap.html
 - FAQ: https://tossinbox.pages.dev/faq.html
+- Arabic: https://tossinbox.pages.dev/ar/
 - llms.txt: https://tossinbox.pages.dev/llms.txt
 
 MIT License © 2026 Mohamed Khairy
