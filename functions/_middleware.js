@@ -36,7 +36,11 @@ export const onRequest = async ({ request, env, next }) => {
   const res = await env.ASSETS.fetch(new Request(new URL(mdPath, url.origin)));
   if (!res || !res.ok) return next();
 
-  const headers = new Headers();
+  // Inherit the headers the static asset response already carries (CSP, HSTS,
+  // X-Frame-Options, Referrer-Policy, ...) instead of rebuilding from scratch —
+  // otherwise agent-preferred text/markdown responses lose every security
+  // header and the Link header used for discovery.
+  const headers = new Headers(res.headers);
   headers.set("Content-Type", "text/markdown; charset=utf-8");
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Cache-Control", "public, max-age=0, must-revalidate");

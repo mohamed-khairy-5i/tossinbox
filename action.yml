@@ -31,7 +31,7 @@ runs:
 
     - name: Install TossInbox
       shell: bash
-      run: npm install --global "github:mohamed-khairy-5i/tossinbox#main"
+      run: npm install --global tossinbox@0.1.1
 
     - name: Spawn inbox
       id: spawn

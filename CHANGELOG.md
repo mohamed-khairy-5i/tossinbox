@@ -5,6 +5,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-11
+
 ### Fixed
 - **`tossinbox-mcp` now starts when launched through npm/Homebrew bin symlinks.**
   Previously the direct-run check compared unresolved paths, so the globally
@@ -37,4 +39,4 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 - OTP extraction tuned for English and Arabic emails (رمز / كود / تفعيل / تحقق).
 - State file `~/.tossinbox/state.json` written with `0600` permissions.
 - GitHub Action (`mohamed-khairy-5i/tossinbox@v1`), Homebrew tap, project
-  website on GitHub Pages, `llms.txt` for LLM onboarding.
+  website on tossinbox.pages.dev (Cloudflare Pages), `llms.txt` for LLM onboarding.

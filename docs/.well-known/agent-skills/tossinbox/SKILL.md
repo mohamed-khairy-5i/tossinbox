@@ -21,9 +21,9 @@ it never sends email. No accounts, no API keys, no interactive prompts.
 ## Install (Node.js 18+)
 
 ```bash
-npm install -g github:mohamed-khairy-5i/tossinbox
+npm install -g tossinbox
 # or run without installing:
-npx github:mohamed-khairy-5i/tossinbox spawn
+npx tossinbox@latest spawn
 # or on macOS/Linux:
 brew install mohamed-khairy-5i/tap/tossinbox
 ```
@@ -65,7 +65,7 @@ Client config:
   "mcpServers": {
     "tossinbox": {
       "command": "npx",
-      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+      "args": ["-y", "tossinbox", "mcp"]
     }
   }
 }

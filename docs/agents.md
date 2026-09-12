@@ -23,7 +23,7 @@ Transport: stdio, no network, no auth.
   "mcpServers": {
     "tossinbox": {
       "command": "npx",
-      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+      "args": ["-y", "tossinbox", "mcp"]
     }
   }
 }
@@ -34,7 +34,7 @@ Transport: stdio, no network, no auth.
 | Client          | Where to put the config                                                                                     |
 |-----------------|-------------------------------------------------------------------------------------------------------------|
 | Claude Desktop  | Settings → Developer → Edit Config (`claude_desktop_config.json`)                                            |
-| Claude Code     | `claude mcp add tossinbox -- npx -y github:mohamed-khairy-5i/tossinbox mcp`                                  |
+| Claude Code     | `claude mcp add tossinbox -- npx -y tossinbox mcp`                                  |
 | Cursor          | `~/.cursor/mcp.json`                                                                                         |
 | Windsurf        | `~/.codeium/windsurf/mcp_config.json`                                                                       |
 | Codex CLI       | `~/.codex/config.toml` → `[mcp_servers.tossinbox]` with command / args                                       |

@@ -27,7 +27,7 @@ banking, government, or your real identity.
 ## Does it work on Windows?
 
 Yes. Anywhere Node.js 18+ runs.
-`npx github:mohamed-khairy-5i/tossinbox spawn` works in PowerShell exactly the
+`npx tossinbox@latest spawn` works in PowerShell exactly the
 same. Homebrew covers macOS and Linux.
 
 ## How is this different from tmpmail and friends?
@@ -60,7 +60,7 @@ round.
 ## How do I uninstall it?
 
 `brew uninstall mohamed-khairy-5i/tap/tossinbox` or
-`npm uninstall -g github:mohamed-khairy-5i/tossinbox`, then delete
+`npm uninstall -g tossinbox`, then delete
 `~/.tossinbox/` for the local state. Nothing was ever written anywhere else.
 
 MIT License © 2026 Mohamed Khairy

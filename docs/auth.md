@@ -16,4 +16,4 @@ tokens, and nothing requires registration.
   matching OAuth discovery documents will be published here first.
 
 Agent registration: not required. Just use the tool —
-`npx github:mohamed-khairy-5i/tossinbox spawn`.
+`npx tossinbox@latest spawn`.

@@ -15,7 +15,7 @@
     {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+      "args": ["-y", "tossinbox", "mcp"]
     }
   ],
   "tools": [
@@ -39,11 +39,11 @@
   "documentation": [
     {
       "name": "agents-guide",
-      "url": "https://tossinbox.pages.dev/agents.html"
+      "url": "https://tossinbox.pages.dev/agents"
     },
     {
       "name": "cli-reference",
-      "url": "https://tossinbox.pages.dev/cli.html"
+      "url": "https://tossinbox.pages.dev/cli"
     }
   ],
   "homepage": "https://tossinbox.pages.dev/",

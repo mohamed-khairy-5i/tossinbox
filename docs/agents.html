@@ -82,12 +82,12 @@
         </table>
       </div>
       <div class="codeblock codeblock--spaced">
-        <div class="code-head"><span>json: stdio, no network, no auth</span><button class="copy-chip" data-copy='{"mcpServers":{"tossinbox":{"command":"npx","args":["-y","github:mohamed-khairy-5i/tossinbox","mcp"]}}}' aria-label="Copy MCP config JSON">copy</button></div>
+        <div class="code-head"><span>json: stdio, no network, no auth</span><button class="copy-chip" data-copy='{"mcpServers":{"tossinbox":{"command":"npx","args":["-y","tossinbox","mcp"]}}}' aria-label="Copy MCP config JSON">copy</button></div>
         <pre class="block" tabindex="0"><span class="k">{</span>
   <span class="s">"mcpServers"</span><span class="k">:</span> <span class="k">{</span>
     <span class="s">"tossinbox"</span><span class="k">:</span> <span class="k">{</span>
       <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span>,
-      <span class="s">"args"</span><span class="k">:</span> [<span class="s">"-y"</span>, <span class="s">"github:mohamed-khairy-5i/tossinbox"</span>, <span class="s">"mcp"</span>]
+      <span class="s">"args"</span><span class="k">:</span> [<span class="s">"-y"</span>, <span class="s">"tossinbox"</span>, <span class="s">"mcp"</span>]
     <span class="k">}</span>
   <span class="k">}</span>
 <span class="k">}</span></pre>
@@ -103,7 +103,7 @@
           <thead><tr><th scope="col">Client</th><th scope="col">Where to put the config</th></tr></thead>
           <tbody>
             <tr><td>Claude Desktop</td><td class="desc">Settings → Developer → Edit Config (<code>claude_desktop_config.json</code>)</td></tr>
-            <tr><td>Claude Code</td><td class="desc"><code>claude mcp add tossinbox -- npx -y github:mohamed-khairy-5i/tossinbox mcp</code></td></tr>
+            <tr><td>Claude Code</td><td class="desc"><code>claude mcp add tossinbox -- npx -y tossinbox mcp</code></td></tr>
             <tr><td>Cursor</td><td class="desc"><code>~/.cursor/mcp.json</code></td></tr>
             <tr><td>Windsurf</td><td class="desc"><code>~/.codeium/windsurf/mcp_config.json</code></td></tr>
             <tr><td>Codex CLI</td><td class="desc"><code>~/.codex/config.toml</code> → <code>[mcp_servers.tossinbox]</code> with <code>command</code> / <code>args</code></td></tr>

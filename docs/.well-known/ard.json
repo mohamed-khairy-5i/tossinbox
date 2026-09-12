@@ -33,7 +33,7 @@
       "identifier": "urn:air:tossinbox.pages.dev:docs:agents-guide",
       "displayName": "TossInbox Agents & MCP guide",
       "type": "text/html",
-      "url": "https://tossinbox.pages.dev/agents.html",
+      "url": "https://tossinbox.pages.dev/agents",
       "description": "MCP setup for Claude Desktop, Claude Code, Cursor, Windsurf, Codex, Gemini CLI and any stdio MCP client, plus a full no-human-in-the-loop agent flow and CI usage.",
       "representativeQueries": [
         "how do I add TossInbox to Claude or Cursor",

@@ -24,10 +24,10 @@ pick one:
 brew install mohamed-khairy-5i/tap/tossinbox
 
 # npm (from GitHub)
-npm install -g github:mohamed-khairy-5i/tossinbox
+npm install -g tossinbox
 
 # npx (nothing installed)
-npx github:mohamed-khairy-5i/tossinbox spawn
+npx tossinbox@latest spawn
 
 # from source
 git clone https://github.com/mohamed-khairy-5i/tossinbox.git && cd tossinbox && npm install && npm run build
