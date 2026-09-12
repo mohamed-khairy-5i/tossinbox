@@ -23,3 +23,41 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  docs-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax-check site and tool scripts
+        run: |
+          for f in docs/*.js scripts/*.mjs; do
+            node --check "$f"
+          done
+
+      - name: Parse every well-known JSON surface
+        run: |
+          for f in docs/.well-known/*.json docs/.well-known/agent-skills/index.json docs/.well-known/mcp/server-card.json; do
+            node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$f"
+          done
+
+      - name: Site consistency (changelog, llms mirrors, digest, install forms, sitemap)
+        run: node scripts/sync-site.mjs
+
+  deploy:
+    needs: [build, docs-checks]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy docs/ to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy docs --project-name=tossinbox --branch=main
