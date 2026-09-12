@@ -68,11 +68,11 @@ Requires Node.js 18+.
 # Homebrew (macOS, Linux)
 brew install mohamed-khairy-5i/tap/tossinbox
 
-# npm from GitHub (npm registry publish coming soon)
-npm install -g github:mohamed-khairy-5i/tossinbox
+# npm (npmjs.com)
+npm install -g tossinbox
 
 # Or run without installing
-npx github:mohamed-khairy-5i/tossinbox spawn
+npx tossinbox@latest spawn
 ```
 
 From source:
@@ -164,7 +164,7 @@ TossInbox ships with an MCP server exposing four tools:
   "mcpServers": {
     "tossinbox": {
       "command": "npx",
-      "args": ["-y", "github:mohamed-khairy-5i/tossinbox", "mcp"]
+      "args": ["-y", "tossinbox-mcp"]
     }
   }
 }
@@ -229,7 +229,7 @@ No — receive-only by design. TossInbox exists for privacy and testing and
 ships no bulk-send or bulk-signup mode.
 
 **Does it work on Windows?**
-Yes, anywhere Node.js 18+ runs. `npx github:mohamed-khairy-5i/tossinbox spawn`
+Yes, anywhere Node.js 18+ runs. `npx tossinbox@latest spawn`
 works in PowerShell exactly the same.
 
 **A site blocked my disposable address. What now?**
@@ -252,7 +252,7 @@ round.
 - [x] GitHub Action: `mohamed-khairy-5i/tossinbox@v1`
 - [x] Homebrew tap: `brew install mohamed-khairy-5i/tap/tossinbox`
 - [x] Project website at [tossinbox.pages.dev](https://tossinbox.pages.dev/)
-- [ ] Publish `tossinbox` + `tossinbox-mcp` to the npm registry
+- [x] Publish `tossinbox` + `tossinbox-mcp` to the [npm registry](https://www.npmjs.com/package/tossinbox)
 - [ ] `mail.gw` provider (mail.tm-compatible API — small lift)
 - [ ] `tempmail.lol` provider (free API)
 - [ ] Provider failover: auto-switch when a provider is down

@@ -37,9 +37,9 @@ Typical agent flow: `create_inbox` -> use the address in a signup form ->
 ## Installation
 
 ```bash
-npm install -g github:mohamed-khairy-5i/tossinbox
+npm install -g tossinbox
 # or run without installing:
-npx github:mohamed-khairy-5i/tossinbox spawn
+npx tossinbox@latest spawn
 ```
 
 ## Notes
