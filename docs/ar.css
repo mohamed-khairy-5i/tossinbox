@@ -1,5 +1,12 @@
 /* TossInbox Arabic landing (docs/ar/index.html) — RTL refinements on top of style.css */
 
+/* CRITICAL RTL FIX: style.css parks the skip link at left:-9999px. In LTR that
+   overflow is not scrollable, but in RTL the inline-end (scrollable) side is the
+   LEFT, so the off-screen link made <html> ~11k px wide. Park it on the right
+   instead (the non-scrollable side in RTL) and reveal it there on focus. */
+.skip { left: auto; right: -9999px; }
+.skip:focus { right: 0; }
+
 /* Arabic headings don't want the latin tight tracking */
 h1, h2, h3 { letter-spacing: 0; }
 .eyebrow { letter-spacing: 0.08em; }
