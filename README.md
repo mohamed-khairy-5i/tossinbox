@@ -1,27 +1,27 @@
-# TossInbox
+# TossInbox — Disposable Email CLI & MCP Server for AI Agents
 
 <p align="center">
-  <img src="docs/logo.png" width="140" alt="TossInbox logo">
+  <img src="docs/logo.png" width="140" alt="TossInbox logo: an envelope tossed into a trash bin">
 </p>
 
-**Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.**
-
-<p align="center">
-  <a href="https://tossinbox.pages.dev/">Website</a> ·
-  <a href="https://github.com/mohamed-khairy-5i/tossinbox#readme">Docs</a> ·
-  <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
-</p>
+**Disposable email inboxes for humans and AI agents. Spawn a temporary inbox, wait for the OTP verification code, toss it.**
 
 [![CI](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Node](https://img.shields.io/badge/node-18%2B-34d399.svg)
+![MCP](https://img.shields.io/badge/MCP-server-222a39.svg)
 
 > **Built by [Mohamed Khairy](https://github.com/mohamed-khairy-5i).**
 > If TossInbox saved you a signup form, consider starring the repo — it helps more people find it.
 
-TossInbox gives you a brand-new disposable email address in one command. Use it to
-sign up anywhere, then let `wait` collect the verification code for you — or let
-your **AI agent** do it through the built-in **MCP server**. When you are done,
-toss the inbox: it is deleted server-side and wiped from local state.
+TossInbox is a temp-mail CLI and MCP server: it creates a brand-new throwaway
+email address in one command, waits for the email verification to land, extracts
+the OTP code, and deletes the inbox when you are done — server-side and locally.
+Use it for signups, QA email flows, and test automation — or let your **AI
+agent** do all of it through the built-in **MCP server**. No sign-up, no ads,
+no browser, no API keys. Humans read the output; agents parse the `--json`.
+
+<a href="https://tossinbox.pages.dev/"><strong>Website & docs → tossinbox.pages.dev</strong></a>
 
 ## Demo
 
@@ -39,22 +39,33 @@ $ tossinbox toss
 ✔ tossed qwd6996p1lbc@uberip.com
 ```
 
-## Why
+## Why TossInbox
 
-- **For humans** — no more exposing your real address to every signup form.
-- **For agents** — TossInbox is built agent-first from day one:
+- **For humans** — stop exposing your real address to every signup form.
+- **For agents** — built agent-first from day one:
   - `--json` output on every command
   - documented exit codes, no interactive prompts
   - an [MCP server](https://modelcontextprotocol.io) so Claude, Cursor, and any
-    MCP client can create inboxes and read verification codes as tools
+    MCP client can create inboxes and read verification codes as native tools
   - an `llms.txt` at the repository root for LLM-friendly onboarding
+
+|                        | TossInbox               | temp-mail websites  | tmpmail-era CLIs            |
+|------------------------|-------------------------|---------------------|-----------------------------|
+| JSON on every command  | `--json`                | no                  | rarely                      |
+| Documented exit codes  | 0–4                     | none                | no                          |
+| MCP server for agents  | yes, built in           | no                  | no                          |
+| Runs headless / in CI  | yes                     | no                  | partial                     |
+| Upstream alive         | mail.tm + GuerrillaMail | varies              | many wrap the dead 1secmail |
+| Ads, trackers, popups  | none                    | the business model  | none                        |
+
+Checked September 2026. If a cell is wrong, open an issue and win the argument.
 
 ## Install
 
 Requires Node.js 18+.
 
 ```bash
-# Homebrew
+# Homebrew (macOS, Linux)
 brew install mohamed-khairy-5i/tap/tossinbox
 
 # npm from GitHub (npm registry publish coming soon)
@@ -76,10 +87,11 @@ node dist/cli.js --help
 
 ## Quickstart
 
+Four commands from zero to a tossed inbox:
+
 ```bash
+tossinbox providers             # sanity check: install + network work
 tossinbox spawn                 # create an inbox (saved locally)
-tossinbox list                  # see what arrived
-tossinbox read <message-id>     # read a full message
 tossinbox wait --code           # block until a message arrives, print its OTP
 tossinbox toss                  # delete the inbox server-side + wipe local state
 ```
@@ -98,7 +110,7 @@ tossinbox wait --code --json
 | `spawn` | Create a new disposable inbox (`-p provider`, `-l label`) |
 | `list` | List messages (`-a address`) |
 | `read <id>` | Read a full message, including any detected code |
-| `wait` | Poll until a message arrives (`-f sender`, `-s subject`, `-c` extract code, `-t timeout`) |
+| `wait` | Poll until a message arrives (`-f sender`, `-s subject`, `-c` extract code, `-t timeout` max 600s) |
 | `inboxes` | List locally saved inboxes |
 | `toss` | Delete an inbox server-side and remove it from local state (`--all` for every inbox) |
 | `clear` | Remove all inboxes from local state only |
@@ -106,6 +118,8 @@ tossinbox wait --code --json
 | `mcp` | Run the MCP server over stdio |
 
 ### Exit codes
+
+A stable contract: agents script against these, not against stdout.
 
 | Code | Meaning |
 |---|---|
@@ -117,7 +131,8 @@ tossinbox wait --code --json
 
 ## GitHub Action (email verification in CI)
 
-Use TossInbox directly in your workflows:
+Use TossInbox directly in your workflows to test real signup / verification
+email flows:
 
 ```yaml
 - uses: mohamed-khairy-5i/tossinbox@v1
@@ -162,10 +177,10 @@ Or after a global install, simply use `tossinbox-mcp` as the command.
 TossInbox is deliberately agent-agnostic — no lock-in to one vendor:
 
 - **Any MCP client**: Claude Desktop, Claude Code, Cursor, Windsurf, Cline,
-  Codex CLI, and every other MCP-compatible client
+  Codex CLI, Gemini CLI, and every other MCP-compatible client
 - **Any shell-capable agent**: the CLI itself is the interface — `--json` on
   every command, exit codes `0–4` documented, zero interactive prompts
-- **CI/CD**: the GitHub Action below needs no agent at all
+- **CI/CD**: the GitHub Action above needs no agent at all
 
 ## Using TossInbox with an agent (copy-paste flow)
 
@@ -178,6 +193,22 @@ TossInbox is deliberately agent-agnostic — no lock-in to one vendor:
 5. "Toss the inbox when done"              -> CLI: tossinbox toss
 ```
 
+## Agent discovery surfaces
+
+If you are an AI agent or LLM reading this: everything below is
+machine-readable and kept up to date.
+
+- [llms.txt](./llms.txt) at the repository root — full onboarding in one file
+- [llms.txt on the website](https://tossinbox.pages.dev/llms.txt)
+- [MCP Server Card](https://tossinbox.pages.dev/.well-known/mcp/server-card.json)
+- [Agent skill (SKILL.md)](https://tossinbox.pages.dev/.well-known/agent-skills/tossinbox/SKILL.md)
+  · [skills index](https://tossinbox.pages.dev/.well-known/agent-skills/index.json)
+- [API catalog (RFC 9727)](https://tossinbox.pages.dev/.well-known/api-catalog)
+- [ARD manifest](https://tossinbox.pages.dev/.well-known/ard.json)
+- Markdown mirrors of every docs page: send `Accept: text/markdown` to
+  [tossinbox.pages.dev](https://tossinbox.pages.dev/) or fetch `/index.md`,
+  `/quickstart.md`, `/cli.md`, `/agents.md`, `/faq.md`
+
 ## Providers
 
 | Provider | API key | Notes |
@@ -188,6 +219,24 @@ TossInbox is deliberately agent-agnostic — no lock-in to one vendor:
 Adding a provider means implementing a small interface (`createInbox`,
 `listMessages`, `readMessage`, optional `destroyInbox`) — PRs welcome.
 
+## FAQ
+
+**Is it really free?**
+Yes. MIT-licensed, and both upstream providers are free with no API keys.
+
+**Can it send email?**
+No — receive-only by design. TossInbox exists for privacy and testing and
+ships no bulk-send or bulk-signup mode.
+
+**Does it work on Windows?**
+Yes, anywhere Node.js 18+ runs. `npx github:mohamed-khairy-5i/tossinbox spawn`
+works in PowerShell exactly the same.
+
+**A site blocked my disposable address. What now?**
+Some sites blocklist known disposable domains. Try the other provider:
+`tossinbox spawn -p guerrillamail`. If both are blocked, the site wins that
+round.
+
 ## Privacy and safety
 
 - The local state file (`~/.tossinbox/state.json`, override with
@@ -195,25 +244,28 @@ Adding a provider means implementing a small interface (`createInbox`,
   permissions.
 - `toss` deletes the account on the provider when supported, then wipes local
   state.
-- TossInbox intentionally ships **no bulk-send or bulk-signup mode**. Disposable
-  email is for privacy and testing — not for abuse. Please respect each
-  provider's terms of service.
+- Disposable email is for privacy and testing — not for abuse. Please respect
+  each provider's terms of service.
 
 ## Roadmap
 
 - [x] GitHub Action: `mohamed-khairy-5i/tossinbox@v1`
 - [x] Homebrew tap: `brew install mohamed-khairy-5i/tap/tossinbox`
-- [x] Project website on GitHub Pages
+- [x] Project website at [tossinbox.pages.dev](https://tossinbox.pages.dev/)
 - [ ] Publish `tossinbox` + `tossinbox-mcp` to the npm registry
 - [ ] `mail.gw` provider (mail.tm-compatible API — small lift)
 - [ ] `tempmail.lol` provider (free API)
 - [ ] Provider failover: auto-switch when a provider is down
 - [ ] Homebrew core formula (after community adoption)
 
+## Documentation
+
+- [Quickstart](https://tossinbox.pages.dev/quickstart) — first inbox in four commands
+- [CLI reference](https://tossinbox.pages.dev/cli) — every command, flag, and exit code
+- [Agents & MCP](https://tossinbox.pages.dev/agents) — setup for every MCP client
+- [FAQ](https://tossinbox.pages.dev/faq) — privacy, providers, troubleshooting
+- [Changelog](./CHANGELOG.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
+
 ## License
 
 [MIT](./LICENSE) © Mohamed Khairy
-
-Contributing: see [CONTRIBUTING.md](./CONTRIBUTING.md) ·
-Security: see [SECURITY.md](./SECURITY.md) ·
-Changes: see [CHANGELOG.md](./CHANGELOG.md)

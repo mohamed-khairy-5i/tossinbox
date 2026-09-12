@@ -12,17 +12,26 @@
   "homepage": "https://github.com/mohamed-khairy-5i/tossinbox#readme",
   "bugs": "https://github.com/mohamed-khairy-5i/tossinbox/issues",
   "keywords": [
-    "temp-email",
     "disposable-email",
-    "temporary-inbox",
+    "temporary-email",
+    "temp-mail",
+    "temp-email",
+    "throwaway-email",
+    "disposable-inbox",
     "otp",
+    "otp-verification",
+    "verification-code",
+    "email-verification",
+    "email-automation",
     "mcp",
     "mcp-server",
+    "model-context-protocol",
     "ai-agents",
     "cli",
-    "email",
-    "testing",
-    "automation"
+    "cli-tool",
+    "developer-tools",
+    "privacy",
+    "testing"
   ],
   "engines": {
     "node": ">=18"
