@@ -7,7 +7,7 @@
 **Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.**
 
 <p align="center">
-  <a href="https://mohamed-khairy-5i.github.io/tossinbox/">Website</a> ·
+  <a href="https://tossinbox.pages.dev/">Website</a> ·
   <a href="https://github.com/mohamed-khairy-5i/tossinbox#readme">Docs</a> ·
   <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
 </p>

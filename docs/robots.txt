@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mohamed-khairy-5i.github.io/tossinbox/sitemap.xml
+Sitemap: https://tossinbox.pages.dev/sitemap.xml
