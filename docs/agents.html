@@ -72,7 +72,7 @@
   <section>
     <div class="wrap">
       <h2>MCP tools</h2>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="MCP tools exposed by the TossInbox server">
         <table class="tbl">
           <thead><tr><th scope="col">MCP tool</th><th scope="col">What it returns</th></tr></thead>
           <tbody>
@@ -85,7 +85,7 @@
       </div>
       <div class="codeblock" style="margin-top:20px;">
         <div class="code-head"><span>json: stdio, no network, no auth</span><button class="copy-chip" data-copy='{"mcpServers":{"tossinbox":{"command":"npx","args":["-y","github:mohamed-khairy-5i/tossinbox","mcp"]}}}' aria-label="Copy MCP config JSON">copy</button></div>
-        <pre class="block"><span class="k">{</span>
+        <pre class="block" tabindex="0"><span class="k">{</span>
   <span class="s">"mcpServers"</span><span class="k">:</span> <span class="k">{</span>
     <span class="s">"tossinbox"</span><span class="k">:</span> <span class="k">{</span>
       <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span>,
@@ -100,7 +100,7 @@
   <section>
     <div class="wrap">
       <h2>Where the config goes</h2>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="Where the MCP config goes, per client">
         <table class="tbl">
           <thead><tr><th scope="col">Client</th><th scope="col">Where to put the config</th></tr></thead>
           <tbody>
@@ -157,7 +157,7 @@
 
 - run: echo "code: ${{ steps.code.outputs.code }}"
 # outputs per step: steps.<id>.outputs.address, steps.<id>.outputs.code' aria-label="Copy the full GitHub Actions workflow">copy</button></div>
-        <pre class="block"><span class="c"># 1: create the inbox</span>
+        <pre class="block" tabindex="0"><span class="c"># 1: create the inbox</span>
 <span class="k">- uses:</span> mohamed-khairy-5i/tossinbox@v1
   <span class="k">id:</span> inbox
   <span class="k">with:</span>

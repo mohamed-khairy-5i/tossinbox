@@ -203,7 +203,7 @@
         <li><code>tossinbox wait --code</code> blocks until the verification email lands, prints the code, exits clean. Script it.</li>
         <li><code>tossinbox toss</code> deletes the inbox. Gone from the server, gone from disk.</li>
       </ul>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox compared with temp-mail websites and tmpmail-era CLIs">
         <table class="tbl">
           <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
           <tbody>
@@ -219,7 +219,7 @@
       <p class="tbl-caption">Checked September 2026. If a cell is wrong, open an issue and win the argument.</p>
 
       <p class="sec-lead" style="margin-top:32px; margin-bottom:12px;"><b>Changelog</b>. What actually shipped:</p>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox changelog">
         <table class="tbl">
           <tbody>
             <tr><td><code>v0.1.1</code></td><td class="desc">2026-09-11: fixed a silent MCP bin-symlink failure, implemented exit code 4, added hard request timeouts, made a corrupted state file fail loudly instead of being overwritten, OTP codes lowercased</td></tr>
