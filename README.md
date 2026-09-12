@@ -164,13 +164,14 @@ TossInbox ships with an MCP server exposing four tools:
   "mcpServers": {
     "tossinbox": {
       "command": "npx",
-      "args": ["-y", "tossinbox-mcp"]
+      "args": ["-y", "tossinbox", "mcp"]
     }
   }
 }
 ```
 
-Or after a global install, simply use `tossinbox-mcp` as the command.
+Or after a global install, simply use `tossinbox-mcp` as the command —
+equivalent to `npx -y tossinbox mcp`.
 
 ### Works with any AI agent
 
