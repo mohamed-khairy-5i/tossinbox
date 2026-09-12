@@ -265,6 +265,9 @@ round.
 - [CLI reference](https://tossinbox.pages.dev/cli) — every command, flag, and exit code
 - [Agents & MCP](https://tossinbox.pages.dev/agents) — setup for every MCP client
 - [FAQ](https://tossinbox.pages.dev/faq) — privacy, providers, troubleshooting
+- [Examples](https://tossinbox.pages.dev/examples) — copy-paste recipes: shell, CI, Node.js, MCP
+- [Guide](https://tossinbox.pages.dev/guide) — providers, state, flags, exit codes, troubleshooting
+- [Roadmap](https://tossinbox.pages.dev/roadmap) — what shipped and what is next
 - [Changelog](./CHANGELOG.md) · [Contributing](./CONTRIBUTING.md) · [Security](./SECURITY.md)
 
 ## License

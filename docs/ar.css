@@ -1,0 +1,24 @@
+/* TossInbox Arabic landing (docs/ar/index.html) — RTL refinements on top of style.css */
+
+/* Arabic headings don't want the latin tight tracking */
+h1, h2, h3 { letter-spacing: 0; }
+.eyebrow { letter-spacing: 0.08em; }
+
+/* shell snippets and file paths stay LTR even on an RTL page */
+pre.block, .install-inline, .install-inline code, .term-body,
+.code-head, .tbl-caption, .crumbs { direction: ltr; text-align: left; }
+
+/* tables read right-to-left */
+.tbl th, .tbl td { text-align: right; }
+.tbl td:first-child { white-space: normal; }
+
+/* fact-list arrows flip to the RTL side */
+ul.facts li { padding-left: 0; padding-right: 24px; }
+ul.facts li::before { left: auto; right: 0; content: "←"; }
+
+/* pager arrows follow the reading direction */
+.pager .dir { margin-right: 0; margin-left: 6px; }
+.pager .next .dir { margin-left: 0; margin-right: 6px; }
+
+/* inline code inside Arabic prose keeps latin glyph metrics */
+.sec-lead code, .page-lead code, .facts code, .tbl code { direction: ltr; unicode-bidi: embed; }

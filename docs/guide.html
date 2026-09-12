@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide · TossInbox</title>
+<meta name="description" content="The complete TossInbox guide: providers, state, spawn flags, wait filters, cleanup commands, exit codes, and troubleshooting.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://tossinbox.pages.dev/guide">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TossInbox">
+<meta property="og:title" content="Guide · TossInbox">
+<meta property="og:description" content="The complete TossInbox guide: providers, state, flags, exit codes, troubleshooting.">
+<meta property="og:url" content="https://tossinbox.pages.dev/guide">
+<meta property="og:image" content="https://tossinbox.pages.dev/banner.png">
+<meta property="og:image:alt" content="TossInbox: disposable email CLI and MCP server">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guide · TossInbox">
+<meta name="twitter:description" content="The complete TossInbox guide: providers, state, flags, exit codes, troubleshooting.">
+<meta name="twitter:image" content="https://tossinbox.pages.dev/banner.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "docs", "item": "https://tossinbox.pages.dev/"},
+    {"@type": "ListItem", "position": 2, "name": "guide", "item": "https://tossinbox.pages.dev/guide"}
+  ]
+}
+</script>
+<link rel="preload" href="fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="logo.png" alt="TossInbox" width="26" height="26"> <span aria-hidden="true">TossInbox</span></a>
+    <span class="nav-links">
+      <a href="/#install">Install</a>
+      <a href="quickstart">Quickstart</a>
+      <a href="cli">CLI</a>
+      <a href="agents">Agents</a>
+      <a href="examples">Examples</a>
+      <a href="guide" aria-current="page">Guide</a>
+      <a href="roadmap">Roadmap</a>
+      <a href="faq">FAQ</a>
+      <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="/">docs</a><span class="sep">/</span>guide</p>
+      <h1>Guide</h1>
+      <p class="page-lead">Everything the four-command quickstart left out: how providers and
+      state work, every flag that matters, what each exit code means, and what to do when
+      something misbehaves. Flag-by-flag syntax lives on the <a href="cli">CLI reference</a>.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <h2>Concepts you need first</h2>
+      <p class="sec-lead">Three facts explain almost all of TossInbox's behavior.</p>
+      <ul class="facts">
+        <li><b>Providers are free public mail APIs.</b> <code>mailtm</code> is the default;
+        <code>guerrillamail</code> is the fallback. No accounts, no API keys — the CLI creates the
+        mailbox itself and keeps its credentials in local state. Run <code>tossinbox providers</code> to see them.</li>
+        <li><b>State is one local file:</b> <code>~/.tossinbox/state.json</code>, written with
+        <code>0600</code>. It holds the addresses + tokens of your live inboxes. Override its location
+        with <code>TOSSINBOX_STATE</code> — useful for CI parallelism and tests.</li>
+        <li><b>TossInbox receives; it never sends.</b> It exists to collect signup/verification
+        mail. There is no send path, which is exactly why providers tolerate it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Creating inboxes</h2>
+      <p class="sec-lead"><code>spawn</code> creates the mailbox, saves it to state, and prints
+      the address. Plain text for humans, <code>--json</code> for programs.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>shell: spawn variations</span><button class="copy-chip" data-copy="tossinbox spawn
+tossinbox spawn --json
+tossinbox spawn -p guerrillamail
+tossinbox spawn -l github-test
+tossinbox inboxes" aria-label="Copy spawn variations">copy</button></div>
+        <pre class="block" tabindex="0"><span class="a">tossinbox</span> spawn                       <span class="c"># default provider, plain output</span>
+<span class="a">tossinbox</span> spawn --json                <span class="c"># machine-readable (ok, inbox{address,…})</span>
+<span class="a">tossinbox</span> spawn -p guerrillamail      <span class="c"># pick a provider explicitly</span>
+<span class="a">tossinbox</span> spawn -l github-test        <span class="c"># label it — labels show in `inboxes`</span>
+<span class="a">tossinbox</span> inboxes                     <span class="c"># every inbox saved in local state</span></pre>
+      </div>
+      <p class="note">Inboxes on the provider expire on their own schedule; the local record is
+      what TossInbox cleans when you <code>toss</code>. Neither expires just because your terminal closed.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Receiving mail and codes</h2>
+      <p class="sec-lead">Three commands: <code>list</code> peeks at what arrived,
+      <code>read</code> opens one message, and <code>wait</code> blocks until the message you
+      care about lands — then prints its extracted code.</p>
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="wait flags">
+        <table class="tbl">
+          <thead><tr><th scope="col">flag</th><th scope="col">meaning</th><th scope="col">default</th></tr></thead>
+          <tbody>
+            <tr><td><code>--code</code></td><td class="desc">require an extractable verification code; keep polling until one arrives</td><td class="desc">off (first message wins)</td></tr>
+            <tr><td><code>--from, -f</code></td><td class="desc">only messages from this sender</td><td class="desc">any</td></tr>
+            <tr><td><code>--subject, -s</code></td><td class="desc">only messages whose subject matches</td><td class="desc">any</td></tr>
+            <tr><td><code>--timeout, -t</code></td><td class="desc">give up after N seconds (exit code <code>2</code>)</td><td class="desc">60</td></tr>
+            <tr><td><code>--interval, -i</code></td><td class="desc">seconds between polls</td><td class="desc">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="codeblock codeblock--spaced">
+        <div class="code-head"><span>shell: read paths</span><button class="copy-chip" data-copy="tossinbox list
+tossinbox list -a qwd6996p1lbc@uberip.com
+tossinbox read 42
+tossinbox wait --code --from noreply@example-app.dev --timeout 120" aria-label="Copy read paths">copy</button></div>
+        <pre class="block" tabindex="0"><span class="a">tossinbox</span> list                              <span class="c"># messages in the newest inbox</span>
+<span class="a">tossinbox</span> list -a qwd6996p1lbc@uberip.com   <span class="c"># messages for a specific address</span>
+<span class="a">tossinbox</span> read 42                           <span class="c"># full body + headers of message 42</span>
+<span class="a">tossinbox</span> wait --code --from noreply@example-app.dev --timeout 120</pre>
+      </div>
+      <p class="note">Code extraction handles digits-only and letter+digit OTPs (letters come back
+      uppercased) and recognizes English and Arabic prompts (رمز / كود / تفعيل / تحقق).</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Cleanup: toss vs clear</h2>
+      <p class="sec-lead">Two cleanup verbs with one important difference.</p>
+      <ul class="facts">
+        <li><code>tossinbox toss</code> deletes the inbox <b>on the provider</b> (where supported)
+        <b>and</b> wipes its local record. <code>toss --all</code> does every saved inbox.</li>
+        <li><code>tossinbox clear</code> wipes <b>local records only</b> — no server-side deletion.
+        Use it when the mailbox already expired upstream and you just want clean state.</li>
+      </ul>
+      <div class="codeblock">
+        <div class="code-head"><span>shell: cleanup</span><button class="copy-chip" data-copy="tossinbox toss
+tossinbox toss --all
+tossinbox clear" aria-label="Copy cleanup commands">copy</button></div>
+        <pre class="block" tabindex="0"><span class="a">tossinbox</span> toss          <span class="c"># delete current inbox on server + locally</span>
+<span class="a">tossinbox</span> toss --all    <span class="c"># same, for every saved inbox</span>
+<span class="a">tossinbox</span> clear         <span class="c"># local records only, server untouched</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Exit codes (the whole contract)</h2>
+      <p class="sec-lead">Scripts should never parse human text when an exit code will do.</p>
+      <div class="tbl-wrap" tabindex="0" role="region" aria-label="Exit codes">
+        <table class="tbl">
+          <thead><tr><th scope="col">code</th><th scope="col">meaning</th><th scope="col">typical cause</th></tr></thead>
+          <tbody>
+            <tr><td><code>0</code></td><td class="desc">success</td><td class="desc">—</td></tr>
+            <tr><td><code>1</code></td><td class="desc">error</td><td class="desc">provider API failure, network error</td></tr>
+            <tr><td><code>2</code></td><td class="desc">timeout</td><td class="desc">no matching message before <code>--timeout</code></td></tr>
+            <tr><td><code>3</code></td><td class="desc">not found</td><td class="desc">unknown address, no saved inbox, nothing to toss</td></tr>
+            <tr><td><code>4</code></td><td class="desc">usage error</td><td class="desc">bad flags, unknown provider, garbage values</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">With <code>--json</code>, failures additionally print
+      <code>{"ok":false,"error":"…"}</code> on stdout before exiting non-zero.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Troubleshooting</h2>
+      <p class="sec-lead">The failures that actually happen, in the order you'll meet them.</p>
+      <details>
+        <summary>wait exits with code 2 — the email never came</summary>
+        <div class="answer">Check the sender/subject filters aren't too strict, raise
+        <code>--timeout</code> (bulk senders can take minutes), and confirm the signup email was
+        actually sent. If the provider is degraded, spawn a fresh inbox with
+        <code>-p guerrillamail</code> and retry.</div>
+      </details>
+      <details>
+        <summary>spawn fails with exit code 1</summary>
+        <div class="answer">Usually the provider API having a moment. Retry once, then switch
+        providers: <code>tossinbox spawn -p guerrillamail</code>. All HTTP calls carry a hard
+        20-second timeout, so this always fails fast instead of hanging.</div>
+      </details>
+      <details>
+        <summary>"corrupt state file" error on any command</summary>
+        <div class="answer">v0.1.1 refuses to silently overwrite a damaged
+        <code>~/.tossinbox/state.json</code> — fix it by deleting the file (losing saved inbox
+        records, not your machine) or point <code>TOSSINBOX_STATE</code> at a fresh path.</div>
+      </details>
+      <details>
+        <summary>Parallel test runs stomp on each other</summary>
+        <div class="answer">Give each run its own state file:
+        <code>TOSSINBOX_STATE=$(mktemp) tossinbox spawn</code>. Nothing else is shared.</div>
+      </details>
+      <details>
+        <summary>Is this legal / will my real inbox be affected?</summary>
+        <div class="answer">Disposable email for testing and privacy is a normal use case — just
+        respect each provider's terms of service, and remember TossInbox can never touch your
+        real mailbox: it creates separate throwaway accounts.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="wrap wrap--footer">
+    <nav class="pager" aria-label="Docs pagination">
+      <a class="prev" href="cli"><span class="dir">←</span>CLI reference</a>
+      <a class="next" href="examples">Examples<span class="dir">→</span></a>
+    </nav>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-legal">MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
+      <a href="llms.txt">llms.txt</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+      <a href="#main">top ↑</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

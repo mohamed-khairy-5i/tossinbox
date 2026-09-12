@@ -18,6 +18,14 @@ const MD_MAP = {
   "/agents.html": "/agents.md",
   "/faq": "/faq.md",
   "/faq.html": "/faq.md",
+  "/examples": "/examples.md",
+  "/examples.html": "/examples.md",
+  "/guide": "/guide.md",
+  "/guide.html": "/guide.md",
+  "/changelog": "/changelog.md",
+  "/changelog.html": "/changelog.md",
+  "/roadmap": "/roadmap.md",
+  "/roadmap.html": "/roadmap.md",
 };
 
 export const onRequest = async ({ request, env, next }) => {

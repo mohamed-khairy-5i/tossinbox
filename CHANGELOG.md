@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+### Added
+- Website: Examples, Guide, Changelog, and Roadmap pages plus an Arabic homepage
+  (`/ar/`), Markdown mirrors for every new page, and hreflang alternates between
+  the English and Arabic homes.
+- `scripts/sync-site.mjs`: keeps llms.txt mirrors, generated changelog pages,
+  sitemap coverage, the SKILL.md digest, and npm install forms consistent
+  (`--check` mode in CI, `--fix` locally).
+- CI: a docs-checks job (syntax-checks site JS, parses all well-known JSON, runs
+  the site sync) and an automated Cloudflare Pages deploy of `docs/` on every
+  push to `main`.
+
 ## [0.1.1] - 2026-09-11
 
 ### Fixed

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Examples · TossInbox</title>
+<meta name="description" content="Copy-paste TossInbox recipes: shell signup + OTP, GitHub Actions e2e, Node.js scripts, MCP agents, provider failover, wait-flag filters.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="canonical" href="https://tossinbox.pages.dev/examples">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TossInbox">
+<meta property="og:title" content="Examples · TossInbox">
+<meta property="og:description" content="Copy-paste recipes: signup + OTP in shell, CI, Node.js, MCP agents, provider failover.">
+<meta property="og:url" content="https://tossinbox.pages.dev/examples">
+<meta property="og:image" content="https://tossinbox.pages.dev/banner.png">
+<meta property="og:image:alt" content="TossInbox: disposable email CLI and MCP server">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Examples · TossInbox">
+<meta name="twitter:description" content="Copy-paste recipes: signup + OTP in shell, CI, Node.js, MCP agents, provider failover.">
+<meta name="twitter:image" content="https://tossinbox.pages.dev/banner.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "docs", "item": "https://tossinbox.pages.dev/"},
+    {"@type": "ListItem", "position": 2, "name": "examples", "item": "https://tossinbox.pages.dev/examples"}
+  ]
+}
+</script>
+<link rel="preload" href="fonts/space-grotesk-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="logo.png" alt="TossInbox" width="26" height="26"> <span aria-hidden="true">TossInbox</span></a>
+    <span class="nav-links">
+      <a href="/#install">Install</a>
+      <a href="quickstart">Quickstart</a>
+      <a href="cli">CLI</a>
+      <a href="agents">Agents</a>
+      <a href="examples" aria-current="page">Examples</a>
+      <a href="guide">Guide</a>
+      <a href="roadmap">Roadmap</a>
+      <a href="faq">FAQ</a>
+      <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+    </span>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="/">docs</a><span class="sep">/</span>examples</p>
+      <h1>Examples</h1>
+      <p class="page-lead">Copy-paste recipes for the three jobs TossInbox does:
+      <b>sign up with a throwaway address</b>, <b>collect the verification code</b>,
+      and <b>toss the inbox</b>. Every snippet uses the documented JSON contract —
+      no screen scraping, no fragile parsing.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <h2>1 · Shell: sign up, get the code, verify</h2>
+      <p class="sec-lead">The whole loop as a paste-runnable bash block. Needs <code>jq</code>
+      (or swap in <code>node -e</code> parsing). Replace the two <code>curl</code> calls with
+      whatever your target app actually does.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>bash: signup + otp end to end</span><button class="copy-chip" aria-label="Copy the shell signup example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="c"># 1: create the inbox and grab its address as plain text</span>
+<span class="a">ADDR</span>=$(<span class="a">tossinbox</span> spawn --json | jq -r .inbox.address)
+<span class="k">echo</span> <span class="s">"inbox: $ADDR"</span>
+
+<span class="c"># 2: use the address in the signup flow of the app under test</span>
+<span class="a">curl</span> -fsS https://staging.example-app.dev/api/signup \
+  -d <span class="s">"email=$ADDR"</span> \
+  -d <span class="s">"password=correct-horse-battery"</span>
+
+<span class="c"># 3: block until the verification email lands, print just the code</span>
+<span class="a">CODE</span>=$(<span class="a">tossinbox</span> wait --code --timeout 180 --json | jq -r .code)
+<span class="k">echo</span> <span class="s">"code: $CODE"</span>
+
+<span class="c"># 4: complete the verification</span>
+<span class="a">curl</span> -fsS https://staging.example-app.dev/api/verify \
+  -d <span class="s">"email=$ADDR"</span> \
+  -d <span class="s">"code=$CODE"</span>
+
+<span class="c"># 5: done — delete the inbox on the server and locally</span>
+<span class="a">tossinbox</span> toss</pre>
+      </div>
+      <p class="note">Exit codes tell your script what happened: <code>2</code> = the email never
+      arrived before the timeout, <code>3</code> = nothing matched your filters. Treat non-zero as a test failure.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>2 · GitHub Actions: e2e signup on every push</h2>
+      <p class="sec-lead">A workflow that signs up a fresh account on your staging API every push
+      and verifies it — no shared test account, no mailbox quota, no state between runs.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>.github/workflows/e2e-signup.yml</span><button class="copy-chip" aria-label="Copy the GitHub Actions example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="k">name:</span> e2e-signup
+<span class="k">on:</span> <span class="s">[push]</span>
+<span class="k">jobs:</span>
+  <span class="k">signup:</span>
+    <span class="k">runs-on:</span> ubuntu-latest
+    <span class="k">steps:</span>
+      - <span class="k">uses:</span> actions/checkout@v4
+      - <span class="k">uses:</span> actions/setup-node@v4
+        <span class="k">with:</span>
+          <span class="k">node-version:</span> <span class="s">20</span>
+      - <span class="k">name:</span> Install TossInbox
+        <span class="k">run:</span> npm install --global tossinbox@0.1.1
+
+      - <span class="k">name:</span> Spawn inbox
+        <span class="k">id:</span> inbox
+        <span class="k">run:</span> |
+          <span class="k">echo</span> <span class="s">"address=$(tossinbox spawn --json | jq -r .inbox.address)"</span> &gt;&gt; <span class="s">"$GITHUB_OUTPUT"</span>
+
+      - <span class="k">name:</span> Sign up on staging
+        <span class="k">run:</span> |
+          <span class="k">curl</span> -fsS https://staging.example-app.dev/api/signup \
+            -d <span class="s">"email=${{ steps.inbox.outputs.address }}"</span> \
+            -d <span class="s">"password=correct-horse-battery"</span>
+
+      - <span class="k">name:</span> Wait for the verification code
+        <span class="k">id:</span> code
+        <span class="k">run:</span> |
+          <span class="k">echo</span> <span class="s">"code=$(tossinbox wait --code --timeout 180 --json | jq -r .code)"</span> &gt;&gt; <span class="s">"$GITHUB_OUTPUT"</span>
+
+      - <span class="k">name:</span> Verify the account
+        <span class="k">run:</span> |
+          <span class="k">curl</span> -fsS https://staging.example-app.dev/api/verify \
+            -d <span class="s">"email=${{ steps.inbox.outputs.address }}"</span> \
+            -d <span class="s">"code=${{ steps.code.outputs.code }}"</span>
+
+      - <span class="k">name:</span> Toss the inbox
+        <span class="k">if:</span> <span class="s">always()</span>
+        <span class="k">run:</span> tossinbox toss</pre>
+      </div>
+      <p class="note">There is also a packaged action (<code>- uses: mohamed-khairy-5i/tossinbox@v1</code>)
+      that spawns + waits in one composite step and exposes <code>address</code> / <code>code</code> outputs —
+      handy when nothing has to run between spawn and wait. Full setup on the
+      <a href="agents">Agents page</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>3 · Node.js: drive it from a script</h2>
+      <p class="sec-lead">Same contract, inside Node. <code>spawnSync</code> keeps it dependency-free;
+      the exit code is your error channel, <code>--json</code> is your data channel.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>signup-flow.mjs</span><button class="copy-chip" aria-label="Copy the Node.js example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="k">import</span> { spawnSync } <span class="k">from</span> <span class="s">"node:child_process"</span>;
+
+<span class="k">const</span> run = (args) =&gt; {
+  <span class="k">const</span> r = spawnSync(<span class="s">"tossinbox"</span>, args, { encoding: <span class="s">"utf8"</span> });
+  <span class="k">if</span> (r.status !== 0) <span class="k">throw new</span> Error(<span class="s">`tossinbox ${args.join(" ")} exited ${r.status}`</span>);
+  <span class="k">return</span> JSON.parse(r.stdout);
+};
+
+<span class="c">// 1: a fresh inbox for this run</span>
+<span class="k">const</span> { inbox } = run([<span class="s">"spawn"</span>, <span class="s">"--json"</span>]);
+console.log(<span class="s">"inbox:"</span>, inbox.address);
+
+<span class="c">// 2: your app under test does its signup with inbox.address here …</span>
+
+<span class="c">// 3: block until the verification email lands</span>
+<span class="k">const</span> { code } = run([<span class="s">"wait"</span>, <span class="s">"--code"</span>, <span class="s">"--timeout"</span>, <span class="s">"180"</span>, <span class="s">"--json"</span>]);
+console.log(<span class="s">"code:"</span>, code);
+
+<span class="c">// 4: clean up no matter what happened</span>
+run([<span class="s">"toss"</span>]);</pre>
+      </div>
+      <p class="note">State lives in <code>~/.tossinbox/state.json</code> (<code>0600</code>). Point it
+      somewhere temporary with <code>TOSSINBOX_STATE=$(mktemp)</code> to keep parallel runs isolated.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>4 · MCP: hand the whole job to an agent</h2>
+      <p class="sec-lead">TossInbox ships a stdio MCP server. Point any MCP client at it and the
+      agent can create inboxes, read messages, and wait for codes with tool calls.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>mcp client config (claude desktop / cursor / any MCP client)</span><button class="copy-chip" aria-label="Copy the MCP configuration">copy</button></div>
+        <pre class="block" tabindex="0"><span class="k">{</span>
+  <span class="s">"mcpServers"</span><span class="k">:</span> <span class="k">{</span>
+    <span class="s">"tossinbox"</span><span class="k">:</span> <span class="k">{</span>
+      <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span>,
+      <span class="s">"args"</span><span class="k">:</span> [<span class="s">"-y"</span>, <span class="s">"tossinbox"</span>, <span class="s">"mcp"</span>]
+    <span class="k">}</span>
+  <span class="k">}</span>
+<span class="k">}</span></pre>
+      </div>
+      <p class="sec-lead sec-lead--changelog">Then just say it in natural language:</p>
+      <ul class="facts">
+        <li>“Create a disposable inbox, sign this test account up on staging, wait for the code, finish the verification, then delete the inbox.”</li>
+        <li>The agent maps that to <code>create_inbox</code> → its own signup step → <code>wait_for_code</code> → <code>tossinbox toss</code>.</li>
+      </ul>
+      <p class="note">All four tools, plus client-by-client setup: the <a href="agents">Agents &amp; MCP page</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>5 · Second provider when the first is flaky</h2>
+      <p class="sec-lead">Two providers ship built in: <code>mailtm</code> (default) and
+      <code>guerrillamail</code>. When one is having a bad day, switch with a flag — no config files.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>shell: provider failover by hand</span><button class="copy-chip" data-copy="tossinbox providers
+tossinbox spawn -p guerrillamail" aria-label="Copy the provider failover example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="c"># what is available?</span>
+<span class="a">tossinbox</span> providers
+
+<span class="c"># default provider is down / slow? spawn on the other one</span>
+<span class="a">tossinbox</span> spawn -p guerrillamail</pre>
+      </div>
+      <p class="note">Automatic failover is on the <a href="roadmap">roadmap</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>6 · Wait flags: filter by sender, subject, timing</h2>
+      <p class="sec-lead"><code>wait</code> polls until a message matches. Tighten the match so noise
+      from other mail never delays your run.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>shell: filtered wait</span><button class="copy-chip" data-copy="tossinbox wait --code --from noreply@example-app.dev --subject verification --timeout 120 --interval 3" aria-label="Copy the filtered wait example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="c"># only the sender you expect, only the subject you expect</span>
+<span class="a">tossinbox</span> wait --code \
+  --from noreply@example-app.dev \
+  --subject verification \
+  --timeout 120 \
+  --interval 3</pre>
+      </div>
+      <p class="note">Codes with letters come back uppercased (<code>f4x9k2</code> → <code>F4X9K2</code>);
+      extraction understands English and Arabic prompts (رمز / كود / تفعيل / تحقق). Flag reference on the
+      <a href="cli">CLI page</a>.</p>
+    </div>
+  </section>
+
+  <div class="wrap wrap--footer">
+    <nav class="pager" aria-label="Docs pagination">
+      <a class="prev" href="guide"><span class="dir">←</span>guide</a>
+      <a class="next" href="agents">Agents &amp; MCP<span class="dir">→</span></a>
+    </nav>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-legal">MIT License © 2026 <a href="https://github.com/mohamed-khairy-5i">Mohamed Khairy</a></span>
+    <span class="foot-links">
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">Releases</a>
+      <a href="llms.txt">llms.txt</a>
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Issues</a>
+      <a href="#main">top ↑</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,9 +1,15 @@
 /* TossInbox — one small job: copy buttons. Shared by every page. */
-document.querySelectorAll("[data-copy]").forEach(function (btn) {
+document.querySelectorAll(".copy-btn, .copy-chip").forEach(function (btn) {
   btn.setAttribute("aria-live", "polite");
   var label = btn.textContent;
   btn.addEventListener("click", function () {
     var text = btn.getAttribute("data-copy");
+    if (!text) {
+      /* no explicit payload: copy the nearest code sample (pre, then code) */
+      var host = btn.closest(".codeblock") || btn.closest(".install-inline");
+      var src = host && (host.querySelector("pre") || host.querySelector("code"));
+      text = src ? src.textContent : "";
+    }
     function show(msg) {
       btn.textContent = msg;
       clearTimeout(btn._t);
