@@ -22,22 +22,6 @@ Three facts explain almost all of TossInbox's behavior.
   signup/verification mail. There is no send path, which is exactly why
   providers tolerate it.
 
-## How it compares
-
-Disposable email already exists as ad-covered websites and as human-first CLI
-wrappers around a dead upstream API. TossInbox is the one built for programs.
-
-| Feature                   | TossInbox          | temp-mail websites  | tmpmail-era CLIs            |
-|---------------------------|--------------------|---------------------|-----------------------------|
-| JSON on every command     | `--json`           | no                  | rarely                      |
-| Documented exit codes     | 0–4                | none                | no                          |
-| MCP server for agents     | yes, built in      | no                  | no                          |
-| Runs headless / in CI     | yes                | no                  | partial                     |
-| Upstream providers alive  | mail.tm + GuerrillaMail | varies         | many wrap the dead 1secmail |
-| Ads, trackers, popups     | none               | the business model  | none                        |
-
-Checked September 2026. If a cell is wrong, open an issue and win the argument.
-
 ## Creating inboxes
 
 `spawn` creates the mailbox, saves it to state, and prints the address. Plain

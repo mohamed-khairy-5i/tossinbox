@@ -88,28 +88,6 @@
 
   <section>
     <div class="wrap">
-      <h2>How it compares</h2>
-      <p class="sec-lead">Disposable email already exists as ad-covered websites and as
-      human-first CLI wrappers around a dead upstream API. TossInbox is the one built for programs.</p>
-      <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox compared with temp-mail websites and tmpmail-era CLIs">
-        <table class="tbl">
-          <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
-          <tbody>
-            <tr><td class="prop">JSON on every command</td><td><code>--json</code></td><td class="desc">no</td><td class="desc">rarely</td></tr>
-            <tr><td class="prop">Documented exit codes</td><td><code>0-4</code></td><td class="desc">none</td><td class="desc">no</td></tr>
-            <tr><td class="prop">MCP server for agents</td><td class="desc">yes, built in</td><td class="desc">no</td><td class="desc">no</td></tr>
-            <tr><td class="prop">Runs headless / in CI</td><td class="desc">yes</td><td class="desc">no</td><td class="desc">partial</td></tr>
-            <tr><td class="prop">Upstream providers alive</td><td class="desc">mail.tm + GuerrillaMail</td><td class="desc">varies</td><td class="desc">many wrap the dead 1secmail</td></tr>
-            <tr><td class="prop">Ads, trackers, popups</td><td class="desc">none</td><td class="desc">the business model</td><td class="desc">none</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="tbl-caption">Checked September 2026. If a cell is wrong, open an issue and win the argument.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
       <h2>Creating inboxes</h2>
       <p class="sec-lead"><code>spawn</code> creates the mailbox, saves it to state, and prints
       the address. Plain text for humans, <code>--json</code> for programs.</p>

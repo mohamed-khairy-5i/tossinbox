@@ -7,21 +7,12 @@ command, exit codes documented 0–4, zero interactive prompts.
 - Repository: https://github.com/mohamed-khairy-5i/tossinbox
 - Markdown version of https://tossinbox.pages.dev/
 
-## Why TossInbox
+## What is TossInbox?
 
-TossInbox is a disposable email CLI and MCP server: one command spawns a
-throwaway inbox on a real mail provider, a second waits for the verification
-code and prints it, a third deletes the inbox. Humans read the output, agents
-parse the `--json`. No sign-up, no ads, no browser — and no ad-covered
-websites.
-
-- `tossinbox spawn` gives you a real inbox on a live provider. No sign-up, no
-  browser, no ads.
-- `tossinbox wait --code` blocks until the verification email lands, prints
-  the code, exits clean. Script it.
-- `tossinbox toss` deletes the inbox on the provider and wipes the local
-  record. Gone from the server, gone from disk.
-- It receives, never sends — which is exactly why the providers tolerate it.
+TossInbox is a disposable email CLI and MCP server. One command spawns a
+throwaway inbox on a real mail provider; a second waits for the verification
+code and prints it; a third deletes the inbox. Humans read the output, agents
+parse the `--json`. No sign-up, no ads, no browser.
 
 ## Install
 
@@ -32,7 +23,7 @@ pick one:
 # Homebrew (macOS, Linux)
 brew install mohamed-khairy-5i/tap/tossinbox
 
-# npm
+# npm (from GitHub)
 npm install -g tossinbox
 
 # npx (nothing installed)
@@ -56,33 +47,44 @@ $ tossinbox toss
 ✔ tossed qwd6996p1lbc@uberip.com — gone from the server, gone from disk.
 ```
 
-## Latest release
+## Why TossInbox
+
+Disposable email already exists as ad-covered websites and as human-first CLI
+wrappers around a dead upstream API. TossInbox is the one built for programs.
+
+- `tossinbox spawn` gives you a real inbox on a live provider. No sign-up, no
+  browser, no ads.
+- `tossinbox wait --code` blocks until the verification email lands, prints
+  the code, exits clean. Script it.
+- `tossinbox toss` deletes the inbox. Gone from the server, gone from disk.
+
+| Feature                   | TossInbox          | temp-mail websites  | tmpmail-era CLIs            |
+|---------------------------|--------------------|---------------------|-----------------------------|
+| JSON on every command     | `--json`           | no                  | rarely                      |
+| Documented exit codes     | 0–4                | none                | no                          |
+| MCP server for agents     | yes, built in      | no                  | no                          |
+| Runs headless / in CI     | yes                | no                  | partial                     |
+| Upstream providers alive  | mail.tm + GuerrillaMail | varies         | many wrap the dead 1secmail |
+| Ads, trackers, popups     | none               | the business model  | none                        |
+
+Checked September 2026. If a cell is wrong, open an issue and win the argument.
+
+## Changelog
 
 - **v0.1.1** — 2026-09-11: fixed a silent MCP bin-symlink failure, implemented
   exit code 4, added hard request timeouts, made a corrupted state file fail
-  loudly instead of being overwritten.
+  loudly instead of being overwritten, OTP codes lowercased.
+- **v0.1.0** — 2026-09-10: first public release, CLI + MCP server, GitHub
+  Action, Homebrew tap.
 
-Full changelog: https://tossinbox.pages.dev/changelog.html
 Full diffs in the GitHub releases.
 
-## The manual, classified
+## Where next
 
-Eight short pages, each with a Markdown twin for agents:
-
-- Quickstart — four commands, first code in about ninety seconds:
-  https://tossinbox.pages.dev/quickstart.html
-- CLI reference — every command, flag, and default:
-  https://tossinbox.pages.dev/cli.html
-- Agents & MCP — MCP config, tool schemas, agent-friendly guarantees:
-  https://tossinbox.pages.dev/agents.html
-- Examples — copy-paste recipes (OTP capture, CI signups, Playwright):
-  https://tossinbox.pages.dev/examples.html
-- Guide — providers, state, wait filters, exit codes, troubleshooting:
-  https://tossinbox.pages.dev/guide.html
-- Roadmap — shipped, next, under consideration:
-  https://tossinbox.pages.dev/roadmap.html
-- FAQ — direct answers: https://tossinbox.pages.dev/faq.html
-- Arabic landing (RTL): https://tossinbox.pages.dev/ar/
+- Quickstart: https://tossinbox.pages.dev/quickstart.html
+- CLI reference: https://tossinbox.pages.dev/cli.html
+- Agents & MCP: https://tossinbox.pages.dev/agents.html
+- FAQ: https://tossinbox.pages.dev/faq.html
 - llms.txt: https://tossinbox.pages.dev/llms.txt
 
 MIT License © 2026 Mohamed Khairy

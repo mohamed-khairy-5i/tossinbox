@@ -10,19 +10,17 @@
 /* Arabic headings don't want the latin tight tracking */
 h1, h2, h3 { letter-spacing: 0; }
 .eyebrow { letter-spacing: 0.08em; }
-.f-name, .dir-name, .end-line, .brand { letter-spacing: 0; }
 
-/* the macOS terminal chrome stays LTR even on an RTL page */
-.term-bar, .term-body, .code-head, pre.block,
-.install-inline, .install-inline code,
-.tbl-caption, .crumbs { direction: ltr; text-align: left; }
+/* shell snippets and file paths stay LTR even on an RTL page */
+pre.block, .install-inline, .install-inline code, .term-body,
+.code-head, .tbl-caption, .crumbs { direction: ltr; text-align: left; }
 
 /* tables read right-to-left */
 .tbl th, .tbl td { text-align: right; }
 .tbl td:first-child { white-space: normal; }
 
 /* fact-list arrows flip to the RTL side */
-ul.facts li { padding-left: 0; padding-right: 26px; }
+ul.facts li { padding-left: 0; padding-right: 24px; }
 ul.facts li::before { left: auto; right: 0; content: "←"; }
 
 /* pager arrows follow the reading direction */
@@ -30,5 +28,4 @@ ul.facts li::before { left: auto; right: 0; content: "←"; }
 .pager .next .dir { margin-left: 0; margin-right: 6px; }
 
 /* inline code inside Arabic prose keeps latin glyph metrics */
-.sec-lead code, .page-lead code, .facts code, .tbl code,
-.f-desc code, .note code, details .answer code { direction: ltr; unicode-bidi: embed; }
+.sec-lead code, .page-lead code, .facts code, .tbl code { direction: ltr; unicode-bidi: embed; }
