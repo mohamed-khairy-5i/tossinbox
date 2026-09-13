@@ -1,7 +1,7 @@
 # TossInbox — Disposable Email CLI & MCP Server for AI Agents
 
 <p align="center">
-  <img src="docs/logo.png" width="140" alt="TossInbox logo: an envelope tossed into a trash bin">
+  <img src="docs/banner.png" width="100%" alt="TossInbox banner: an envelope tossed into a trash bin">
 </p>
 
 **Disposable email inboxes for humans and AI agents. Spawn a temporary inbox, wait for the OTP verification code, toss it.**
