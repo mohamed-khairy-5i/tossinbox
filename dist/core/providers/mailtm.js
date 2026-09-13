@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { ProviderError } from "../types.js";
 import { extractCode } from "../otp.js";
+import { networkError } from "../net.js";
 import { VERSION } from "../../version.js";
 const BASE = "https://api.mail.tm";
 const REQUEST_TIMEOUT_MS = 20_000;
@@ -27,9 +28,13 @@ function headers(token) {
         h.Authorization = `Bearer ${token}`;
     return h;
 }
-/** Hard timeout on every request — an agent must never hang forever. */
+/** Hard timeout on every request — an agent must never hang forever. Raw
+ *  network failures (DNS, refused, timeout) are translated into a readable,
+ *  actionable ProviderError instead of Node's bare "fetch failed". */
 function fetchJson(url, init) {
-    return fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    return fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) }).catch((err) => {
+        throw networkError(err, "mailtm", "api.mail.tm", REQUEST_TIMEOUT_MS);
+    });
 }
 /** mail.tm allows ~8 requests per second; retry once on 429. */
 async function request(method, url, options = {}) {

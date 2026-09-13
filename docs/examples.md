@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 20
       - name: Install TossInbox
-        run: npm install --global tossinbox@0.1.1
+        run: npm install --global tossinbox@0.1.2
 
       - name: Spawn inbox
         id: inbox

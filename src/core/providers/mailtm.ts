@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { ProviderError, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
 import { extractCode } from "../otp.js";
+import { networkError } from "../net.js";
 import { VERSION } from "../../version.js";
 
 const BASE = "https://api.mail.tm";
@@ -49,9 +50,15 @@ function headers(token?: string): Record<string, string> {
   return h;
 }
 
-/** Hard timeout on every request — an agent must never hang forever. */
+/** Hard timeout on every request — an agent must never hang forever. Raw
+ *  network failures (DNS, refused, timeout) are translated into a readable,
+ *  actionable ProviderError instead of Node's bare "fetch failed". */
 function fetchJson(url: string, init: RequestInit): Promise<Response> {
-  return fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+  return fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) }).catch(
+    (err: unknown) => {
+      throw networkError(err, "mailtm", "api.mail.tm", REQUEST_TIMEOUT_MS);
+    }
+  );
 }
 
 /** mail.tm allows ~8 requests per second; retry once on 429. */

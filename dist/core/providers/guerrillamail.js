@@ -1,5 +1,6 @@
 import { ProviderError } from "../types.js";
 import { extractCode } from "../otp.js";
+import { networkError } from "../net.js";
 import { VERSION } from "../../version.js";
 const BASE = "https://api.guerrillamail.com/ajax.php";
 const REQUEST_TIMEOUT_MS = 20_000;
@@ -13,10 +14,13 @@ async function call(params) {
     const url = new URL(BASE);
     for (const [k, v] of Object.entries(params))
         url.searchParams.set(k, v);
-    // Hard timeout on every request — an agent must never hang forever.
+    // Hard timeout on every request — an agent must never hang forever. Raw
+    // network failures are translated into a readable, actionable ProviderError.
     const res = await fetch(url, {
         headers: { Accept: "application/json", "User-Agent": `tossinbox/${VERSION}` },
         signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    }).catch((err) => {
+        throw networkError(err, "guerrillamail", "api.guerrillamail.com", REQUEST_TIMEOUT_MS);
     });
     if (!res.ok)
         throw new ProviderError("guerrillamail", `HTTP ${res.status}`, res.status);

@@ -3,7 +3,7 @@
 Spawn an inbox. Get the code. Toss it. Built agent-first: `--json` on every
 command, exit codes documented 0–4, zero interactive prompts.
 
-- Version: v0.1.1 · License: MIT · Node 18+ · macOS, Linux, Windows
+- Version: v0.1.2 · License: MIT · Node 18+ · macOS, Linux, Windows
 - Repository: https://github.com/mohamed-khairy-5i/tossinbox
 - Markdown version of https://tossinbox.pages.dev/
 

@@ -4,6 +4,20 @@ Every notable TossInbox change, newest first. Generated from the repo's
 CHANGELOG.md (edit that file, not this page). Full diffs:
 https://github.com/mohamed-khairy-5i/tossinbox/releases
 
+## 0.1.2 - 2026-09-13
+
+### Added
+
+- Website v2: brew/npx install tabs in the hero, a "Star on GitHub" secondary
+
+### Fixed
+
+- **Network failures now say what actually happened.** A dead connection used
+
+### Changed
+
+- **State saves are atomic.** `state.json` is written to a sibling temp file,
+
 ## 0.1.1 - 2026-09-11
 
 ### Fixed

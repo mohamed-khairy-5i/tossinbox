@@ -75,9 +75,27 @@ export async function resolveInbox(address?: string): Promise<Inbox | undefined>
 
 async function writeState(state: StateFile): Promise<void> {
   const file = statePath();
+  const dir = path.dirname(file);
   // The state file contains provider tokens — keep it private.
-  await fs.mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
-  await fs.writeFile(file, JSON.stringify(state, null, 2) + "\n", "utf8");
-  // writeFile's mode option only applies at creation — enforce on every write.
-  await fs.chmod(file, 0o600);
+  await fs.mkdir(dir, { recursive: true, mode: 0o700 });
+
+  // Atomic save: write a sibling temp file, fsync it, then rename it over the
+  // real one. A crash mid-write can no longer truncate state.json and destroy
+  // saved inboxes — readers always see either the old file or the new one.
+  const tmp = path.join(dir, `.${path.basename(file)}.${process.pid}.${Date.now()}.tmp`);
+  const handle = await fs.open(tmp, "w", 0o600);
+  try {
+    await handle.writeFile(JSON.stringify(state, null, 2) + "\n", "utf8");
+    // open()'s mode is filtered by umask — enforce 0600 before the rename.
+    await handle.chmod(0o600);
+    await handle.sync(); // flush to disk before it becomes the real file
+  } finally {
+    await handle.close();
+  }
+  try {
+    await fs.rename(tmp, file); // atomic on POSIX; replaces the target on Windows too
+  } catch (err) {
+    await fs.rm(tmp, { force: true }).catch(() => {});
+    throw err;
+  }
 }

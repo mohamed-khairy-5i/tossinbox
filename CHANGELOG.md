@@ -5,16 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-13
+
 ### Added
-- Website: Examples, Guide, Changelog, and Roadmap pages plus an Arabic homepage
-  (`/ar/`), Markdown mirrors for every new page, and hreflang alternates between
-  the English and Arabic homes.
-- `scripts/sync-site.mjs`: keeps llms.txt mirrors, generated changelog pages,
-  sitemap coverage, the SKILL.md digest, and npm install forms consistent
-  (`--check` mode in CI, `--fix` locally).
-- CI: a docs-checks job (syntax-checks site JS, parses all well-known JSON, runs
-  the site sync) and an automated Cloudflare Pages deploy of `docs/` on every
-  push to `main`.
+- Website v2: brew/npx install tabs in the hero, a "Star on GitHub" secondary
+  CTA, a highlighted TossInbox column in the comparison table, an EN/AR nav
+  toggle, a full Arabic quickstart (`/ar/quickstart`), and an Arabic copy
+  polish pass (idiomatic phrasing over literal renderings).
+
+### Fixed
+- **Network failures now say what actually happened.** A dead connection used
+  to surface as Node's bare `fetch failed`; DNS failures, refused connections,
+  dropped sockets, TLS problems, and the 20s timeout each now produce a short,
+  actionable message — e.g. `DNS lookup failed for api.mail.tm — check
+  connectivity and retry` or `no response from api.mail.tm within 20s —
+  retry, or switch with --provider`.
+
+### Changed
+- **State saves are atomic.** `state.json` is written to a sibling temp file,
+  fsynced, then renamed into place — a crash mid-write can no longer truncate
+  the file and destroy saved inboxes (0600 enforced before the rename).
 
 ## [0.1.1] - 2026-09-11
 
