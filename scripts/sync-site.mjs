@@ -117,6 +117,7 @@ function renderChangelogHtml(versions) {
       <a href="guide">Guide</a>
       <a href="faq">FAQ</a>
       <a href="changelog" aria-current="page">Changelog</a>
+      <a href="ar/" lang="ar" hreflang="ar">العربية</a>
       <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
     </span>
   </div>
