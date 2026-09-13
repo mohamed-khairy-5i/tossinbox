@@ -4,6 +4,14 @@ Every notable TossInbox change, newest first. Generated from the repo's
 CHANGELOG.md (edit that file, not this page). Full diffs:
 https://github.com/mohamed-khairy-5i/tossinbox/releases
 
+## 0.1.3 - 2026-09-13
+
+### Added
+
+- **`mail.gw` provider** (`spawn -p mailgw`) — mail.tm-compatible API on
+- **`tossinbox watch`** — live-polling mode that prints each new message (and
+- **Verification-code keywords now understand twelve languages.** French,
+
 ## 0.1.2 - 2026-09-13
 
 ### Added

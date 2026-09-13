@@ -3,7 +3,7 @@
 Spawn an inbox. Get the code. Toss it. Built agent-first: `--json` on every
 command, exit codes documented 0–4, zero interactive prompts.
 
-- Version: v0.1.2 · License: MIT · Node 18+ · macOS, Linux, Windows
+- Version: v0.1.3 · License: MIT · Node 18+ · macOS, Linux, Windows
 - Repository: https://github.com/mohamed-khairy-5i/tossinbox
 - Markdown version of https://tossinbox.pages.dev/
 
@@ -64,7 +64,7 @@ wrappers around a dead upstream API. TossInbox is the one built for programs.
 | Documented exit codes     | 0–4                | none                | no                          |
 | MCP server for agents     | yes, built in      | no                  | no                          |
 | Runs headless / in CI     | yes                | no                  | partial                     |
-| Upstream providers alive  | mail.tm + GuerrillaMail | varies         | many wrap the dead 1secmail |
+| Upstream providers alive  | mail.tm + mail.gw + GuerrillaMail | varies         | many wrap the dead 1secmail |
 | Ads, trackers, popups     | none               | the business model  | none                        |
 
 Checked September 2026. If a cell is wrong, open an issue and win the argument.

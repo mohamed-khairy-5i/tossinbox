@@ -63,7 +63,7 @@
     <div class="wrap">
       <p class="crumbs"><a href="/">docs</a><span class="sep">/</span>cli</p>
       <h1>CLI reference</h1>
-      <p class="page-lead">Nine commands. The table is the manual. Every command also accepts
+      <p class="page-lead">Ten commands. The table is the manual. Every command also accepts
       <code>--json</code> and exits <code>0-4</code> — that contract is documented below, not discovered at runtime.</p>
     </div>
   </header>
@@ -79,6 +79,7 @@
             <tr><td><code>list</code></td><td class="desc">List messages in an inbox. Flags: <code>-a</code> address (defaults to most recent)</td></tr>
             <tr><td><code>read &lt;id&gt;</code></td><td class="desc">Read a full message, including any detected verification code. Flags: <code>-a</code> address</td></tr>
             <tr><td><code>wait</code></td><td class="desc">Poll until a message arrives. Flags: <code>-a</code> address, <code>-f</code> from, <code>-s</code> subject, <code>-c</code> extract code, <code>-t</code> timeout (max 600s), <code>-i</code> interval</td></tr>
+            <tr><td><code>watch</code></td><td class="desc">Stream new messages as they arrive until Ctrl-C — only new arrivals, never history. Flags: <code>-a</code> address, <code>-f</code> from, <code>-s</code> subject, <code>-i</code> interval (1–60s). With <code>--json</code>: one compact JSON object per line (NDJSON)</td></tr>
             <tr><td><code>inboxes</code></td><td class="desc">List locally saved inboxes</td></tr>
             <tr><td><code>toss</code></td><td class="desc">Delete an inbox server-side + wipe local state. Flags: <code>-a</code> address, <code>--all</code></td></tr>
             <tr><td><code>clear</code></td><td class="desc">Remove all inboxes from local state only (server accounts stay)</td></tr>
@@ -115,6 +116,7 @@
               <thead><tr><th scope="col">Provider</th><th scope="col">Notes</th></tr></thead>
               <tbody>
                 <tr><td><code>mailtm</code></td><td class="desc">mail.tm, the default, no API key</td></tr>
+                <tr><td><code>mailgw</code></td><td class="desc">mail.gw — mail.tm-compatible API on independent infrastructure</td></tr>
                 <tr><td><code>guerrillamail</code></td><td class="desc">GuerrillaMail, classic fallback</td></tr>
               </tbody>
             </table>

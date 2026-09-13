@@ -1,6 +1,6 @@
 # CLI reference
 
-Nine commands. The table is the manual. Every command also accepts `--json`
+Ten commands. The table is the manual. Every command also accepts `--json`
 and exits 0–4 — that contract is documented below, not discovered at runtime.
 
 Markdown version of https://tossinbox.pages.dev/cli.html
@@ -13,6 +13,7 @@ Markdown version of https://tossinbox.pages.dev/cli.html
 | `list`      | List messages in an inbox. Flags: `-a address` (defaults to most recent)                                 |
 | `read <id>` | Read a full message, including any detected verification code. Flags: `-a address`                       |
 | `wait`      | Poll until a message arrives. Flags: `-a address`, `-f from`, `-s subject`, `-c` extract code, `-t` timeout (max 600s), `-i` interval |
+| `watch`     | Stream new messages as they arrive until Ctrl-C — only new arrivals, never history. Flags: `-a address`, `-f from`, `-s subject`, `-i` interval (1–60s). With `--json`: one compact JSON object per line (NDJSON) |
 | `inboxes`   | List locally saved inboxes                                                                               |
 | `toss`      | Delete an inbox server-side + wipe local state. Flags: `-a address`, `--all`                             |
 | `clear`     | Remove all inboxes from local state only (server accounts stay)                                          |
@@ -36,6 +37,7 @@ A stable contract: agents script against these, not against stdout.
 | Provider        | Notes                          |
 |-----------------|--------------------------------|
 | `mailtm`        | mail.tm, the default, no API key |
+| `mailgw`        | mail.gw — mail.tm-compatible API on independent infrastructure |
 | `guerrillamail` | GuerrillaMail, classic fallback |
 
 New provider = one small file implementing `createInbox` / `listMessages` /

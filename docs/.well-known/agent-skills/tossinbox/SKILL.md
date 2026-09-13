@@ -6,7 +6,7 @@ description: Create disposable email inboxes from the terminal or via MCP, wait 
 # TossInbox — disposable email for agents
 
 TossInbox spawns real disposable inboxes on live providers (mail.tm by
-default, GuerrillaMail as fallback), waits for incoming verification mail,
+default, mail.gw and GuerrillaMail as fallbacks), waits for incoming verification mail,
 extracts the OTP code, and deletes the inbox when done. It is receive-only:
 it never sends email. No accounts, no API keys, no interactive prompts.
 
@@ -40,8 +40,9 @@ tossinbox toss                         # delete server-side + wipe local state
 
 Commands: `spawn` (`-p provider`, `-l label`), `list` (`-a address`),
 `read <id>`, `wait` (`-f from`, `-s subject`, `-c` extract code,
-`-t` timeout max 600s, `-i` interval), `inboxes`, `toss` (`-a`, `--all`),
-`clear`, `providers`, `mcp`.
+`-t` timeout max 600s, `-i` interval), `watch` (stream new messages until
+Ctrl-C; `--json` streams one JSON object per line), `inboxes`,
+`toss` (`-a`, `--all`), `clear`, `providers`, `mcp`.
 
 Exit codes: 0 success · 1 error (network/provider) · 2 timeout ·
 3 not found · 4 usage error. Script against these codes, not against stdout.

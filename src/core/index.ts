@@ -1,14 +1,15 @@
 import type { EmailProvider } from "./types.js";
-import { mailTm } from "./providers/mailtm.js";
+import { mailTm, mailGw } from "./providers/mailtm.js";
 import { guerrillaMail } from "./providers/guerrillamail.js";
 
 export * from "./types.js";
 export { extractCode, htmlToText } from "./otp.js";
 export * from "./state.js";
-export { waitForMessage } from "./wait.js";
+export { waitForMessage, sleep } from "./wait.js";
 
 export const providers: Record<string, EmailProvider> = {
   [mailTm.name]: mailTm,
+  [mailGw.name]: mailGw,
   [guerrillaMail.name]: guerrillaMail,
 };
 

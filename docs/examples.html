@@ -122,7 +122,7 @@
         <span class="k">with:</span>
           <span class="k">node-version:</span> <span class="s">20</span>
       - <span class="k">name:</span> Install TossInbox
-        <span class="k">run:</span> npm install --global tossinbox@0.1.2
+        <span class="k">run:</span> npm install --global tossinbox@0.1.3
 
       - <span class="k">name:</span> Spawn inbox
         <span class="k">id:</span> inbox
@@ -218,15 +218,18 @@ run([<span class="s">"toss"</span>]);</pre>
   <section>
     <div class="wrap">
       <h2>5 · Second provider when the first is flaky</h2>
-      <p class="sec-lead">Two providers ship built in: <code>mailtm</code> (default) and
+      <p class="sec-lead">Three providers ship built in: <code>mailtm</code> (default),
+      <code>mailgw</code> (mail.tm-compatible API on independent infrastructure) and
       <code>guerrillamail</code>. When one is having a bad day, switch with a flag — no config files.</p>
       <div class="codeblock">
         <div class="code-head"><span>shell: provider failover by hand</span><button class="copy-chip" data-copy="tossinbox providers
+tossinbox spawn -p mailgw
 tossinbox spawn -p guerrillamail" aria-label="Copy the provider failover example">copy</button></div>
         <pre class="block" tabindex="0"><span class="c"># what is available?</span>
 <span class="a">tossinbox</span> providers
 
-<span class="c"># default provider is down / slow? spawn on the other one</span>
+<span class="c"># default provider is down / slow? spawn on another one</span>
+<span class="a">tossinbox</span> spawn -p mailgw
 <span class="a">tossinbox</span> spawn -p guerrillamail</pre>
       </div>
       <p class="note">Automatic failover is on the <a href="roadmap">roadmap</a>.</p>
@@ -248,8 +251,28 @@ tossinbox spawn -p guerrillamail" aria-label="Copy the provider failover example
   --interval 3</pre>
       </div>
       <p class="note">Codes with letters come back uppercased (<code>f4x9k2</code> → <code>F4X9K2</code>);
-      extraction understands English and Arabic prompts (رمز / كود / تفعيل / تحقق). Flag reference on the
+      extraction understands prompts in twelve languages — English and Arabic (رمز / كود / تفعيل / تحقق),
+      plus French, Spanish, German, Portuguese, Italian, Russian, Turkish, Chinese, Japanese, and Korean.
+      Flag reference on the
       <a href="cli">CLI page</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>7 · Watch: stream codes the moment they land</h2>
+      <p class="sec-lead">Long-lived automation should not exit after the first message. <code>watch</code>
+      keeps polling, prints every new message (and its code when found), and stops on Ctrl-C. Only new
+      arrivals are reported — restarting a watch never replays old mail.</p>
+      <div class="codeblock">
+        <div class="code-head"><span>shell: watch for codes</span><button class="copy-chip" data-copy="tossinbox watch --from noreply@example-app.dev
+tossinbox watch --json" aria-label="Copy the watch example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="c"># watch until the code from your app lands, then keep going</span>
+<span class="a">tossinbox</span> watch --from noreply@example-app.dev
+
+<span class="c"># agents: one compact JSON object per line on stdout, stderr stays silent</span>
+<span class="a">tossinbox</span> watch --json</pre>
+      </div>
     </div>
   </section>
 

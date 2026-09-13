@@ -21,6 +21,9 @@ Markdown version of https://tossinbox.pages.dev/roadmap.html
   say what to do), atomic state saves a crash can no longer truncate.
 - **site v2** — brew/npx hero tabs, Star-on-GitHub CTA, highlighted comparison
   column, EN/AR nav toggle, Arabic quickstart, Arabic copy polish.
+- **v0.1.3** — third provider `mailgw` (mail.tm-compatible, independent
+  infrastructure), `tossinbox watch` live-polling mode with NDJSON output for
+  agents, OTP keywords in twelve languages.
 
 ## Next up
 
@@ -28,12 +31,9 @@ Ordered by how likely they are to land first. Small, verifiable increments.
 
 | item | status | why |
 |------|--------|-----|
-| `mail.gw` provider | planned | mail.tm-compatible API — the cheapest possible provider win |
-| `tempmail.lol` provider | planned | free API, adds a third independent upstream |
+| `tempmail.lol` provider | planned | free API, adds a fourth independent upstream |
 | Provider failover | planned | auto-retry spawn/wait on the next provider when one is down |
-| `tossinbox watch` | planned | live-polling mode that prints codes as they arrive — no exit until Ctrl-C |
 | Attachments & HTML bodies | planned | `read` gains decoded HTML and downloadable attachments |
-| More OTP languages | planned | wider extraction coverage beyond English + Arabic prompts |
 
 ## Exploring
 

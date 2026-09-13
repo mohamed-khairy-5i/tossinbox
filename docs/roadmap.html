@@ -82,6 +82,7 @@
             <tr><td><code>site</code></td><td class="desc">examples + guide + changelog + roadmap pages, Arabic homepage, Markdown-for-agents on every page, automated Cloudflare Pages deploy from CI</td></tr>
             <tr><td><code>v0.1.2</code></td><td class="desc">friendly network error messages (DNS, refused, TLS, timeout each say what to do), atomic state saves a crash can no longer truncate</td></tr>
             <tr><td><code>site v2</code></td><td class="desc">brew/npx hero tabs, Star-on-GitHub CTA, highlighted comparison column, EN/AR nav toggle, Arabic quickstart <code>/ar/quickstart</code>, Arabic copy polish</td></tr>
+            <tr><td><code>v0.1.3</code></td><td class="desc">third provider <code>mailgw</code> (mail.tm-compatible, independent infrastructure), <code>tossinbox watch</code> live-polling mode with NDJSON output for agents, OTP keywords in twelve languages</td></tr>
           </tbody>
         </table>
       </div>
@@ -96,12 +97,9 @@
         <table class="tbl">
           <thead><tr><th scope="col">item</th><th scope="col">status</th><th scope="col">why</th></tr></thead>
           <tbody>
-            <tr><td><code>mail.gw</code> provider</td><td class="desc">planned</td><td class="desc">mail.tm-compatible API — the cheapest possible provider win</td></tr>
-            <tr><td><code>tempmail.lol</code> provider</td><td class="desc">planned</td><td class="desc">free API, adds a third independent upstream</td></tr>
+            <tr><td><code>tempmail.lol</code> provider</td><td class="desc">planned</td><td class="desc">free API, adds a fourth independent upstream</td></tr>
             <tr><td>Provider failover</td><td class="desc">planned</td><td class="desc">auto-retry spawn/wait on the next provider when one is down</td></tr>
-            <tr><td><code>tossinbox watch</code></td><td class="desc">planned</td><td class="desc">live-polling mode that prints codes as they arrive — no exit until Ctrl-C</td></tr>
             <tr><td>Attachments &amp; HTML bodies</td><td class="desc">planned</td><td class="desc"><code>read</code> gains decoded HTML and downloadable attachments</td></tr>
-            <tr><td>More OTP languages</td><td class="desc">planned</td><td class="desc">wider extraction coverage beyond English + Arabic prompts</td></tr>
           </tbody>
         </table>
       </div>

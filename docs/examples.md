@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 20
       - name: Install TossInbox
-        run: npm install --global tossinbox@0.1.2
+        run: npm install --global tossinbox@0.1.3
 
       - name: Spawn inbox
         id: inbox
@@ -143,14 +143,16 @@ the inbox.” The agent maps that to `create_inbox` → its own signup step →
 
 ## 5 · Second provider when the first is flaky
 
-Two providers ship built in: `mailtm` (default) and `guerrillamail`. When one
-is having a bad day, switch with a flag — no config files.
+Three providers ship built in: `mailtm` (default), `mailgw` (mail.tm-compatible
+API on independent infrastructure) and `guerrillamail`. When one is having a
+bad day, switch with a flag — no config files.
 
 ```bash
 # what is available?
 tossinbox providers
 
-# default provider is down / slow? spawn on the other one
+# default provider is down / slow? spawn on another one
+tossinbox spawn -p mailgw
 tossinbox spawn -p guerrillamail
 ```
 
@@ -169,6 +171,23 @@ tossinbox wait --code \
 ```
 
 Codes with letters come back uppercased (`f4x9k2` → `F4X9K2`); extraction
-understands English and Arabic prompts (رمز / كود / تفعيل / تحقق).
+understands prompts in twelve languages — English and Arabic
+(رمز / كود / تفعيل / تحقق), plus French, Spanish, German, Portuguese, Italian,
+Russian, Turkish, Chinese, Japanese, and Korean.
+
+## 7 · Watch: stream codes the moment they land
+
+Long-lived automation should not exit after the first message. `watch` keeps
+polling, prints every new message (and its code when found), and stops on
+Ctrl-C. Only new arrivals are reported — restarting a watch never replays
+old mail.
+
+```bash
+# watch until the code from your app lands, then keep going
+tossinbox watch --from noreply@example-app.dev
+
+# agents: one compact JSON object per line on stdout, stderr stays silent
+tossinbox watch --json
+```
 
 MIT License © 2026 Mohamed Khairy

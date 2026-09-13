@@ -62,7 +62,9 @@ tossinbox wait --code --from noreply@example-app.dev --timeout 120
 ```
 
 Code extraction handles digits-only and letter+digit OTPs (letters come back
-uppercased) and recognizes English and Arabic prompts (رمز / كود / تفعيل / تحقق).
+uppercased) and understands prompts in twelve languages — English and Arabic
+(رمز / كود / تفعيل / تحقق), plus French, Spanish, German, Portuguese, Italian,
+Russian, Turkish, Chinese, Japanese, and Korean.
 
 ## Cleanup: toss vs clear
 

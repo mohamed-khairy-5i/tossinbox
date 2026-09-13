@@ -11,6 +11,7 @@ import {
   saveInbox,
   statePath,
   waitForMessage,
+  sleep,
   htmlToText,
   ProviderError,
   type EmailProvider,
@@ -228,6 +229,122 @@ program
         }
       }
       exitWith(opts.code && !message.code ? EXIT_ERROR : EXIT_OK);
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+program
+  .command("watch")
+  .description(
+    "Stream new messages as they arrive — prints each message (and its code when found) and keeps polling until Ctrl-C"
+  )
+  .option("-a, --address <address>", "inbox address (defaults to the most recent inbox)")
+  .option("-f, --from <sender>", "only report messages from this sender (substring)")
+  .option("-s, --subject <text>", "only report messages whose subject contains this text")
+  .option("-i, --interval <seconds>", "poll interval in seconds", "5")
+  .action(async (opts) => {
+    try {
+      const intervalSeconds = Number(opts.interval);
+      if (!Number.isFinite(intervalSeconds) || intervalSeconds < 1 || intervalSeconds > 60) {
+        fail(new Error(`Invalid --interval "${opts.interval}" (expected seconds between 1 and 60)`), EXIT_USAGE);
+      }
+
+      const inbox = await resolveInbox(opts.address);
+      if (!inbox) fail(new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
+
+      const provider = providerOrExit(inbox.provider);
+
+      const matches = (m: { from: string; fromName?: string; subject: string }): boolean => {
+        if (opts.from) {
+          const hay = `${m.from} ${m.fromName ?? ""}`.toLowerCase();
+          if (!hay.includes(opts.from.toLowerCase())) return false;
+        }
+        if (opts.subject && !m.subject.toLowerCase().includes(opts.subject.toLowerCase())) return false;
+        return true;
+      };
+
+      // Snapshot what is already in the inbox so only NEW arrivals are
+      // reported — re-watching an inbox after a wait must not replay history.
+      const seen = new Set<string>();
+      try {
+        for (const m of await provider.listMessages(inbox)) seen.add(m.id);
+      } catch {
+        // A failed first poll should not blind the watcher — start empty.
+      }
+
+      let stopped = false;
+      const stop = (): void => {
+        stopped = true;
+      };
+      process.on("SIGINT", stop);
+      process.on("SIGTERM", stop);
+
+      if (jsonMode()) {
+        // Streaming mode: one compact JSON object per line (NDJSON).
+      } else {
+        console.error(`👀 watching ${inbox.address} — Ctrl-C to stop`);
+      }
+
+      while (!stopped) {
+        let summaries;
+        try {
+          summaries = await provider.listMessages(inbox);
+        } catch {
+          // Transient provider/network errors: keep polling until stopped.
+        }
+
+        if (summaries) {
+          for (const summary of summaries) {
+            if (seen.has(summary.id) || !matches(summary)) continue;
+            seen.add(summary.id);
+
+            // One retry — a transient read error must not swallow a message
+            // that may have taken minutes to arrive.
+            let message: Message | undefined;
+            try {
+              message = await provider.readMessage(inbox, summary.id);
+            } catch {
+              await sleep(1500);
+              try {
+                message = await provider.readMessage(inbox, summary.id);
+              } catch {
+                // Report from the summary rather than dropping the event.
+              }
+            }
+
+            if (jsonMode()) {
+              const event: Record<string, unknown> = {
+                ok: true,
+                event: "message",
+                inbox: inbox.address,
+                provider: inbox.provider,
+                id: summary.id,
+                from: summary.from,
+                fromName: summary.fromName,
+                subject: summary.subject,
+                createdAt: summary.createdAt,
+                code: message?.code,
+                text: message?.text ?? (message?.html ? htmlToText(message.html) : undefined),
+              };
+              console.log(JSON.stringify(event));
+            } else if (message) {
+              printMessageHuman(message, false);
+            } else {
+              console.log(`✔ new message: ${summary.subject}`);
+            }
+          }
+        }
+
+        // Sleep in small slices so Ctrl-C feels instant.
+        const deadline = Date.now() + intervalSeconds * 1000;
+        while (!stopped && Date.now() < deadline) {
+          await sleep(Math.min(200, deadline - Date.now()));
+        }
+      }
+
+      if (!jsonMode()) console.error("✔ watch stopped");
+      exitWith(EXIT_OK);
     } catch (err) {
       fail(err);
     }

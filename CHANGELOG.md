@@ -5,6 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-09-13
+
+### Added
+- **`mail.gw` provider** (`spawn -p mailgw`) — mail.tm-compatible API on
+  independent infrastructure. When mail.tm is having a bad day, spawn on
+  mail.gw instead; same CLI, same JSON, same exit codes. And when any
+  upstream is down, a 5xx now reads
+  `HTTP 502 from api.mail.gw — provider is down or having trouble; retry,
+  or switch with --provider` instead of a bare `HTTP 502`.
+- **`tossinbox watch`** — live-polling mode that prints each new message (and
+  its code when found) the moment it arrives, and keeps polling until Ctrl-C.
+  Only *new* arrivals are reported: re-watching an inbox never replays old
+  mail. With `--json` it streams one compact JSON object per message (NDJSON)
+  on stdout and keeps stderr silent, so agents can pipe it straight into the
+  next step of a script.
+- **Verification-code keywords now understand twelve languages.** French,
+  Spanish, German, Portuguese, Italian, Russian, Turkish, Chinese, Japanese,
+  and Korean join English and Arabic — `Votre code de vérification est 482913`
+  or `您的验证码是662341` extract just as reliably as "Your code is 123456".
+
 ## [0.1.2] - 2026-09-13
 
 ### Added

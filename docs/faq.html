@@ -37,7 +37,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The tool is MIT-licensed and both upstream providers (mail.tm, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to sign up for."}},
+    {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The tool is MIT-licensed and all three upstream providers (mail.tm, mail.gw, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to sign up for."}},
     {"@type": "Question", "name": "Can it send email?", "acceptedAnswer": {"@type": "Answer", "text": "No. Receive-only, by design. TossInbox exists for privacy and testing. It deliberately ships no bulk-send or bulk-signup mode. Please respect each provider's terms of service."}},
     {"@type": "Question", "name": "Is a disposable inbox private?", "acceptedAnswer": {"@type": "Answer", "text": "Treat any disposable inbox as public: anyone who guesses the address could read it. Your local state (~/.tossinbox/state.json, override with TOSSINBOX_STATE) holds provider tokens and is written with 0600 permissions. toss deletes the account on the provider when supported. Never use it for banking, government, or your real identity."}},
     {"@type": "Question", "name": "Does it work on Windows?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anywhere Node.js 18+ runs. npx tossinbox@latest spawn works in PowerShell exactly the same. Homebrew covers macOS and Linux."}},
@@ -87,7 +87,7 @@
     <div class="wrap">
       <details>
         <summary>Is it really free?</summary>
-        <div class="answer">Yes. The tool is MIT-licensed and both upstream providers (mail.tm, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to sign up for.</div>
+        <div class="answer">Yes. The tool is MIT-licensed and all three upstream providers (mail.tm, mail.gw, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to sign up for.</div>
       </details>
       <details>
         <summary>Can it send email?</summary>

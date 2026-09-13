@@ -6,8 +6,8 @@ Markdown version of https://tossinbox.pages.dev/faq.html
 
 ## Is it really free?
 
-Yes. The tool is MIT-licensed and both upstream providers (mail.tm,
-GuerrillaMail) are free with no API keys. There is no paid tier and nothing to
+Yes. The tool is MIT-licensed and all three upstream providers (mail.tm,
+mail.gw, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to
 sign up for.
 
 ## Can it send email?

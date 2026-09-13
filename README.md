@@ -55,7 +55,7 @@ $ tossinbox toss
 | Documented exit codes  | 0–4                     | none                | no                          |
 | MCP server for agents  | yes, built in           | no                  | no                          |
 | Runs headless / in CI  | yes                     | no                  | partial                     |
-| Upstream alive         | mail.tm + GuerrillaMail | varies              | many wrap the dead 1secmail |
+| Upstream alive         | mail.tm + mail.gw + GuerrillaMail | varies              | many wrap the dead 1secmail |
 | Ads, trackers, popups  | none                    | the business model  | none                        |
 
 Checked September 2026. If a cell is wrong, open an issue and win the argument.
@@ -111,6 +111,7 @@ tossinbox wait --code --json
 | `list` | List messages (`-a address`) |
 | `read <id>` | Read a full message, including any detected code |
 | `wait` | Poll until a message arrives (`-f sender`, `-s subject`, `-c` extract code, `-t timeout` max 600s) |
+| `watch` | Stream new messages until Ctrl-C — only new arrivals; `--json` = one JSON object per line (NDJSON) |
 | `inboxes` | List locally saved inboxes |
 | `toss` | Delete an inbox server-side and remove it from local state (`--all` for every inbox) |
 | `clear` | Remove all inboxes from local state only |
@@ -215,6 +216,7 @@ machine-readable and kept up to date.
 | Provider | API key | Notes |
 |---|---|---|
 | `mailtm` (default) | not required | mail.tm — reliable, fast |
+| `mailgw` | not required | mail.gw — mail.tm-compatible API on independent infrastructure |
 | `guerrillamail` | not required | GuerrillaMail — classic fallback |
 
 Adding a provider means implementing a small interface (`createInbox`,
@@ -223,7 +225,7 @@ Adding a provider means implementing a small interface (`createInbox`,
 ## FAQ
 
 **Is it really free?**
-Yes. MIT-licensed, and both upstream providers are free with no API keys.
+Yes. MIT-licensed, and all three upstream providers are free with no API keys.
 
 **Can it send email?**
 No — receive-only by design. TossInbox exists for privacy and testing and
