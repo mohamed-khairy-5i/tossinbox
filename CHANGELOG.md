@@ -5,6 +5,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+### Fixed
+- Pin all GitHub Actions to full commit SHAs (supply-chain hardening):
+  `actions/checkout`, `actions/setup-node`, `cloudflare/wrangler-action`.
+
 ## [0.1.6] - 2026-09-13
 
 ### Added
