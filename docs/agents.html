@@ -77,7 +77,7 @@
         <table class="tbl">
           <thead><tr><th scope="col">MCP tool</th><th scope="col">What it returns</th></tr></thead>
           <tbody>
-            <tr><td><code>create_inbox</code></td><td class="desc">A fresh disposable address + provider name</td></tr>
+            <tr><td><code>create_inbox</code></td><td class="desc">A fresh disposable address + provider name. If the requested provider is down, another one serves the inbox automatically (<code>no_failover</code> opts out)</td></tr>
             <tr><td><code>list_messages</code></td><td class="desc">Messages currently in an inbox</td></tr>
             <tr><td><code>read_message</code></td><td class="desc">Full message body, including any detected code</td></tr>
             <tr><td><code>wait_for_code</code></td><td class="desc">Blocks until a verification code arrives, returns it</td></tr>

@@ -39,7 +39,8 @@ tossinbox wait --code --from noreply@example.com --timeout 120
 tossinbox toss                         # delete server-side + wipe local state
 ```
 
-Commands: `spawn` (`-p provider`, `-l label`), `list` (`-a address`),
+Commands: `spawn` (`-p provider`, `-l label`; if the provider is down, another
+one is used automatically — `--no-failover` opts out), `list` (`-a address`),
 `read <id>`, `wait` (`-f from`, `-s subject`, `-c` extract code,
 `-t` timeout max 600s, `-i` interval), `watch` (stream new messages until
 Ctrl-C; `--json` streams one JSON object per line), `inboxes`,
@@ -55,7 +56,7 @@ The same binary runs a stdio MCP server (`tossinbox mcp`, or the
 
 | Tool            | Returns                                          |
 |-----------------|--------------------------------------------------|
-| `create_inbox`  | Fresh disposable address + provider name         |
+| `create_inbox`  | Fresh disposable address + provider name. If the requested provider is down, another one serves the inbox automatically (`no_failover` opts out) |
 | `list_messages` | Messages currently in the inbox                  |
 | `read_message`  | Full message body incl. any detected code        |
 | `wait_for_code` | Blocks until a code arrives, returns it          |

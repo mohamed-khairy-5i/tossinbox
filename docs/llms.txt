@@ -24,11 +24,13 @@ inboxes when done. It is designed agent-first: every CLI command supports
 
 ## CLI (binary: `tossinbox`)
 
-- `tossinbox spawn` — create a new disposable inbox (flags: `-p provider`, `-l label`)
+- `tossinbox spawn` — create a new disposable inbox (flags: `-p provider`, `-l label`);
+  if the provider is down, another one is used automatically (`--no-failover` opts out)
 - `tossinbox list` — list messages in an inbox (flag: `-a address`)
 - `tossinbox read <id>` — read a full message by id
 - `tossinbox wait --code` — poll until a message arrives and print its verification code
   (flags: `-f sender`, `-s subject`, `-t timeout`, `-i interval`)
+- `tossinbox watch` — stream new messages as they arrive until Ctrl-C (NDJSON with `--json`)
 - `tossinbox inboxes` — list locally saved inboxes
 - `tossinbox toss` — delete an inbox server-side and wipe local state (`--all` for all)
 - `tossinbox providers` — list providers (default: `mailtm`; also `mailgw`, `guerrillamail`, `tempmaillol`, `tempmailio`, `tempmailplus`, `maildrop`)
@@ -59,9 +61,11 @@ npx tossinbox@latest spawn
 
 ## Notes
 
-- Providers: `mailtm` (default) and `guerrillamail`; no API keys required.
+- Providers: `mailtm` (default), `mailgw`, `guerrillamail`, `tempmaillol`,
+  `tempmailio`, `tempmailplus`, `maildrop`; no API keys required. When a
+  provider is down, `spawn` fails over to another one automatically.
 - Local state is stored in `~/.tossinbox/state.json` (override with the
   `TOSSINBOX_STATE` environment variable) with 0600 permissions.
 - TossInbox intentionally has no bulk mode; use it for privacy and testing and
   respect the providers' terms of service.
-- License: MIT. Repository: [mohamed-khairy-5i/tossinbox](https://github.com/mohamed-khairy-5i/tossinbox)
+- License: MIT. Repository: https://github.com/mohamed-khairy-5i/tossinbox

@@ -107,7 +107,7 @@ tossinbox wait --code --json
 
 | Command | Description |
 |---|---|
-| `spawn` | Create a new disposable inbox (`-p provider`, `-l label`) |
+| `spawn` | Create a new disposable inbox (`-p provider`, `-l label`). If the provider is down, another one is used automatically — `--no-failover` opts out |
 | `list` | List messages (`-a address`) |
 | `read <id>` | Read a full message, including any detected code |
 | `wait` | Poll until a message arrives (`-f sender`, `-s subject`, `-c` extract code, `-t timeout` max 600s) |
@@ -239,6 +239,12 @@ ships no bulk-send or bulk-signup mode.
 Yes, anywhere Node.js 18+ runs. `npx tossinbox@latest spawn`
 works in PowerShell exactly the same.
 
+**What if a provider is down?**
+`spawn` fails over automatically: it retries the create against the remaining
+providers and reports the switch (human mode prints a `⚠` warning and
+`provider : mailtm (failover from mailgw)`; `--json` returns a `failover`
+object). Use `--no-failover` if you need the chosen provider or nothing.
+
 **A site blocked my disposable address. What now?**
 Some sites blocklist known disposable domains. Try the other provider:
 `tossinbox spawn -p guerrillamail`. If both are blocked, the site wins that
@@ -260,9 +266,9 @@ round.
 - [x] Homebrew tap: `brew install mohamed-khairy-5i/tap/tossinbox`
 - [x] Project website at [tossinbox.pages.dev](https://tossinbox.pages.dev/)
 - [x] Publish `tossinbox` + `tossinbox-mcp` to the [npm registry](https://www.npmjs.com/package/tossinbox)
-- [ ] `mail.gw` provider (mail.tm-compatible API — small lift)
-- [ ] `tempmail.lol` provider (free API)
-- [ ] Provider failover: auto-switch when a provider is down
+- [x] `mail.gw` provider (v0.1.3)
+- [x] Four more providers: `tempmail.lol`, `temp-mail.io`, `tempmail.plus`, `maildrop.cc` (v0.1.4)
+- [x] Provider failover: auto-switch when a provider is down (v0.1.5)
 - [ ] Homebrew core formula (after community adoption)
 
 ## Documentation

@@ -1,6 +1,6 @@
 {
   "name": "tossinbox",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Disposable email inboxes for humans and AI agents. Spawn an inbox, wait for the OTP, toss it.",
   "type": "module",
   "license": "MIT",

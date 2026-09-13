@@ -2,6 +2,7 @@
 import { Command, CommanderError } from "commander";
 import {
   DEFAULT_PROVIDER,
+  createInboxWithFailover,
   getProvider,
   listProviders,
   listSavedInboxes,
@@ -102,21 +103,32 @@ function printMessageHuman(message: Message, withBody: boolean): void {
 
 program
   .command("spawn")
-  .description("Create a new disposable inbox")
+  .description("Create a new disposable inbox (automatically falls back to another provider when the chosen one is down)")
   .option("-p, --provider <name>", "email provider (see: providers)", DEFAULT_PROVIDER)
   .option("-l, --label <label>", "optional label to identify this inbox")
+  .option("--no-failover", "fail if the chosen provider is down instead of falling back to another one")
   .action(async (opts) => {
     try {
-      const provider = providerOrExit(opts.provider);
-      const inbox = await provider.createInbox({ label: opts.label });
+      providerOrExit(opts.provider); // unknown name = usage error before any network call
+      const { inbox, switched, warnings } = await createInboxWithFailover({
+        requested: opts.provider,
+        label: opts.label,
+        failover: opts.failover,
+      });
       await saveInbox(inbox);
 
       if (jsonMode()) {
-        out({ ok: true, inbox });
+        out({
+          ok: true,
+          inbox,
+          ...(switched ? { failover: { requested: opts.provider, used: inbox.provider } } : {}),
+          ...(warnings.length > 0 ? { warnings } : {}),
+        });
         return;
       }
+      for (const warning of warnings) console.error(`⚠ ${warning}`);
       console.log(`✔ Inbox ready : ${inbox.address}`);
-      console.log(`  provider    : ${inbox.provider}`);
+      console.log(`  provider    : ${inbox.provider}${switched ? ` (failover from ${opts.provider})` : ""}`);
       if (inbox.label) console.log(`  label       : ${inbox.label}`);
       console.log(`  state file  : ${statePath()}`);
     } catch (err) {

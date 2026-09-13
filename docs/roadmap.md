@@ -27,6 +27,10 @@ Markdown version of https://tossinbox.pages.dev/roadmap.html
 - **v0.1.4** — four more zero-config providers: `tempmaillol`, `tempmailio`
   (server-side toss), `tempmailplus` and `maildrop` — seven upstreams across
   four independent stacks; temp-mail.io's transient post-create 400 now retries.
+- **v0.1.5** — provider failover: when the requested provider is down
+  (network error, 5xx, 429), `spawn` retries the create against the remaining
+  providers automatically and reports the switch in human output, `--json`, and
+  the MCP `create_inbox` tool; `--no-failover` opts out.
 
 ## Next up
 
@@ -34,7 +38,6 @@ Ordered by how likely they are to land first. Small, verifiable increments.
 
 | item | status | why |
 |------|--------|-----|
-| Provider failover | planned | auto-retry spawn/wait on the next provider when one is down |
 | Attachments & HTML bodies | planned | `read` gains decoded HTML and downloadable attachments |
 
 ## Exploring

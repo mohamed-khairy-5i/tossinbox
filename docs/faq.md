@@ -31,6 +31,13 @@ Yes. Anywhere Node.js 18+ runs.
 `npx tossinbox@latest spawn` works in PowerShell exactly the
 same. Homebrew covers macOS and Linux.
 
+## What if a provider is down?
+
+`spawn` fails over automatically: it retries the create against the remaining
+providers and reports the switch (human mode prints a `⚠` warning and
+`provider : mailtm (failover from mailgw)`; `--json` returns a `failover`
+object). Use `--no-failover` if you need the chosen provider or nothing.
+
 ## How is this different from tmpmail and friends?
 
 Most existing CLI temp-mail tools are human-first wrappers around the same

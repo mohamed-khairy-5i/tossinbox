@@ -26,12 +26,16 @@ Three facts explain almost all of TossInbox's behavior.
 ## Creating inboxes
 
 `spawn` creates the mailbox, saves it to state, and prints the address. Plain
-text for humans, `--json` for programs.
+text for humans, `--json` for programs. If the provider you asked for is down
+(network error, 5xx, 429), `spawn` fails over: it retries the create against
+the remaining providers and reports the switch (`provider : mailtm (failover
+from mailgw)`, or a `failover` object in JSON).
 
 ```bash
 tossinbox spawn                       # default provider, plain output
 tossinbox spawn --json                # machine-readable (ok, inbox{address,…})
 tossinbox spawn -p guerrillamail      # pick a provider explicitly
+tossinbox spawn -p mailgw --no-failover  # strict: mailgw or nothing
 tossinbox spawn -l github-test        # label it — labels show in `inboxes`
 tossinbox inboxes                     # every inbox saved in local state
 ```
@@ -108,9 +112,13 @@ the provider is degraded, spawn a fresh inbox with `-p guerrillamail` and retry.
 
 ### spawn fails with exit code 1
 
-Usually the provider API having a moment. Retry once, then switch providers:
-`tossinbox spawn -p guerrillamail`. All HTTP calls carry a hard 20-second
-timeout, so this always fails fast instead of hanging.
+If the requested provider was down, failover already tried every other
+provider before failing — the error is the requested provider's original
+message plus a `failover also tried N other provider(s)` note, which means
+everything upstream is having a bad day. Wait a bit and retry, or check
+`tossinbox providers`. Add `--no-failover` when you need to see the chosen
+provider's raw failure without the fallback tour. All HTTP calls carry a hard
+20-second timeout, so this always fails fast instead of hanging.
 
 ### "corrupt state file" error on any command
 

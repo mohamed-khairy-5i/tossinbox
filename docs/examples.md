@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 20
       - name: Install TossInbox
-        run: npm install --global tossinbox@0.1.4
+        run: npm install --global tossinbox@0.1.5
 
       - name: Spawn inbox
         id: inbox
@@ -141,25 +141,32 @@ account up on staging, wait for the code, finish the verification, then delete
 the inbox.” The agent maps that to `create_inbox` → its own signup step →
 `wait_for_code` → `tossinbox toss`.
 
-## 5 · Second provider when the first is flaky
+## 5 · When a provider is down, failover kicks in
 
 Seven providers ship built in: `mailtm` (default), `mailgw` (mail.tm-compatible
 API on independent infrastructure), `guerrillamail`, `tempmaillol`,
-`tempmailio`, `tempmailplus` and `maildrop`. When one is having a bad day,
-switch with a flag — no config files.
+`tempmailio`, `tempmailplus` and `maildrop`. If the one you asked for is down,
+`spawn` retries the create against the others automatically and reports the
+switch — no config files, no retry scripts.
 
 ```bash
-# what is available?
-tossinbox providers
-
-# default provider is down / slow? spawn on another one
+# mail.gw is down? the inbox still lands on a healthy provider
 tossinbox spawn -p mailgw
+#   ⚠ mailgw: HTTP 502 from api.mail.gw — provider is down or having trouble…
+# ✔ Inbox ready : ab12cd34ef@uberip.com
+#   provider    : mailtm (failover from mailgw)
+
+# strict mode: fail instead of switching
+tossinbox spawn -p mailgw --no-failover
+
+# or pick a healthy provider yourself
+tossinbox providers
 tossinbox spawn -p guerrillamail
-tossinbox spawn -p tempmaillol
-tossinbox spawn -p tempmailio
-tossinbox spawn -p tempmailplus
-tossinbox spawn -p maildrop
 ```
+
+`--json` makes the switch machine-readable: a `failover` object
+(`{"requested": "mailgw", "used": "mailtm"}`) plus a `warnings` array with one
+entry per failed attempt.
 
 ## 6 · Wait flags: filter by sender, subject, timing
 

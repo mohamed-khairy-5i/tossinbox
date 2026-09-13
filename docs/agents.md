@@ -11,7 +11,7 @@ Markdown version of https://tossinbox.pages.dev/agents.html
 
 | MCP tool        | What it returns                                        |
 |-----------------|--------------------------------------------------------|
-| `create_inbox`  | A fresh disposable address + provider name             |
+| `create_inbox`  | A fresh disposable address + provider name. If the requested provider is down, another one serves the inbox automatically (`no_failover` opts out) |
 | `list_messages` | Messages currently in an inbox                         |
 | `read_message`  | Full message body, including any detected code         |
 | `wait_for_code` | Blocks until a verification code arrives, returns it   |

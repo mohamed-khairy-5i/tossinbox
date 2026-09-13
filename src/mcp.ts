@@ -7,6 +7,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import {
   DEFAULT_PROVIDER,
+  createInboxWithFailover,
   getProvider,
   resolveInbox,
   saveInbox,
@@ -56,18 +57,25 @@ export async function startMcpServer(): Promise<void> {
       description:
         "Create a brand new disposable email inbox. The inbox is saved locally so the other tools can use it. Returns the full email address to use in sign-up forms.",
       inputSchema: {
-        provider: z.string().optional().describe(`Provider name (default: "${DEFAULT_PROVIDER}", see the providers list)`),
+        provider: z.string().optional().describe(`Provider name (default: "${DEFAULT_PROVIDER}", see the providers list). If the provider is down, another one is used automatically unless no_failover is set`),
         label: z.string().optional().describe("Optional label to identify this inbox"),
+        no_failover: z.boolean().optional().describe("Fail when the chosen provider is down instead of falling back to another one"),
       },
     },
-    async ({ provider, label }) => {
+    async ({ provider, label, no_failover }) => {
       try {
-        const p = getProvider(provider);
-        const inbox = await p.createInbox({ label });
+        getProvider(provider); // unknown name = clean error before any network call
+        const { inbox, switched, warnings } = await createInboxWithFailover({
+          requested: provider,
+          label,
+          failover: !no_failover,
+        });
         await saveInbox(inbox);
         return text({
           ok: true,
           inbox: { address: inbox.address, provider: inbox.provider, label: inbox.label },
+          ...(switched ? { failover: { requested: provider ?? DEFAULT_PROVIDER, used: inbox.provider } } : {}),
+          ...(warnings.length > 0 ? { warnings } : {}),
           hint: `Use address "${inbox.address}" in the sign-up form, then call wait_for_code after submitting it.`,
         });
       } catch (err) {

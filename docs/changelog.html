@@ -72,6 +72,25 @@
 
   <section>
     <div class="wrap">
+      <h2><code>0.1.5</code> <span class="flag"><b>2026-09-13</b></span></h2>
+      <h3>Added</h3>
+      <ul class="facts">
+        <li><b>Provider failover.</b> <code>spawn</code> no longer gives up when the requested provider is down: a network error, a 5xx, or a 429 makes it retry the create against the remaining providers (requested first, then registration order) and report exactly what happened:
+          <ul class="facts">
+            <li>human output prints one <code>⚠</code> warning per failed attempt, then <code>provider : mailtm (failover from mailgw)</code></li>
+            <li><code>--json</code> gains an optional <code>failover</code> object (<code>requested</code> / <code>used</code>) and a <code>warnings</code> array</li>
+            <li>the MCP <code>create_inbox</code> tool fails over the same way (opt out with <code>no_failover</code>)</li>
+            <li><code>--no-failover</code> restores strict behavior: the chosen provider or nothing</li>
+            <li>a plain 4xx on the explicitly requested provider fails without fallback — switching providers cannot fix a bad request</li>
+          </ul>
+        </li>
+        <li>Verified against a real outage: with mail.gw answering 502, <code>spawn -p mailgw</code> lands the inbox on a healthy provider and exits 0.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
       <h2><code>0.1.4</code> <span class="flag"><b>2026-09-13</b></span></h2>
       <h3>Added</h3>
       <ul class="facts">

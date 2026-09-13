@@ -8,6 +8,7 @@ export * from "./types.js";
 export { extractCode, htmlToText } from "./otp.js";
 export * from "./state.js";
 export { waitForMessage, sleep } from "./wait.js";
+export { createInboxWithFailover } from "./failover.js";
 export const providers = {
     [mailTm.name]: mailTm,
     [mailGw.name]: mailGw,

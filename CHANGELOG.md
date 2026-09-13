@@ -5,6 +5,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-09-13
+
+### Added
+- **Provider failover.** `spawn` no longer gives up when the requested
+  provider is down: a network error, a 5xx, or a 429 makes it retry the create
+  against the remaining providers (requested first, then registration order)
+  and report exactly what happened:
+  - human output prints one `⚠` warning per failed attempt, then
+    `provider : mailtm (failover from mailgw)`
+  - `--json` gains an optional `failover` object (`requested` / `used`) and a
+    `warnings` array
+  - the MCP `create_inbox` tool fails over the same way (opt out with
+    `no_failover`)
+  - `--no-failover` restores strict behavior: the chosen provider or nothing
+  - a plain 4xx on the explicitly requested provider fails without fallback —
+    switching providers cannot fix a bad request
+- Verified against a real outage: with mail.gw answering 502, `spawn -p mailgw`
+  lands the inbox on a healthy provider and exits 0.
+
 ## [0.1.4] - 2026-09-13
 
 ### Added

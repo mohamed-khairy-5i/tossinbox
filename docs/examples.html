@@ -122,7 +122,7 @@
         <span class="k">with:</span>
           <span class="k">node-version:</span> <span class="s">20</span>
       - <span class="k">name:</span> Install TossInbox
-        <span class="k">run:</span> npm install --global tossinbox@0.1.4
+        <span class="k">run:</span> npm install --global tossinbox@0.1.5
 
       - <span class="k">name:</span> Spawn inbox
         <span class="k">id:</span> inbox
@@ -217,31 +217,31 @@ run([<span class="s">"toss"</span>]);</pre>
 
   <section>
     <div class="wrap">
-      <h2>5 · Second provider when the first is flaky</h2>
+      <h2>5 · When a provider is down, failover kicks in</h2>
       <p class="sec-lead">Seven providers ship built in: <code>mailtm</code> (default),
       <code>mailgw</code> (mail.tm-compatible API on independent infrastructure),
       <code>guerrillamail</code>, <code>tempmaillol</code>, <code>tempmailio</code>,
-      <code>tempmailplus</code> and <code>maildrop</code>. When one is having a bad day, switch with a flag — no config files.</p>
+      <code>tempmailplus</code> and <code>maildrop</code>. If the one you asked for is down,
+      <code>spawn</code> retries the create against the others automatically and reports the switch — no config files, no retry scripts.</p>
       <div class="codeblock">
-        <div class="code-head"><span>shell: provider failover by hand</span><button class="copy-chip" data-copy="tossinbox providers
-tossinbox spawn -p mailgw
-tossinbox spawn -p guerrillamail
-tossinbox spawn -p tempmaillol
-tossinbox spawn -p tempmailio
-tossinbox spawn -p tempmailplus
-tossinbox spawn -p maildrop" aria-label="Copy the provider failover example">copy</button></div>
-        <pre class="block" tabindex="0"><span class="c"># what is available?</span>
-<span class="a">tossinbox</span> providers
-
-<span class="c"># default provider is down / slow? spawn on another one</span>
+        <div class="code-head"><span>shell: automatic provider failover</span><button class="copy-chip" data-copy="tossinbox spawn -p mailgw
+tossinbox spawn -p mailgw --no-failover
+tossinbox providers
+tossinbox spawn -p guerrillamail" aria-label="Copy the provider failover example">copy</button></div>
+        <pre class="block" tabindex="0"><span class="c"># mail.gw is down? the inbox still lands on a healthy provider</span>
 <span class="a">tossinbox</span> spawn -p mailgw
-<span class="a">tossinbox</span> spawn -p guerrillamail
-<span class="a">tossinbox</span> spawn -p tempmaillol
-<span class="a">tossinbox</span> spawn -p tempmailio
-<span class="a">tossinbox</span> spawn -p tempmailplus
-<span class="a">tossinbox</span> spawn -p maildrop</pre>
+<span class="c">#   ⚠ mailgw: HTTP 502 from api.mail.gw — provider is down or having trouble…</span>
+<span class="c"># ✔ Inbox ready : ab12cd34ef@uberip.com</span>
+<span class="c">#   provider    : mailtm (failover from mailgw)</span>
+
+<span class="c"># strict mode: fail instead of switching</span>
+<span class="a">tossinbox</span> spawn -p mailgw --no-failover
+
+<span class="c"># or pick a healthy provider yourself</span>
+<span class="a">tossinbox</span> providers
+<span class="a">tossinbox</span> spawn -p guerrillamail</pre>
       </div>
-      <p class="note">Automatic failover is on the <a href="roadmap">roadmap</a>.</p>
+      <p class="note"><code>--json</code> makes the switch machine-readable: a <code>failover</code> object (requested / used) plus a <code>warnings</code> array with one entry per failed attempt.</p>
     </div>
   </section>
 

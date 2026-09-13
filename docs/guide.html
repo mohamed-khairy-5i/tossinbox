@@ -96,14 +96,20 @@
         <div class="code-head"><span>shell: spawn variations</span><button class="copy-chip" data-copy="tossinbox spawn
 tossinbox spawn --json
 tossinbox spawn -p guerrillamail
+tossinbox spawn -p mailgw --no-failover
 tossinbox spawn -l github-test
 tossinbox inboxes" aria-label="Copy spawn variations">copy</button></div>
         <pre class="block" tabindex="0"><span class="a">tossinbox</span> spawn                       <span class="c"># default provider, plain output</span>
 <span class="a">tossinbox</span> spawn --json                <span class="c"># machine-readable (ok, inbox{address,…})</span>
 <span class="a">tossinbox</span> spawn -p guerrillamail      <span class="c"># pick a provider explicitly</span>
+<span class="a">tossinbox</span> spawn -p mailgw --no-failover  <span class="c"># strict: mailgw or nothing</span>
 <span class="a">tossinbox</span> spawn -l github-test        <span class="c"># label it — labels show in `inboxes`</span>
 <span class="a">tossinbox</span> inboxes                     <span class="c"># every inbox saved in local state</span></pre>
       </div>
+      <p class="note">If the provider you asked for is down (network error, 5xx, 429),
+      <code>spawn</code> fails over: it retries the create against the remaining providers
+      and reports the switch (<code>provider : mailtm (failover from mailgw)</code>, or a
+      <code>failover</code> object in JSON).</p>
       <p class="note">Inboxes on the provider expire on their own schedule; the local record is
       what TossInbox cleans when you <code>toss</code>. Neither expires just because your terminal closed.</p>
     </div>
@@ -198,9 +204,13 @@ tossinbox clear" aria-label="Copy cleanup commands">copy</button></div>
       </details>
       <details>
         <summary>spawn fails with exit code 1</summary>
-        <div class="answer">Usually the provider API having a moment. Retry once, then switch
-        providers: <code>tossinbox spawn -p guerrillamail</code>. All HTTP calls carry a hard
-        20-second timeout, so this always fails fast instead of hanging.</div>
+        <div class="answer">If the requested provider was down, failover already tried every
+        other provider before failing — the error is the requested provider's original
+        message plus a “failover also tried N other provider(s)” note, meaning everything
+        upstream is having a bad day. Wait a bit and retry, or check
+        <code>tossinbox providers</code>. Add <code>--no-failover</code> when you need the
+        chosen provider's raw failure without the fallback tour. All HTTP calls carry a
+        hard 20-second timeout, so this always fails fast instead of hanging.</div>
       </details>
       <details>
         <summary>"corrupt state file" error on any command</summary>
