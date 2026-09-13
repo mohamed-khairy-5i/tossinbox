@@ -41,8 +41,21 @@ function parseChangelog(md) {
     if (!cur) continue;
     const g = line.match(/^### (.+?)\s*$/);
     if (g) { group = { title: g[1], items: [] }; cur.groups.push(group); continue; }
-    if (group && /^- /.test(line)) {
-      group.items.push(line.slice(2).replace(/\n\s+/g, " "));
+    if (!group) continue;
+    const bullet = line.match(/^(\s*)- (.*)$/);
+    if (bullet) {
+      const last = group.items[group.items.length - 1];
+      if (bullet[1].length === 0 || !last) group.items.push({ text: bullet[2], children: [] });
+      else last.children.push(bullet[2]);
+    } else if (group.items.length && line.trim()) {
+      // Wrapped continuation of the previous bullet — nested (4+ spaces)
+      // continuations attach to the last nested bullet, else to the top item.
+      const last = group.items[group.items.length - 1];
+      if (/^\s{4,}/.test(line) && last.children.length) {
+        last.children[last.children.length - 1] += " " + line.trim();
+      } else {
+        last.text += " " + line.trim();
+      }
     }
   }
   return versions;
@@ -58,7 +71,12 @@ function inlineToHtml(s) {
 function renderChangelogHtml(versions) {
   const sections = versions.map((v) => {
     const groups = v.groups.map((g) => {
-      const items = g.items.map((it) => `        <li>${inlineToHtml(it)}</li>`).join("\n");
+      const items = g.items.map((it) => {
+        const kids = it.children.length
+          ? `\n          <ul class="facts">\n${it.children.map((c) => `            <li>${inlineToHtml(c)}</li>`).join("\n")}\n          </ul>\n        `
+          : "";
+        return `        <li>${inlineToHtml(it.text)}${kids}</li>`;
+      }).join("\n");
       return `      <h3>${g.title}</h3>\n      <ul class="facts">\n${items}\n      </ul>`;
     }).join("\n");
     return `  <section>\n    <div class="wrap">\n      <h2><code>${v.version}</code> <span class="flag"><b>${v.date}</b></span></h2>\n${groups}\n    </div>\n  </section>`;
@@ -168,7 +186,10 @@ ${sections}
 function renderChangelogMd(versions) {
   const body = versions.map((v) => {
     const groups = v.groups.map((g) => {
-      const items = g.items.map((it) => `- ${it}`).join("\n");
+      const items = g.items.map((it) => {
+        const kids = it.children.map((c) => `  - ${c}`).join("\n");
+        return kids ? `- ${it.text}\n${kids}` : `- ${it.text}`;
+      }).join("\n");
       return `### ${g.title}\n\n${items}`;
     }).join("\n\n");
     return `## ${v.version} - ${v.date}\n\n${groups}`;

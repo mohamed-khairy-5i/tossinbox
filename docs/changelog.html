@@ -75,12 +75,19 @@
       <h2><code>0.1.4</code> <span class="flag"><b>2026-09-13</b></span></h2>
       <h3>Added</h3>
       <ul class="facts">
-        <li><b>Four new providers, all zero-config.</b> TossInbox now speaks to seven</li>
-        <li>Same guarantees everywhere: hard 20-second timeouts, readable network-error</li>
+        <li><b>Four new providers, all zero-config.</b> TossInbox now speaks to seven upstreams across four independent stacks:
+          <ul class="facts">
+            <li><b><code>tempmaillol</code></b> (<code>spawn -p tempmaillol</code>) — tempmail.lol: random inbox on rotating domains, token-based reads.</li>
+            <li><b><code>tempmailio</code></b> (<code>spawn -p tempmailio</code>) — temp-mail.io: server-generated address, full-text bodies, and <code>toss</code> deletes the inbox server-side.</li>
+            <li><b><code>tempmailplus</code></b> (<code>spawn -p tempmailplus</code>) — tempmail.plus: pick-your-name inbox on 9 public domains; messages clear server-side on <code>toss</code>.</li>
+            <li><b><code>maildrop</code></b> (<code>spawn -p maildrop</code>) — maildrop.cc: public inbox on one stable domain, read over their GraphQL API.</li>
+          </ul>
+        </li>
+        <li>Same guarantees everywhere: hard 20-second timeouts, readable network-error translation, friendly 5xx messages, <code>--json</code> shapes and exit codes identical across providers.</li>
       </ul>
       <h3>Fixed</h3>
       <ul class="facts">
-        <li><b>temp-mail.io eventual consistency.</b> A brand-new address can transiently</li>
+        <li><b>temp-mail.io eventual consistency.</b> A brand-new address can transiently answer <code>400 Email not found</code> seconds after creation; TossInbox now retries once before surfacing an error.</li>
       </ul>
     </div>
   </section>
@@ -90,9 +97,9 @@
       <h2><code>0.1.3</code> <span class="flag"><b>2026-09-13</b></span></h2>
       <h3>Added</h3>
       <ul class="facts">
-        <li><b><code>mail.gw</code> provider</b> (<code>spawn -p mailgw</code>) — mail.tm-compatible API on</li>
-        <li><b><code>tossinbox watch</code></b> — live-polling mode that prints each new message (and</li>
-        <li><b>Verification-code keywords now understand twelve languages.</b> French,</li>
+        <li><b><code>mail.gw</code> provider</b> (<code>spawn -p mailgw</code>) — mail.tm-compatible API on independent infrastructure. When mail.tm is having a bad day, spawn on mail.gw instead; same CLI, same JSON, same exit codes. And when any upstream is down, a 5xx now reads <code>HTTP 502 from api.mail.gw — provider is down or having trouble; retry, or switch with --provider</code> instead of a bare <code>HTTP 502</code>.</li>
+        <li><b><code>tossinbox watch</code></b> — live-polling mode that prints each new message (and its code when found) the moment it arrives, and keeps polling until Ctrl-C. Only *new* arrivals are reported: re-watching an inbox never replays old mail. With <code>--json</code> it streams one compact JSON object per message (NDJSON) on stdout and keeps stderr silent, so agents can pipe it straight into the next step of a script.</li>
+        <li><b>Verification-code keywords now understand twelve languages.</b> French, Spanish, German, Portuguese, Italian, Russian, Turkish, Chinese, Japanese, and Korean join English and Arabic — <code>Votre code de vérification est 482913</code> or <code>您的验证码是662341</code> extract just as reliably as "Your code is 123456".</li>
       </ul>
     </div>
   </section>
@@ -102,15 +109,15 @@
       <h2><code>0.1.2</code> <span class="flag"><b>2026-09-13</b></span></h2>
       <h3>Added</h3>
       <ul class="facts">
-        <li>Website v2: brew/npx install tabs in the hero, a "Star on GitHub" secondary</li>
+        <li>Website v2: brew/npx install tabs in the hero, a "Star on GitHub" secondary CTA, a highlighted TossInbox column in the comparison table, an EN/AR nav toggle, a full Arabic quickstart (<code>/ar/quickstart</code>), and an Arabic copy polish pass (idiomatic phrasing over literal renderings).</li>
       </ul>
       <h3>Fixed</h3>
       <ul class="facts">
-        <li><b>Network failures now say what actually happened.</b> A dead connection used</li>
+        <li><b>Network failures now say what actually happened.</b> A dead connection used to surface as Node's bare <code>fetch failed</code>; DNS failures, refused connections, dropped sockets, TLS problems, and the 20s timeout each now produce a short, actionable message — e.g. <code>DNS lookup failed for api.mail.tm — check connectivity and retry</code> or <code>no response from api.mail.tm within 20s — retry, or switch with --provider</code>.</li>
       </ul>
       <h3>Changed</h3>
       <ul class="facts">
-        <li><b>State saves are atomic.</b> <code>state.json</code> is written to a sibling temp file,</li>
+        <li><b>State saves are atomic.</b> <code>state.json</code> is written to a sibling temp file, fsynced, then renamed into place — a crash mid-write can no longer truncate the file and destroy saved inboxes (0600 enforced before the rename).</li>
       </ul>
     </div>
   </section>
@@ -120,15 +127,15 @@
       <h2><code>0.1.1</code> <span class="flag"><b>2026-09-11</b></span></h2>
       <h3>Fixed</h3>
       <ul class="facts">
-        <li><b><code>tossinbox-mcp</code> now starts when launched through npm/Homebrew bin symlinks.</b></li>
-        <li>Unknown providers and bad flags now exit with <b>code 4</b> (usage error),</li>
-        <li>Every provider HTTP call now has a hard <b>20s timeout</b>, so agents can never</li>
-        <li>A corrupt or unreadable state file is now reported <b>loudly</b> instead of</li>
-        <li>Verification codes with <b>lowercase letters</b> (e.g. <code>f4x9k2</code>) are now</li>
+        <li><b><code>tossinbox-mcp</code> now starts when launched through npm/Homebrew bin symlinks.</b> Previously the direct-run check compared unresolved paths, so the globally installed binary exited silently without starting the MCP server.</li>
+        <li>Unknown providers and bad flags now exit with <b>code 4</b> (usage error), matching the documented contract.</li>
+        <li>Every provider HTTP call now has a hard <b>20s timeout</b>, so agents can never hang forever on a stalled connection.</li>
+        <li>A corrupt or unreadable state file is now reported <b>loudly</b> instead of being silently overwritten (which could destroy saved inboxes).</li>
+        <li>Verification codes with <b>lowercase letters</b> (e.g. <code>f4x9k2</code>) are now extracted and returned uppercased.</li>
       </ul>
       <h3>Changed</h3>
       <ul class="facts">
-        <li>Inbox credentials are generated with <code>node:crypto</code> (cryptographic randomness)</li>
+        <li>Inbox credentials are generated with <code>node:crypto</code> (cryptographic randomness) instead of <code>Math.random()</code>.</li>
         <li>MCP tool failures set <code>isError: true</code> so clients render them as real errors.</li>
         <li><code>read</code> errors during <code>wait</code> are retried once before giving up.</li>
         <li><code>--timeout</code> / <code>--interval</code> values are validated up front (exit 4 on garbage).</li>
@@ -142,12 +149,12 @@
       <h3>Added</h3>
       <ul class="facts">
         <li>First public release.</li>
-        <li>CLI: <code>spawn</code>, <code>list</code>, <code>read</code>, <code>wait</code>, <code>inboxes</code>, <code>toss</code>, <code>clear</code>,</li>
-        <li>MCP server over stdio with four tools: <code>create_inbox</code>, <code>list_messages</code>,</li>
+        <li>CLI: <code>spawn</code>, <code>list</code>, <code>read</code>, <code>wait</code>, <code>inboxes</code>, <code>toss</code>, <code>clear</code>, <code>providers</code>, <code>mcp</code> — every command supports <code>--json</code>; documented exit codes.</li>
+        <li>MCP server over stdio with four tools: <code>create_inbox</code>, <code>list_messages</code>, <code>read_message</code>, <code>wait_for_code</code>.</li>
         <li>Providers: <b>mail.tm</b> (default) and <b>GuerrillaMail</b> — no API keys.</li>
         <li>OTP extraction tuned for English and Arabic emails (رمز / كود / تفعيل / تحقق).</li>
         <li>State file <code>~/.tossinbox/state.json</code> written with <code>0600</code> permissions.</li>
-        <li>GitHub Action (<code>mohamed-khairy-5i/tossinbox@v1</code>), Homebrew tap, project</li>
+        <li>GitHub Action (<code>mohamed-khairy-5i/tossinbox@v1</code>), Homebrew tap, project website on tossinbox.pages.dev (Cloudflare Pages), <code>llms.txt</code> for LLM onboarding.</li>
       </ul>
     </div>
   </section>
