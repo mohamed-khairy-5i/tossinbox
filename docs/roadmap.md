@@ -17,6 +17,10 @@ Markdown version of https://tossinbox.pages.dev/roadmap.html
   crypto-random credentials.
 - **site** — examples + guide + changelog + roadmap pages, Arabic homepage,
   Markdown-for-agents on every page, automated Cloudflare Pages deploy from CI.
+- **v0.1.2** — friendly network error messages (DNS, refused, TLS, timeout each
+  say what to do), atomic state saves a crash can no longer truncate.
+- **site v2** — brew/npx hero tabs, Star-on-GitHub CTA, highlighted comparison
+  column, EN/AR nav toggle, Arabic quickstart, Arabic copy polish.
 
 ## Next up
 

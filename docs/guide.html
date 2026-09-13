@@ -78,7 +78,8 @@
         <code>guerrillamail</code> is the fallback. No accounts, no API keys — the CLI creates the
         mailbox itself and keeps its credentials in local state. Run <code>tossinbox providers</code> to see them.</li>
         <li><b>State is one local file:</b> <code>~/.tossinbox/state.json</code>, written with
-        <code>0600</code>. It holds the addresses + tokens of your live inboxes. Override its location
+        <code>0600</code> and saved atomically (v0.1.2+) — a crash mid-write can no longer
+        truncate it. It holds the addresses + tokens of your live inboxes. Override its location
         with <code>TOSSINBOX_STATE</code> — useful for CI parallelism and tests.</li>
         <li><b>TossInbox receives; it never sends.</b> It exists to collect signup/verification
         mail. There is no send path, which is exactly why providers tolerate it.</li>

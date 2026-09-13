@@ -15,7 +15,8 @@ Three facts explain almost all of TossInbox's behavior.
   `guerrillamail` is the fallback. No accounts, no API keys — the CLI creates
   the mailbox itself and keeps its credentials in local state. Run
   `tossinbox providers` to see them.
-- **State is one local file:** `~/.tossinbox/state.json`, written with `0600`.
+- **State is one local file:** `~/.tossinbox/state.json`, written with `0600`
+  and saved atomically (v0.1.2+) — a crash mid-write can no longer truncate it.
   It holds the addresses + tokens of your live inboxes. Override its location
   with `TOSSINBOX_STATE` — useful for CI parallelism and tests.
 - **TossInbox receives; it never sends.** It exists to collect
