@@ -57,7 +57,7 @@
     <a class="brand" href="/ar/"><img src="/logo.png" alt="TossInbox" width="26" height="26"> <span aria-hidden="true">TossInbox</span></a>
     <span class="nav-links">
       <a href="/ar/#install">التثبيت</a>
-      <a href="/quickstart">Quickstart</a>
+      <a href="/ar/quickstart" aria-current="page">البداية السريعة</a>
       <a href="/cli">CLI</a>
       <a href="/agents">Agents</a>
       <a href="/examples">Examples</a>
@@ -78,12 +78,23 @@
         <h1><span class="sr-only">TossInbox: بريد إلكتروني مؤقت عبر سطر الأوامر وخادم MCP لوكلاء الذكاء الاصطناعي. </span>اعمل إنبوكس.<br>استنى الكود.<br><span class="accent">ارميه.</span><span class="dim">_</span></h1>
         <p class="hero-sub">مبني <b>للوكلاء أولًا</b>: <code>--json</code> في كل أمر،
         أكواد خروج موثقة <code>0-4</code>، وبدون أي أسئلة تفاعلية.</p>
-        <div class="install-inline">
-          <code tabindex="0" dir="ltr"><span class="dollar">$ </span>brew install mohamed-khairy-5i/tap/tossinbox</code>
-          <button class="copy-btn" data-copy="brew install mohamed-khairy-5i/tap/tossinbox" aria-label="انسخ أمر التثبيت">انسخ</button>
+        <div class="inst-switch">
+          <input type="radio" name="hero-inst" id="inst-brew" checked>
+          <label for="inst-brew">brew</label>
+          <input type="radio" name="hero-inst" id="inst-npx">
+          <label for="inst-npx">npx</label>
+          <div class="install-inline">
+            <code tabindex="0" dir="ltr"><span class="dollar">$ </span>brew install mohamed-khairy-5i/tap/tossinbox</code>
+            <button class="copy-btn" data-copy="brew install mohamed-khairy-5i/tap/tossinbox" aria-label="انسخ أمر التثبيت">انسخ</button>
+          </div>
+          <div class="install-inline">
+            <code tabindex="0" dir="ltr"><span class="dollar">$ </span>npx tossinbox@latest spawn</code>
+            <button class="copy-btn" data-copy="npx tossinbox@latest spawn" aria-label="انسخ أمر npx">انسخ</button>
+          </div>
         </div>
         <div class="cta">
-          <a class="btn btn-primary" href="/quickstart">اعمل أول إنبوكس الآن</a>
+          <a class="btn btn-primary" href="/ar/quickstart">اعمل أول إنبوكس الآن</a>
+          <a class="btn btn-ghost" href="https://github.com/mohamed-khairy-5i/tossinbox">نجمة على GitHub</a>
         </div>
       </div>
       <div class="term">
@@ -112,6 +123,7 @@
       <div class="trust">
         <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/releases/tag/v0.1.1">v0.1.1</a>
         <span class="chip">MIT</span>
+        <span class="chip">مجاني</span>
         <span class="chip">Node 18+</span>
         <span class="chip">macOS · Linux · Windows</span>
       </div>
@@ -172,7 +184,7 @@
         <li><code>tossinbox toss</code> يمسح الإنبوكس: من السيرفر ومن الديسك. خلاص.</li>
       </ul>
       <div class="tbl-wrap" tabindex="0" role="region" aria-label="مقارنة بين TossInbox والبدائل">
-        <table class="tbl">
+        <table class="tbl tbl--vs">
           <thead><tr><th scope="col"><span class="sr-only">الميزة</span></th><th scope="col">TossInbox</th><th scope="col">مواقع البريد المؤقت</th><th scope="col">أدوات CLI قديمة</th></tr></thead>
           <tbody>
             <tr><td class="prop">JSON في كل أمر</td><td><code>--json</code></td><td class="desc">لا</td><td class="desc">نادرًا</td></tr>
@@ -186,16 +198,7 @@
       </div>
       <p class="tbl-caption">تمت المراجعة في سبتمبر 2026. لو خلية غلط — افتح issue واكسب الجدال.</p>
 
-      <p class="sec-lead sec-lead--changelog"><b>سجل التغييرات</b>. اللي اتنشر فعليًا:</p>
-      <div class="tbl-wrap" tabindex="0" role="region" aria-label="سجل التغييرات">
-        <table class="tbl">
-          <tbody>
-            <tr><td><code>v0.1.1</code></td><td class="desc">2026-09-11: إصلاح فشل صامت في تشغيل MCP عبر npm/Homebrew، تطبيق كود الخروج 4، مهل زمنية صارمة لكل الطلبات، الإبلاغ الصاخب عن ملف حالة تالف، وتوحيد أكواد التفعيل بحروف كبيرة</td></tr>
-            <tr><td><code>v0.1.0</code></td><td class="desc">2026-09-10: أول إصدار عام — CLI + خادم MCP، GitHub Action، Homebrew tap</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="tbl-caption">الفروقات الكاملة في <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">صفحة الإصدارات</a></p>
+      <p class="sec-lead sec-lead--changelog"><b>سجل التغييرات</b>. <a href="/changelog">اللي اتنشر فعلًا، إصدار بإصدار</a> — والفروقات الكاملة في <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">صفحة الإصدارات</a>.</p>
     </div>
   </section>
 
@@ -206,7 +209,7 @@
       <p class="sec-lead">ثماني صفحات قصيرة من غير حشو، والأجهزة بتاخد نفس القايمة من <code>llms.txt</code>.</p>
       <div class="ls-dir" tabindex="0" role="region" aria-label="فهرس الموقع" dir="ltr">
         <p class="ls-cmd">$ ls docs/</p>
-        <div class="ls-row"><span class="ls-name"><a href="/quickstart">quickstart/</a></span><span class="ls-desc">أول إنبوكس في 60 ثانية</span></div>
+        <div class="ls-row"><span class="ls-name"><a href="/ar/quickstart">quickstart/</a></span><span class="ls-desc">أول إنبوكس في 60 ثانية — بالعربي</span></div>
         <div class="ls-row"><span class="ls-name"><a href="/cli">cli/</a></span><span class="ls-desc">كل أمر وflag وكود خروج</span></div>
         <div class="ls-row"><span class="ls-name"><a href="/agents">agents/</a></span><span class="ls-desc">إعداد MCP لـ Claude وCursor وCodex</span></div>
         <div class="ls-row"><span class="ls-name"><a href="/examples">examples/</a></span><span class="ls-desc">وصفات جاهزة: اختبار التسجيل، كود التفعيل، CI</span></div>
@@ -225,7 +228,7 @@
     <div class="wrap">
       <p class="end-line">دي كل الحكاية. <span class="accent">الدليل ثمان صفحات.</span></p>
       <div class="cta">
-        <a class="btn btn-primary" href="/quickstart">افتح الـ Quickstart</a>
+        <a class="btn btn-primary" href="/ar/quickstart">افتح البداية السريعة</a>
         <a class="btn btn-ghost" href="https://github.com/mohamed-khairy-5i/tossinbox">نجمة على GitHub</a>
       </div>
     </div>

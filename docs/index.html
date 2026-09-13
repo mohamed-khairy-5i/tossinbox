@@ -98,6 +98,7 @@
       <a href="guide">Guide</a>
       <a href="roadmap">Roadmap</a>
       <a href="faq">FAQ</a>
+      <a href="ar/" lang="ar" hreflang="ar">العربية</a>
       <a class="nav-gh" href="https://github.com/mohamed-khairy-5i/tossinbox">GitHub</a>
     </span>
   </div>
@@ -113,12 +114,23 @@
         <h1><span class="sr-only">TossInbox: disposable email CLI and MCP server for AI agents. </span>Spawn an inbox.<br>Get the code.<br><span class="accent">Toss it.</span><span class="dim">_</span></h1>
         <p class="hero-sub">Built <b>agent-first</b>: <code>--json</code> on every command,
         exit codes documented <code>0-4</code>, zero interactive prompts.</p>
-        <div class="install-inline">
-          <code tabindex="0"><span class="dollar">$ </span>brew install mohamed-khairy-5i/tap/tossinbox</code>
-          <button class="copy-btn" data-copy="brew install mohamed-khairy-5i/tap/tossinbox" aria-label="Copy install command">copy</button>
+        <div class="inst-switch">
+          <input type="radio" name="hero-inst" id="inst-brew" checked>
+          <label for="inst-brew">brew</label>
+          <input type="radio" name="hero-inst" id="inst-npx">
+          <label for="inst-npx">npx</label>
+          <div class="install-inline">
+            <code tabindex="0"><span class="dollar">$ </span>brew install mohamed-khairy-5i/tap/tossinbox</code>
+            <button class="copy-btn" data-copy="brew install mohamed-khairy-5i/tap/tossinbox" aria-label="Copy Homebrew install command">copy</button>
+          </div>
+          <div class="install-inline">
+            <code tabindex="0"><span class="dollar">$ </span>npx tossinbox@latest spawn</code>
+            <button class="copy-btn" data-copy="npx tossinbox@latest spawn" aria-label="Copy npx run command">copy</button>
+          </div>
         </div>
         <div class="cta">
           <a class="btn btn-primary" href="quickstart">Spawn your first inbox</a>
+          <a class="btn btn-ghost" href="https://github.com/mohamed-khairy-5i/tossinbox">Star on GitHub</a>
         </div>
       </div>
       <div class="term">
@@ -148,6 +160,7 @@
         <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/releases/tag/v0.1.1">v0.1.1</a>
         <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/actions">CI</a>
         <span class="chip">MIT</span>
+        <span class="chip">Free</span>
         <span class="chip">Node 18+</span>
         <span class="chip">macOS, Linux, Windows</span>
       </div>
@@ -208,7 +221,7 @@
         <li><code>tossinbox toss</code> deletes the inbox. Gone from the server, gone from disk.</li>
       </ul>
       <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox compared with temp-mail websites and tmpmail-era CLIs">
-        <table class="tbl">
+        <table class="tbl tbl--vs">
           <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">TossInbox</th><th scope="col">temp-mail websites</th><th scope="col">tmpmail-era CLIs</th></tr></thead>
           <tbody>
             <tr><td class="prop">JSON on every command</td><td><code>--json</code></td><td class="desc">no</td><td class="desc">rarely</td></tr>
@@ -222,16 +235,7 @@
       </div>
       <p class="tbl-caption">Checked September 2026. If a cell is wrong, open an issue and win the argument.</p>
 
-      <p class="sec-lead sec-lead--changelog"><b>Changelog</b>. What actually shipped:</p>
-      <div class="tbl-wrap" tabindex="0" role="region" aria-label="TossInbox changelog">
-        <table class="tbl">
-          <tbody>
-            <tr><td><code>v0.1.1</code></td><td class="desc">2026-09-11: fixed a silent MCP bin-symlink failure, implemented exit code 4, added hard request timeouts, made a corrupted state file fail loudly instead of being overwritten, OTP codes lowercased</td></tr>
-            <tr><td><code>v0.1.0</code></td><td class="desc">2026-09-10: first public release, CLI + MCP server, GitHub Action, Homebrew tap</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="tbl-caption">full diffs in <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">releases</a></p>
+      <p class="sec-lead sec-lead--changelog"><b>Changelog</b>. <a href="changelog">What actually shipped, per version</a> — full diffs in <a href="https://github.com/mohamed-khairy-5i/tossinbox/releases">releases</a>.</p>
     </div>
   </section>
 

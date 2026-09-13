@@ -17,7 +17,7 @@
   --border-strong: #3d4759;
   --text: #e8edf4;
   --muted: #96a0b5;
-  --faint: #768093;
+  --faint: #838da0;
   --accent: #34d399;
   --accent-dim: #2aa87a;
   --amber: #fbbf24;
@@ -111,6 +111,20 @@ h1 .dim { color: var(--accent); animation: cursor-blink 1.15s step-end infinite;
 }
 .copy-btn:hover { color: var(--accent); }
 .install-inline .dollar { user-select: none; -webkit-user-select: none; }
+/* hero package switch: brew / npx radio tabs, pure CSS, CSP-safe (no JS) */
+.inst-switch { margin-top: 26px; max-width: 470px; }
+.inst-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.inst-switch label {
+  display: inline-block; font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+  background: var(--panel); border: 1px solid var(--border); border-bottom: none;
+  border-radius: var(--radius) var(--radius) 0 0; padding: 6px 14px 7px; margin-right: 6px; cursor: pointer;
+}
+.inst-switch label:hover { color: var(--text); }
+.inst-switch input:checked + label { color: var(--accent); background: var(--term-bg); border-color: var(--border-strong); }
+.inst-switch input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+.inst-switch .install-inline { display: none; margin-top: 0; }
+.inst-switch input#inst-brew:checked ~ div.install-inline:nth-of-type(1),
+.inst-switch input#inst-npx:checked ~ div.install-inline:nth-of-type(2) { display: flex; }
 /* unified code block: label + copy in a header bar, code below (a button never covers code) */
 .codeblock {
   background: var(--term-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
@@ -224,6 +238,9 @@ pre.block .s { color: var(--amber); }
 .tbl code { background: var(--panel-2); padding: 2px 7px; border-radius: var(--radius); color: var(--text); white-space: nowrap; }
 .tbl .desc { color: var(--muted); white-space: normal; }
 .tbl .desc code { white-space: normal; overflow-wrap: anywhere; }
+/* comparison table: lift our own column so the win reads at a glance */
+.tbl--vs th:nth-child(2) { color: var(--accent); border-bottom-color: var(--accent-dim); }
+.tbl--vs td:nth-child(2) { background: rgba(52, 211, 153, 0.05); }
 .tbl-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow-x: auto; background: var(--panel); }
 .two-col { display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; align-items: start; }
 @media (max-width: 880px) { .two-col { grid-template-columns: 1fr; } }

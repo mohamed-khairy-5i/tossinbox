@@ -19,6 +19,7 @@ inboxes when done. It is designed agent-first: every CLI command supports
 - [Roadmap](https://tossinbox.pages.dev/roadmap): shipped and planned
 - [Changelog](https://tossinbox.pages.dev/changelog): every change by version
 - [Arabic home](https://tossinbox.pages.dev/ar/): الصفحة الرئيسية بالعربية
+- [Arabic quickstart](https://tossinbox.pages.dev/ar/quickstart): البداية السريعة بالعربية
 - [Source repository](https://github.com/mohamed-khairy-5i/tossinbox): code, issues, releases
 
 ## CLI (binary: `tossinbox`)
