@@ -7,6 +7,8 @@
 **Disposable email inboxes for humans and AI agents. Spawn a temporary inbox, wait for the OTP verification code, toss it.**
 
 [![CI](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamed-khairy-5i/tossinbox/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/tossinbox?color=cb3837&label=npm)](https://www.npmjs.com/package/tossinbox)
+[![npm downloads](https://img.shields.io/npm/dm/tossinbox?color=cb3837&label=downloads)](https://www.npmjs.com/package/tossinbox?activeTab=versions)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Node](https://img.shields.io/badge/node-18%2B-34d399.svg)
 ![MCP](https://img.shields.io/badge/MCP-server-222a39.svg)

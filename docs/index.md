@@ -33,6 +33,8 @@ npx tossinbox@latest spawn
 git clone https://github.com/mohamed-khairy-5i/tossinbox.git && cd tossinbox && npm install && npm run build
 ```
 
+The package lives on npm: [npmjs.com/package/tossinbox](https://www.npmjs.com/package/tossinbox).
+
 Example session:
 
 ```console
