@@ -31,14 +31,17 @@ Markdown version of https://tossinbox.pages.dev/roadmap.html
   (network error, 5xx, 429), `spawn` retries the create against the remaining
   providers automatically and reports the switch in human output, `--json`, and
   the MCP `create_inbox` tool; `--no-failover` opts out.
+- **v0.1.6** — attachments & HTML bodies: `read` lists a message's attachments
+  (name, size, type), `--save [dir]` downloads them with the HTML/plain-text
+  bodies into `<dir>/<message-id>/` (`saved` array in JSON), `--html` prints
+  the raw HTML body; the MCP `read_message` tool gains attachment metadata and
+  an optional `save_dir`; tempmailplus message ids, senders and timestamps
+  fixed.
 
 ## Next up
 
-Ordered by how likely they are to land first. Small, verifiable increments.
-
-| item | status | why |
-|------|--------|-----|
-| Attachments & HTML bodies | planned | `read` gains decoded HTML and downloadable attachments |
+Nothing scheduled — the core loop is complete. Missing something? Open an
+issue: https://github.com/mohamed-khairy-5i/tossinbox/issues
 
 ## Exploring
 

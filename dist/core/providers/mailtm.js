@@ -133,6 +133,13 @@ function createMailTmLikeProvider(config) {
             const res = await request("GET", `${base}/messages/${encodeURIComponent(id)}`, { token: inbox.token });
             const m = await parseJson(res);
             const html = m.html && m.html.length > 0 ? m.html.join("\n") : undefined;
+            const attachments = (m.attachments ?? []).map((a) => ({
+                id: a.id,
+                filename: a.filename || "attachment.bin",
+                contentType: a.contentType,
+                size: a.size,
+                contentId: a.disposition === "inline" ? a.id : undefined,
+            }));
             const message = {
                 id: m.id,
                 from: m.from?.address ?? "unknown",
@@ -142,9 +149,23 @@ function createMailTmLikeProvider(config) {
                 createdAt: m.createdAt,
                 text: m.text,
                 html,
+                ...(attachments.length > 0 ? { attachments } : {}),
             };
             message.code = extractCode(message.text) ?? extractCode(message.html);
             return message;
+        },
+        async downloadAttachment(inbox, messageId, attachment) {
+            if (!inbox.token)
+                throw new ProviderError(providerName, "Inbox is missing its API token");
+            if (!attachment.id) {
+                throw new ProviderError(providerName, `Attachment "${attachment.filename}" has no id to download`);
+            }
+            const url = `${base}/messages/${encodeURIComponent(messageId)}/attachment/${encodeURIComponent(attachment.id)}`;
+            const res = await request("GET", url, { token: inbox.token });
+            if (!res.ok) {
+                throw new ProviderError(providerName, `HTTP ${res.status} while downloading "${attachment.filename}"`, res.status);
+            }
+            return Buffer.from(await res.arrayBuffer());
         },
         async destroyInbox(inbox) {
             if (!inbox.token || !inbox.accountId)

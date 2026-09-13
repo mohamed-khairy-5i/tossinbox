@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Create disposable email inboxes from the terminal or via MCP, wait for verification (OTP) codes, read messages, and delete the inbox when done. Use when a signup, test, or privacy flow needs a throwaway email address that receives real mail.",
       "url": "/.well-known/agent-skills/tossinbox/SKILL.md",
-      "digest": "sha256:ab2cc6c55a3f446bb62922668cdcaedbffcf588cb229df006e26202a8149a046"
+      "digest": "sha256:274b5a47cc59906972dc84130db2448c7930223cf353ca1fc9cf01d6d5c2f5af"
     }
   ]
 }

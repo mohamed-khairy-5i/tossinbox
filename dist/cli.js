@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command, CommanderError } from "commander";
-import { DEFAULT_PROVIDER, createInboxWithFailover, getProvider, listProviders, listSavedInboxes, removeInbox, clearInboxes, resolveInbox, saveInbox, statePath, waitForMessage, sleep, htmlToText, ProviderError, } from "./core/index.js";
+import { DEFAULT_PROVIDER, createInboxWithFailover, getProvider, listProviders, listSavedInboxes, removeInbox, clearInboxes, resolveInbox, saveInbox, saveMessageContent, statePath, waitForMessage, sleep, htmlToText, ProviderError, } from "./core/index.js";
 import { VERSION } from "./version.js";
 /* Documented exit codes:
  * 0  success
@@ -58,7 +58,25 @@ function jsonMessage(message, includeHtml = false) {
         code: message.code,
         text: message.text ?? (message.html ? htmlToText(message.html) : undefined),
         html: includeHtml ? message.html : undefined,
+        ...(message.attachments
+            ? {
+                attachments: message.attachments.map((a) => ({
+                    filename: a.filename,
+                    size: a.size,
+                    contentType: a.contentType,
+                })),
+            }
+            : {}),
     };
+}
+function formatSize(bytes) {
+    if (bytes === undefined)
+        return "?";
+    if (bytes < 1024)
+        return `${bytes} B`;
+    if (bytes < 1024 * 1024)
+        return `${(bytes / 1024).toFixed(1)} kB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 function printMessageHuman(message, withBody) {
     console.log(`✔ ${message.subject}`);
@@ -67,6 +85,12 @@ function printMessageHuman(message, withBody) {
         console.log(`  date : ${message.createdAt}`);
     if (message.code)
         console.log(`  code : ${message.code}`);
+    if (message.attachments && message.attachments.length > 0) {
+        console.log(`  attachments (${message.attachments.length}):`);
+        for (const a of message.attachments) {
+            console.log(`    - ${a.filename} (${formatSize(a.size)}${a.contentType ? `, ${a.contentType}` : ""})`);
+        }
+    }
     if (withBody) {
         const body = message.text ?? (message.html ? htmlToText(message.html) : "");
         if (body)
@@ -144,8 +168,10 @@ program
 });
 program
     .command("read <id>")
-    .description("Read a full message by id")
+    .description("Read a full message by id (list attachments, optionally save them and the HTML body)")
     .option("-a, --address <address>", "inbox address (defaults to the most recent inbox)")
+    .option("--html", "print the raw HTML body instead of the plain-text version")
+    .option("--save [dir]", "save attachments + body.html/body.txt into <dir>/<message-id>/ (default dir: ./tossinbox-attachments)")
     .action(async (id, opts) => {
     try {
         const inbox = await resolveInbox(opts.address);
@@ -153,11 +179,38 @@ program
             fail(new Error("No saved inbox found. Run: tossinbox spawn"), EXIT_NOT_FOUND);
         const provider = providerOrExit(inbox.provider);
         const message = await provider.readMessage(inbox, id);
+        let saved;
+        if (opts.save !== undefined) {
+            const dir = typeof opts.save === "string" && opts.save.length > 0 ? opts.save : "./tossinbox-attachments";
+            try {
+                saved = await saveMessageContent(provider, inbox, message, dir);
+            }
+            catch (err) {
+                fail(err);
+            }
+        }
         if (jsonMode()) {
-            out({ ok: true, inbox: inbox.address, message: jsonMessage(message, true) });
+            out({
+                ok: true,
+                inbox: inbox.address,
+                message: jsonMessage(message, true),
+                ...(saved ? { saved } : {}),
+            });
             return;
         }
         printMessageHuman(message, true);
+        if (opts.html) {
+            if (message.html) {
+                console.log(`\n${message.html}\n`);
+            }
+            else {
+                console.error("⚠ this message has no HTML body — showing the plain-text version above");
+            }
+        }
+        if (saved) {
+            for (const f of saved)
+                console.log(`  ✔ saved ${f.filename} → ${f.path}`);
+        }
     }
     catch (err) {
         fail(err, err instanceof ProviderError && err.status === 404 ? EXIT_NOT_FOUND : EXIT_ERROR);
@@ -314,6 +367,9 @@ program
                             createdAt: summary.createdAt,
                             code: message?.code,
                             text: message?.text ?? (message?.html ? htmlToText(message.html) : undefined),
+                            ...(message?.attachments && message.attachments.length > 0
+                                ? { attachments: message.attachments.map((a) => ({ filename: a.filename, size: a.size })) }
+                                : {}),
                         };
                         console.log(JSON.stringify(event));
                     }

@@ -11,7 +11,7 @@ Markdown version of https://tossinbox.pages.dev/cli.html
 |-------------|---------------------------------------------------------------------------------------------------------|
 | `spawn`     | Create a new disposable inbox. If the provider is down, another one is used automatically (`--no-failover` opts out). Flags: `-p provider`, `-l label` |
 | `list`      | List messages in an inbox. Flags: `-a address` (defaults to most recent)                                 |
-| `read <id>` | Read a full message, including any detected verification code. Flags: `-a address`                       |
+| `read <id>` | Read a full message, including any detected verification code. Lists attachments (name, size, type). Flags: `-a address`, `--html` raw HTML body, `--save [dir]` save attachments + bodies to `<dir>/<message-id>/` |
 | `wait`      | Poll until a message arrives. Flags: `-a address`, `-f from`, `-s subject`, `-c` extract code, `-t` timeout (max 600s), `-i` interval |
 | `watch`     | Stream new messages as they arrive until Ctrl-C — only new arrivals, never history. Flags: `-a address`, `-f from`, `-s subject`, `-i` interval (1–60s). With `--json`: one compact JSON object per line (NDJSON) |
 | `inboxes`   | List locally saved inboxes                                                                               |
@@ -46,6 +46,29 @@ A stable contract: agents script against these, not against stdout.
 
 New provider = one small file implementing `createInbox` / `listMessages` /
 `readMessage` / `destroyInbox` (optional).
+
+## Attachments and HTML bodies (v0.1.6)
+
+`read` shows a message's attachments (name, size, type) as an `attachments`
+block in human output; `--json` includes the same metadata as
+`message.attachments` (`filename`, `size`, `contentType`).
+
+| Flag           | What it does                                                                                   |
+|----------------|------------------------------------------------------------------------------------------------|
+| `--save [dir]` | Download every attachment and write the HTML/plain-text bodies into `<dir>/<message-id>/` (default dir: `./tossinbox-attachments`). With `--json`, a `saved` array carries the exact file paths |
+| `--html`       | Print the raw HTML body instead of the plain-text version; warns when the message has none      |
+
+```bash
+tossinbox read 42 --save                # ./tossinbox-attachments/42/{body.html, body.txt, report.pdf, …}
+tossinbox read 42 --save /tmp           # same, into /tmp/42/
+tossinbox read 42 --html                # raw HTML body
+```
+
+Attachment coverage by provider: `mailtm`, `mailgw` and `tempmailplus` list and
+download attachments; `tempmailio` shows them when the upstream response
+includes them (downloadable only if it exposes a URL); `tempmaillol`,
+`guerrillamail` and `maildrop` do not expose attachments upstream — TossInbox
+tells you that instead of guessing.
 
 ## Provider failover
 

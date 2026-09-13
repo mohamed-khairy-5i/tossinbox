@@ -6,7 +6,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roadmap · TossInbox</title>
-<meta name="description" content="What shipped in TossInbox and what is coming next: new providers, failover, watch mode, attachments, more locales.">
+<meta name="description" content="What shipped in TossInbox and what is coming next.">
 <meta name="color-scheme" content="dark">
 <link rel="icon" type="image/png" href="favicon.png">
 <meta name="theme-color" content="#0b0e14">
@@ -85,6 +85,7 @@
             <tr><td><code>v0.1.3</code></td><td class="desc">third provider <code>mailgw</code> (mail.tm-compatible, independent infrastructure), <code>tossinbox watch</code> live-polling mode with NDJSON output for agents, OTP keywords in twelve languages</td></tr>
             <tr><td><code>v0.1.4</code></td><td class="desc">four more zero-config providers: <code>tempmaillol</code>, <code>tempmailio</code> (server-side toss), <code>tempmailplus</code> and <code>maildrop</code> — seven upstreams across four independent stacks; temp-mail.io's transient post-create 400 now retries</td></tr>
             <tr><td><code>v0.1.5</code></td><td class="desc">provider failover: when the requested provider is down (network error, 5xx, 429), <code>spawn</code> retries the create against the remaining providers automatically and reports the switch in human output, <code>--json</code>, and the MCP <code>create_inbox</code> tool; <code>--no-failover</code> opts out</td></tr>
+            <tr><td><code>v0.1.6</code></td><td class="desc">attachments &amp; HTML bodies: <code>read</code> lists a message's attachments (name, size, type), <code>--save [dir]</code> downloads them with the HTML/plain-text bodies into <code>&lt;dir&gt;/&lt;message-id&gt;/</code> (<code>saved</code> array in JSON), <code>--html</code> prints the raw HTML body; the MCP <code>read_message</code> tool gains attachment metadata and an optional <code>save_dir</code>; tempmailplus message ids, senders and timestamps fixed</td></tr>
           </tbody>
         </table>
       </div>
@@ -94,15 +95,8 @@
   <section>
     <div class="wrap">
       <h2>Next up</h2>
-      <p class="sec-lead">Ordered by how likely they are to land first. Small, verifiable increments.</p>
-      <div class="tbl-wrap" tabindex="0" role="region" aria-label="Planned items">
-        <table class="tbl">
-          <thead><tr><th scope="col">item</th><th scope="col">status</th><th scope="col">why</th></tr></thead>
-          <tbody>
-            <tr><td>Attachments &amp; HTML bodies</td><td class="desc">planned</td><td class="desc"><code>read</code> gains decoded HTML and downloadable attachments</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <p class="sec-lead">Nothing scheduled — the core loop is complete. Missing something?
+      <a href="https://github.com/mohamed-khairy-5i/tossinbox/issues">Open an issue</a>.</p>
     </div>
   </section>
 

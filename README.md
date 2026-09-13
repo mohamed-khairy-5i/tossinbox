@@ -57,7 +57,7 @@ $ tossinbox toss
 | Documented exit codes  | 0–4                     | none                | no                          |
 | MCP server for agents  | yes, built in           | no                  | no                          |
 | Runs headless / in CI  | yes                     | no                  | partial                     |
-| Upstream alive         | 7 providers, 4 stacks  | varies              | many wrap the dead 1secmail |
+| Upstream alive         | 7 providers, 4 stacks, attachments on read | varies              | many wrap the dead 1secmail |
 | Ads, trackers, popups  | none                    | the business model  | none                        |
 
 Checked September 2026. If a cell is wrong, open an issue and win the argument.
@@ -111,7 +111,7 @@ tossinbox wait --code --json
 |---|---|
 | `spawn` | Create a new disposable inbox (`-p provider`, `-l label`). If the provider is down, another one is used automatically — `--no-failover` opts out |
 | `list` | List messages (`-a address`) |
-| `read <id>` | Read a full message, including any detected code |
+| `read <id>` | Read a full message, including any detected code; lists attachments. `--html` prints the raw HTML body, `--save [dir]` downloads attachments + bodies to `<dir>/<message-id>/` |
 | `wait` | Poll until a message arrives (`-f sender`, `-s subject`, `-c` extract code, `-t timeout` max 600s) |
 | `watch` | Stream new messages until Ctrl-C — only new arrivals; `--json` = one JSON object per line (NDJSON) |
 | `inboxes` | List locally saved inboxes |
@@ -157,7 +157,7 @@ TossInbox ships with an MCP server exposing four tools:
 |---|---|
 | `create_inbox` | Create a disposable inbox and return its address |
 | `list_messages` | List messages in an inbox |
-| `read_message` | Read a full message, including any detected code |
+| `read_message` | Read a full message, including any detected code; reports attachment metadata and can save attachments + bodies to disk (`save_dir`) |
 | `wait_for_code` | Poll until a message arrives and return its verification code |
 
 ### Claude Desktop / Cursor / any MCP client
@@ -228,6 +228,12 @@ machine-readable and kept up to date.
 Adding a provider means implementing a small interface (`createInbox`,
 `listMessages`, `readMessage`, optional `destroyInbox`) — PRs welcome.
 
+**Attachments** (v0.1.6): full list + download on `mailtm`, `mailgw` and
+`tempmailplus`; `tempmailio` shows them when its upstream returns them
+(downloadable only if it exposes a URL); `tempmaillol`, `guerrillamail` and
+`maildrop` do not expose attachments upstream — TossInbox tells you that
+instead of guessing.
+
 ## FAQ
 
 **Is it really free?**
@@ -246,6 +252,12 @@ works in PowerShell exactly the same.
 providers and reports the switch (human mode prints a `⚠` warning and
 `provider : mailtm (failover from mailgw)`; `--json` returns a `failover`
 object). Use `--no-failover` if you need the chosen provider or nothing.
+
+**Can I download attachments?**
+Yes on `mailtm`, `mailgw` and `tempmailplus`; `tempmailio` shows them when its
+upstream exposes them; the other three providers have no attachments upstream.
+`tossinbox read <id> --save` writes them (plus the HTML/plain-text bodies) to
+`./tossinbox-attachments/<message-id>/`.
 
 **A site blocked my disposable address. What now?**
 Some sites blocklist known disposable domains. Try the other provider:
@@ -271,6 +283,7 @@ round.
 - [x] `mail.gw` provider (v0.1.3)
 - [x] Four more providers: `tempmail.lol`, `temp-mail.io`, `tempmail.plus`, `maildrop.cc` (v0.1.4)
 - [x] Provider failover: auto-switch when a provider is down (v0.1.5)
+- [x] Attachments & HTML bodies: `read --save` / `--html` (v0.1.6)
 - [ ] Homebrew core formula (after community adoption)
 
 ## Documentation

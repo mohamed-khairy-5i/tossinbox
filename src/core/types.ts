@@ -26,9 +26,28 @@ export interface MessageSummary {
   createdAt?: string;
 }
 
+/** An attachment declared by a provider API for a message. */
+export interface Attachment {
+  /** Provider-specific id used to download the attachment (when supported) */
+  id?: string;
+  /** File name as reported by the provider */
+  filename: string;
+  /** MIME type, when the provider reports it */
+  contentType?: string;
+  /** Size in bytes, when the provider reports it */
+  size?: number;
+  /** Direct download URL, when the provider exposes one */
+  url?: string;
+  /** Inline content id (cid:), for embedded images */
+  contentId?: string;
+}
+
 export interface Message extends MessageSummary {
   text?: string;
   html?: string;
+  /** Attachments reported for this message (metadata only — use the
+   *  provider's downloadAttachment, or `tossinbox read --save`, for bytes) */
+  attachments?: Attachment[];
   /** OTP / verification code extracted from the message body, when found */
   code?: string;
 }
@@ -44,6 +63,10 @@ export interface EmailProvider {
   listMessages(inbox: Inbox): Promise<MessageSummary[]>;
   /** Read a full message by id */
   readMessage(inbox: Inbox, id: string): Promise<Message>;
+  /** Download one attachment of a message as raw bytes. Only providers that
+   *  expose attachment downloads implement this; check with
+   *  `typeof provider.downloadAttachment === "function"`. */
+  downloadAttachment?(inbox: Inbox, messageId: string, attachment: Attachment): Promise<Buffer>;
   /** Best-effort server-side deletion of the inbox. Providers that do not
    *  support deletion may simply resolve. */
   destroyInbox?(inbox: Inbox): Promise<void>;

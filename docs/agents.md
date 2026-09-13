@@ -13,7 +13,7 @@ Markdown version of https://tossinbox.pages.dev/agents.html
 |-----------------|--------------------------------------------------------|
 | `create_inbox`  | A fresh disposable address + provider name. If the requested provider is down, another one serves the inbox automatically (`no_failover` opts out) |
 | `list_messages` | Messages currently in an inbox                         |
-| `read_message`  | Full message body, including any detected code         |
+| `read_message`  | Full message body, including any detected code. Reports attachment metadata (filename, size, type); an optional `save_dir` input saves the attachments + `body.html`/`body.txt` to `<save_dir>/<message-id>/` |
 | `wait_for_code` | Blocks until a verification code arrives, returns it   |
 
 Transport: stdio, no network, no auth.

@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { ProviderError, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
+import { ProviderError, type Attachment, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
 import { extractCode } from "../otp.js";
 import { networkError } from "../net.js";
 import { VERSION } from "../../version.js";
@@ -12,6 +12,17 @@ interface MailTmDomain {
   isPrivate: boolean;
 }
 
+interface MailTmAttachment {
+  id: string;
+  filename: string;
+  contentType?: string;
+  disposition?: string;
+  transferEncoding?: string;
+  related?: boolean;
+  size?: number;
+  downloadUrl?: string;
+}
+
 interface MailTmMessage {
   id: string;
   from?: { address?: string; name?: string };
@@ -20,6 +31,7 @@ interface MailTmMessage {
   intro?: string;
   text?: string;
   html?: string[];
+  attachments?: MailTmAttachment[];
   createdAt?: string;
 }
 
@@ -185,6 +197,13 @@ function createMailTmLikeProvider(config: MailTmLikeConfig): EmailProvider {
       const res = await request("GET", `${base}/messages/${encodeURIComponent(id)}`, { token: inbox.token });
       const m = await parseJson<MailTmMessage>(res);
       const html = m.html && m.html.length > 0 ? m.html.join("\n") : undefined;
+      const attachments: Attachment[] = (m.attachments ?? []).map((a) => ({
+        id: a.id,
+        filename: a.filename || "attachment.bin",
+        contentType: a.contentType,
+        size: a.size,
+        contentId: a.disposition === "inline" ? a.id : undefined,
+      }));
       const message: Message = {
         id: m.id,
         from: m.from?.address ?? "unknown",
@@ -194,9 +213,27 @@ function createMailTmLikeProvider(config: MailTmLikeConfig): EmailProvider {
         createdAt: m.createdAt,
         text: m.text,
         html,
+        ...(attachments.length > 0 ? { attachments } : {}),
       };
       message.code = extractCode(message.text) ?? extractCode(message.html);
       return message;
+    },
+
+    async downloadAttachment(inbox, messageId, attachment) {
+      if (!inbox.token) throw new ProviderError(providerName, "Inbox is missing its API token");
+      if (!attachment.id) {
+        throw new ProviderError(providerName, `Attachment "${attachment.filename}" has no id to download`);
+      }
+      const url = `${base}/messages/${encodeURIComponent(messageId)}/attachment/${encodeURIComponent(attachment.id)}`;
+      const res = await request("GET", url, { token: inbox.token });
+      if (!res.ok) {
+        throw new ProviderError(
+          providerName,
+          `HTTP ${res.status} while downloading "${attachment.filename}"`,
+          res.status
+        );
+      }
+      return Buffer.from(await res.arrayBuffer());
     },
 
     async destroyInbox(inbox) {

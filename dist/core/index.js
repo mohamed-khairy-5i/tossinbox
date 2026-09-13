@@ -9,6 +9,7 @@ export { extractCode, htmlToText } from "./otp.js";
 export * from "./state.js";
 export { waitForMessage, sleep } from "./wait.js";
 export { createInboxWithFailover } from "./failover.js";
+export { saveMessageContent, safeSegment } from "./save.js";
 export const providers = {
     [mailTm.name]: mailTm,
     [mailGw.name]: mailGw,

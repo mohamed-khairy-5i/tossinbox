@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 20
       - name: Install TossInbox
-        run: npm install --global tossinbox@0.1.5
+        run: npm install --global tossinbox@0.1.6
 
       - name: Spawn inbox
         id: inbox
@@ -201,5 +201,25 @@ tossinbox watch --from noreply@example-app.dev
 # agents: one compact JSON object per line on stdout, stderr stays silent
 tossinbox watch --json
 ```
+
+## 8 · Attachments: pull the files to disk
+
+Messages can carry attachments. `read --save` downloads all of them plus the
+HTML/plain-text bodies into `<dir>/<message-id>/` (default dir:
+`./tossinbox-attachments`).
+
+```bash
+tossinbox spawn                  # inbox that will receive the email
+# ... the email with the attachment arrives ...
+tossinbox list                   # find the message id
+tossinbox read 42 --save         # ./tossinbox-attachments/42/{body.html, body.txt, report.pdf, …}
+tossinbox read 42 --html         # print the raw HTML body instead of the plain text
+```
+
+Agents: with `--json`, `read --save` returns a `saved` array with the exact
+path of every file it wrote — parse it and read the files directly, no path
+guessing. Full attachment support on `mailtm`, `mailgw` and `tempmailplus`;
+`tempmailio` when its upstream exposes the files; the other providers have no
+attachments upstream.
 
 MIT License © 2026 Mohamed Khairy

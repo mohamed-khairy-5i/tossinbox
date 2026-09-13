@@ -41,7 +41,9 @@ tossinbox toss                         # delete server-side + wipe local state
 
 Commands: `spawn` (`-p provider`, `-l label`; if the provider is down, another
 one is used automatically — `--no-failover` opts out), `list` (`-a address`),
-`read <id>`, `wait` (`-f from`, `-s subject`, `-c` extract code,
+`read <id>` (`--save [dir]` saves every attachment plus the HTML/plain-text
+bodies to `<dir>/<message-id>/`, default `./tossinbox-attachments`; `--html`
+prints the raw HTML body), `wait` (`-f from`, `-s subject`, `-c` extract code,
 `-t` timeout max 600s, `-i` interval), `watch` (stream new messages until
 Ctrl-C; `--json` streams one JSON object per line), `inboxes`,
 `toss` (`-a`, `--all`), `clear`, `providers`, `mcp`.

@@ -72,6 +72,32 @@
 
   <section>
     <div class="wrap">
+      <h2><code>0.1.6</code> <span class="flag"><b>2026-09-13</b></span></h2>
+      <h3>Added</h3>
+      <ul class="facts">
+        <li><b>Attachment support.</b> <code>read</code> now lists a message's attachments (name, size, type) and can save them to disk:
+          <ul class="facts">
+            <li><code>tossinbox read &lt;id&gt;</code> prints an <code>attachments</code> block in human output and includes attachment metadata in <code>--json</code></li>
+            <li><code>tossinbox read &lt;id&gt; --save [dir]</code> downloads every attachment and writes the HTML/plain-text bodies to <code>&lt;dir&gt;/&lt;message-id&gt;/</code> (default dir: <code>./tossinbox-attachments</code>); <code>--json</code> gains a <code>saved</code> array with exact paths, so agents can read the files afterwards</li>
+            <li>the MCP <code>read_message</code> tool reports the same attachment metadata and accepts an optional <code>save_dir</code> input</li>
+            <li><code>watch --json</code> events now include attachment names when a new message has attachments</li>
+            <li>provider coverage: <b>mailtm</b>, <b>mailgw</b> and <b>tempmailplus</b> list and download attachments; <b>tempmailio</b> shows them when the upstream response includes them (download only if it exposes a URL); <b>tempmaillol</b>, <b>guerrillamail</b> and <b>maildrop</b> do not expose attachments upstream — TossInbox tells you that instead of guessing</li>
+          </ul>
+        </li>
+        <li><b><code>tossinbox read &lt;id&gt; --html</code></b> prints the raw HTML body when the message has one, with a clear warning when it does not.</li>
+        <li>Verified end to end with real mail: an email with PDF and PNG attachments was delivered to a live tempmailplus inbox, read with the CLI, saved with <code>--save</code>, and the downloaded files matched the originals byte-for-byte (SHA-256 identical). The mailtm/mailgw download path is covered by tests against a stub API, including Bearer auth on every attachment request.</li>
+      </ul>
+      <h3>Fixed</h3>
+      <ul class="facts">
+        <li><b>tempmailplus message ids.</b> <code>list</code> mapped the wrong field, so every id printed as <code>undefined</code> and <code>read</code> could not be addressed by id; ids now come from the real <code>mail_id</code> field.</li>
+        <li><b>tempmailplus sender addresses.</b> <code>list</code> showed <code>from: unknown</code>; the real <code>from_mail</code> field is now used (list and read).</li>
+        <li><b>tempmailplus timestamps.</b> Detail responses carry a string date instead of an epoch; it is now surfaced as the message date.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
       <h2><code>0.1.5</code> <span class="flag"><b>2026-09-13</b></span></h2>
       <h3>Added</h3>
       <ul class="facts">

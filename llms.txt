@@ -27,10 +27,13 @@ inboxes when done. It is designed agent-first: every CLI command supports
 - `tossinbox spawn` — create a new disposable inbox (flags: `-p provider`, `-l label`);
   if the provider is down, another one is used automatically (`--no-failover` opts out)
 - `tossinbox list` — list messages in an inbox (flag: `-a address`)
-- `tossinbox read <id>` — read a full message by id
+- `tossinbox read <id>` — read a full message by id; `--save [dir]` saves every attachment plus the
+  HTML/plain-text bodies to `<dir>/<message-id>/` (default dir `./tossinbox-attachments`),
+  `--html` prints the raw HTML body
 - `tossinbox wait --code` — poll until a message arrives and print its verification code
   (flags: `-f sender`, `-s subject`, `-t timeout`, `-i interval`)
-- `tossinbox watch` — stream new messages as they arrive until Ctrl-C (NDJSON with `--json`)
+- `tossinbox watch` — stream new messages as they arrive until Ctrl-C (NDJSON with `--json`; events
+  include attachment names when a new message has them)
 - `tossinbox inboxes` — list locally saved inboxes
 - `tossinbox toss` — delete an inbox server-side and wipe local state (`--all` for all)
 - `tossinbox providers` — list providers (default: `mailtm`; also `mailgw`, `guerrillamail`, `tempmaillol`, `tempmailio`, `tempmailplus`, `maildrop`)
@@ -44,7 +47,8 @@ Stdio MCP server exposing four tools:
 
 - `create_inbox` — create a disposable inbox, returns its email address
 - `list_messages` — list messages in an inbox
-- `read_message` — read a full message including any detected code
+- `read_message` — read a full message including any detected code; reports attachment metadata and
+  accepts an optional `save_dir` input that saves attachments + bodies to `<save_dir>/<message-id>/`
 - `wait_for_code` — poll until a message arrives and return its verification code
 
 Typical agent flow: `create_inbox` -> use the address in a signup form ->
@@ -64,6 +68,10 @@ npx tossinbox@latest spawn
 - Providers: `mailtm` (default), `mailgw`, `guerrillamail`, `tempmaillol`,
   `tempmailio`, `tempmailplus`, `maildrop`; no API keys required. When a
   provider is down, `spawn` fails over to another one automatically.
+- Attachments: full list + download on `mailtm`, `mailgw` and `tempmailplus`;
+  `tempmailio` shows them when its upstream returns them (download only if it
+  exposes a URL); `tempmaillol`, `guerrillamail` and `maildrop` have no
+  attachment support upstream.
 - Local state is stored in `~/.tossinbox/state.json` (override with the
   `TOSSINBOX_STATE` environment variable) with 0600 permissions.
 - TossInbox intentionally has no bulk mode; use it for privacy and testing and

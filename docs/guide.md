@@ -62,8 +62,20 @@ extracted code.
 tossinbox list                              # messages in the newest inbox
 tossinbox list -a qwd6996p1lbc@uberip.com   # messages for a specific address
 tossinbox read 42                           # full body + headers of message 42
+tossinbox read 42 --save                    # attachments + bodies → ./tossinbox-attachments/42/
+tossinbox read 42 --html                    # raw HTML body instead of the plain text
 tossinbox wait --code --from noreply@example-app.dev --timeout 120
 ```
+
+Messages can carry attachments: `read` prints an `attachments` block (name,
+size, type), and `read --save [dir]` downloads every attachment plus the
+HTML/plain-text bodies into `<dir>/<message-id>/` (default dir:
+`./tossinbox-attachments`). With `--json` a `saved` array lists the exact file
+paths. `--html` prints the raw HTML body and warns when the message has none.
+Attachment downloads are full on `mailtm`, `mailgw` and `tempmailplus`, partial
+on `tempmailio` (only when its upstream exposes a URL), and absent on
+`tempmaillol`, `guerrillamail` and `maildrop` — their upstreams never expose
+attachments.
 
 Code extraction handles digits-only and letter+digit OTPs (letters come back
 uppercased) and understands prompts in twelve languages — English and Arabic
@@ -125,6 +137,15 @@ provider's raw failure without the fallback tour. All HTTP calls carry a hard
 v0.1.1 refuses to silently overwrite a damaged `~/.tossinbox/state.json` — fix
 it by deleting the file (losing saved inbox records, not your machine) or point
 `TOSSINBOX_STATE` at a fresh path.
+
+### `read --save` says the provider does not support attachment downloads
+
+The message has attachments, but that provider's upstream never exposes them.
+Full download support: `mailtm`, `mailgw`, `tempmailplus`; `tempmailio` only
+when upstream exposes a URL; `tempmaillol`, `guerrillamail` and `maildrop`
+have none. Re-read the message on a supported provider. Saving the bodies
+alone (`body.html` / `body.txt`) works on every provider — the error fires
+only when the message actually carries attachments.
 
 ### Parallel test runs stomp on each other
 

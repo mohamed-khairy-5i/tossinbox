@@ -11,6 +11,7 @@ export { extractCode, htmlToText } from "./otp.js";
 export * from "./state.js";
 export { waitForMessage, sleep } from "./wait.js";
 export { createInboxWithFailover, type FailoverOptions, type FailoverResult } from "./failover.js";
+export { saveMessageContent, safeSegment, type SavedFile } from "./save.js";
 
 export const providers: Record<string, EmailProvider> = {
   [mailTm.name]: mailTm,

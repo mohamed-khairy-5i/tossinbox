@@ -38,6 +38,21 @@ providers and reports the switch (human mode prints a `⚠` warning and
 `provider : mailtm (failover from mailgw)`; `--json` returns a `failover`
 object). Use `--no-failover` if you need the chosen provider or nothing.
 
+## Can I download email attachments?
+
+Yes on three providers: `mailtm`, `mailgw` and `tempmailplus` list and download
+attachments in full. `tempmailio` shows them when its upstream returns them
+(downloadable only if it exposes a URL). `tempmaillol`, `guerrillamail` and
+`maildrop` do not expose attachments upstream, so TossInbox tells you that
+instead of guessing. One command saves everything:
+
+```bash
+tossinbox read <id> --save
+```
+
+Files land in `./tossinbox-attachments/<message-id>/` together with the
+message's `body.html` and `body.txt`.
+
 ## How is this different from tmpmail and friends?
 
 Most existing CLI temp-mail tools are human-first wrappers around the same

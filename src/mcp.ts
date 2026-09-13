@@ -11,6 +11,7 @@ import {
   getProvider,
   resolveInbox,
   saveInbox,
+  saveMessageContent,
   waitForMessage,
   htmlToText,
   type Inbox,
@@ -35,6 +36,15 @@ function messageJson(message: Message, includeHtml = false) {
     code: message.code,
     text: message.text ?? (message.html ? htmlToText(message.html) : undefined),
     html: includeHtml ? message.html : undefined,
+    ...(message.attachments
+      ? {
+          attachments: message.attachments.map((a) => ({
+            filename: a.filename,
+            size: a.size,
+            contentType: a.contentType,
+          })),
+        }
+      : {}),
   };
 }
 
@@ -113,20 +123,33 @@ export async function startMcpServer(): Promise<void> {
     {
       title: "Read a message",
       description:
-        "Read the full body of a message by id, including any verification code detected in it.",
+        "Read the full body of a message by id, including any verification code detected in it. Lists attachment metadata; pass save_dir to also save the attachments and the HTML body to disk (where the provider supports downloads).",
       inputSchema: {
         id: z.string().describe("Message id (from list_messages)"),
         address: z.string().optional().describe("Inbox address; defaults to the most recent inbox"),
+        save_dir: z.string().optional().describe(
+          'Directory to save attachments and body.html/body.txt into, written to <save_dir>/<message-id>/ (e.g. "/tmp")'
+        ),
       },
     },
-    async ({ id, address }) => {
+    async ({ id, address, save_dir }) => {
       try {
         const inbox = await requireInbox(address);
         if (!inbox) return text({ ok: false, error: "No saved inbox found. Call create_inbox first." }, true);
 
         const p = getProvider(inbox.provider);
         const message = await p.readMessage(inbox, id);
-        return text({ ok: true, message: messageJson(message, false) });
+
+        let saved: Awaited<ReturnType<typeof saveMessageContent>> | undefined;
+        if (save_dir) {
+          saved = await saveMessageContent(p, inbox, message, save_dir);
+        }
+
+        return text({
+          ok: true,
+          message: messageJson(message, false),
+          ...(saved ? { saved } : {}),
+        });
       } catch (err) {
         return text({ ok: false, error: err instanceof Error ? err.message : String(err) }, true);
       }

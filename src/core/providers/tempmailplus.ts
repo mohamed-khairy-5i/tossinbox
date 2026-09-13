@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { ProviderError, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
+import { ProviderError, type Attachment, type EmailProvider, type Inbox, type Message, type MessageSummary } from "../types.js";
 import { extractCode } from "../otp.js";
 import { networkError } from "../net.js";
 import { VERSION } from "../../version.js";
@@ -13,11 +13,13 @@ const REQUEST_TIMEOUT_MS = 20_000;
 const DOMAIN = "mailto.plus";
 
 interface PlusMail {
-  id: number | string;
+  id?: number | string;
+  mail_id?: number | string;
   from?: string;
+  from_mail?: string;
   from_name?: string;
   subject?: string;
-  time?: number;
+  time?: number | string;
 }
 
 interface PlusListResponse {
@@ -26,10 +28,19 @@ interface PlusListResponse {
   last_id?: number;
 }
 
+interface PlusAttachment {
+  attachment_id?: number | string;
+  content_id?: string;
+  name?: string;
+  size?: number;
+}
+
 interface PlusMessageResponse extends PlusMail {
   result?: boolean;
   text?: string;
   html?: string;
+  attachments?: PlusAttachment[];
+  date?: string;
 }
 
 function randomUser(length = 12): string {
@@ -40,8 +51,13 @@ function randomUser(length = 12): string {
   return out;
 }
 
-function timeToIso(ts?: number): string | undefined {
+function timeToIso(ts?: number | string): string | undefined {
   if (!ts) return undefined;
+  if (typeof ts === "string") {
+    // Some endpoints return "YYYY-MM-DD HH:mm:ss" strings instead of epochs
+    const d = new Date(ts.includes("T") ? ts : ts.replace(" ", "T") + "Z");
+    return isNaN(d.getTime()) ? undefined : d.toISOString();
+  }
   // Guard against seconds vs milliseconds epochs
   return new Date(ts < 1e12 ? ts * 1000 : ts).toISOString();
 }
@@ -108,8 +124,8 @@ export const tempmailPlus: EmailProvider = {
     );
     return (data.mail_list ?? []).map(
       (m): MessageSummary => ({
-        id: String(m.id),
-        from: m.from ?? "unknown",
+        id: String(m.mail_id ?? m.id),
+        from: m.from_mail ?? m.from ?? "unknown",
         fromName: m.from_name,
         subject: m.subject ?? "(no subject)",
         createdAt: timeToIso(m.time),
@@ -128,17 +144,50 @@ export const tempmailPlus: EmailProvider = {
         "Message not found — re-list messages to see what is currently in the inbox"
       );
     }
+    const attachments: Attachment[] = (data.attachments ?? []).map((a) => ({
+      id: a.attachment_id !== undefined ? String(a.attachment_id) : undefined,
+      filename: a.name || "attachment.bin",
+      size: a.size,
+      contentId: a.content_id || undefined,
+    }));
     const message: Message = {
       id,
-      from: data.from ?? "unknown",
+      from: data.from_mail ?? data.from ?? "unknown",
       fromName: data.from_name,
       subject: data.subject ?? "(no subject)",
-      createdAt: timeToIso(data.time),
+      createdAt: timeToIso(data.time) ?? data.date,
       text: data.text,
       html: data.html,
+      ...(attachments.length > 0 ? { attachments } : {}),
     };
     message.code = extractCode(message.text) ?? extractCode(message.html);
     return message;
+  },
+
+  async downloadAttachment(inbox, messageId, attachment) {
+    if (!attachment.id) {
+      throw new ProviderError("tempmailplus", `Attachment "${attachment.filename}" has no id to download`);
+    }
+    // Download endpoint as used by the tempmail.plus web client:
+    // /api/mails/{mailId}/attachments/{attachment_id}?email={address}&epin={pin?}
+    const url =
+      `${BASE}/api/mails/${encodeURIComponent(messageId)}` +
+      `/attachments/${encodeURIComponent(attachment.id)}` +
+      `?email=${encodeURIComponent(inbox.address)}&epin=${encodeURIComponent(inbox.session ?? "")}`;
+    const res = await fetch(url, {
+      headers: { Accept: "*/*", "User-Agent": `tossinbox/${VERSION}` },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    }).catch((err: unknown) => {
+      throw networkError(err, "tempmailplus", HOST, REQUEST_TIMEOUT_MS);
+    });
+    if (!res.ok) {
+      throw new ProviderError(
+        "tempmailplus",
+        `HTTP ${res.status} while downloading "${attachment.filename}"`,
+        res.status
+      );
+    }
+    return Buffer.from(await res.arrayBuffer());
   },
 
   async destroyInbox(inbox) {

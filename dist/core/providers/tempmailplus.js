@@ -20,6 +20,11 @@ function randomUser(length = 12) {
 function timeToIso(ts) {
     if (!ts)
         return undefined;
+    if (typeof ts === "string") {
+        // Some endpoints return "YYYY-MM-DD HH:mm:ss" strings instead of epochs
+        const d = new Date(ts.includes("T") ? ts : ts.replace(" ", "T") + "Z");
+        return isNaN(d.getTime()) ? undefined : d.toISOString();
+    }
     // Guard against seconds vs milliseconds epochs
     return new Date(ts < 1e12 ? ts * 1000 : ts).toISOString();
 }
@@ -75,8 +80,8 @@ export const tempmailPlus = {
     async listMessages(inbox) {
         const data = await callJson("GET", `/api/mails/?email=${encodeURIComponent(inbox.address)}&first_id=0`);
         return (data.mail_list ?? []).map((m) => ({
-            id: String(m.id),
-            from: m.from ?? "unknown",
+            id: String(m.mail_id ?? m.id),
+            from: m.from_mail ?? m.from ?? "unknown",
             fromName: m.from_name,
             subject: m.subject ?? "(no subject)",
             createdAt: timeToIso(m.time),
@@ -87,17 +92,44 @@ export const tempmailPlus = {
         if (!data.result) {
             throw new ProviderError("tempmailplus", "Message not found — re-list messages to see what is currently in the inbox");
         }
+        const attachments = (data.attachments ?? []).map((a) => ({
+            id: a.attachment_id !== undefined ? String(a.attachment_id) : undefined,
+            filename: a.name || "attachment.bin",
+            size: a.size,
+            contentId: a.content_id || undefined,
+        }));
         const message = {
             id,
-            from: data.from ?? "unknown",
+            from: data.from_mail ?? data.from ?? "unknown",
             fromName: data.from_name,
             subject: data.subject ?? "(no subject)",
-            createdAt: timeToIso(data.time),
+            createdAt: timeToIso(data.time) ?? data.date,
             text: data.text,
             html: data.html,
+            ...(attachments.length > 0 ? { attachments } : {}),
         };
         message.code = extractCode(message.text) ?? extractCode(message.html);
         return message;
+    },
+    async downloadAttachment(inbox, messageId, attachment) {
+        if (!attachment.id) {
+            throw new ProviderError("tempmailplus", `Attachment "${attachment.filename}" has no id to download`);
+        }
+        // Download endpoint as used by the tempmail.plus web client:
+        // /api/mails/{mailId}/attachments/{attachment_id}?email={address}&epin={pin?}
+        const url = `${BASE}/api/mails/${encodeURIComponent(messageId)}` +
+            `/attachments/${encodeURIComponent(attachment.id)}` +
+            `?email=${encodeURIComponent(inbox.address)}&epin=${encodeURIComponent(inbox.session ?? "")}`;
+        const res = await fetch(url, {
+            headers: { Accept: "*/*", "User-Agent": `tossinbox/${VERSION}` },
+            signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        }).catch((err) => {
+            throw networkError(err, "tempmailplus", HOST, REQUEST_TIMEOUT_MS);
+        });
+        if (!res.ok) {
+            throw new ProviderError("tempmailplus", `HTTP ${res.status} while downloading "${attachment.filename}"`, res.status);
+        }
+        return Buffer.from(await res.arrayBuffer());
     },
     async destroyInbox(inbox) {
         try {

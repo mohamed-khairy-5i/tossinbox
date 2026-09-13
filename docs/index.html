@@ -38,7 +38,7 @@
       "@type": "SoftwareApplication",
       "@id": "https://tossinbox.pages.dev/#app",
       "name": "TossInbox",
-      "softwareVersion": "0.1.5",
+      "softwareVersion": "0.1.6",
       "datePublished": "2026-09-10",
       "dateModified": "2026-09-13",
       "operatingSystem": "macOS, Linux, Windows",
@@ -55,6 +55,7 @@
       "featureList": [
         "Disposable inboxes from the terminal, no sign-up",
         "Wait for the verification code with one command",
+        "Save attachments and HTML bodies to disk with one command",
         "Built-in MCP server for AI agents",
         "--json output on every command",
         "Documented exit codes 0 to 4",
@@ -157,7 +158,7 @@
     </div>
     <div class="wrap">
       <div class="trust">
-        <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/releases/tag/v0.1.5">v0.1.5</a>
+        <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/releases/tag/v0.1.6">v0.1.6</a>
         <a class="chip" href="https://github.com/mohamed-khairy-5i/tossinbox/actions">CI</a>
         <span class="chip">MIT</span>
         <span class="chip">Free</span>
@@ -202,7 +203,7 @@
           <button class="copy-chip" data-copy="npx tossinbox@latest spawn" aria-label="Copy npx command">copy</button>
         </div>
         <div class="il-row">
-          <span class="il-label">from source <em>v0.1.5</em></span>
+          <span class="il-label">from source <em>v0.1.6</em></span>
           <code tabindex="0">git clone https://github.com/mohamed-khairy-5i/tossinbox.git &amp;&amp; cd tossinbox &amp;&amp; npm install &amp;&amp; npm run build</code>
           <button class="copy-chip" data-copy="git clone https://github.com/mohamed-khairy-5i/tossinbox.git &amp;&amp; cd tossinbox &amp;&amp; npm install &amp;&amp; npm run build" aria-label="Copy build-from-source commands">copy</button>
         </div>
@@ -229,7 +230,7 @@
             <tr><td class="prop">Documented exit codes</td><td><code>0-4</code></td><td class="desc">none</td><td class="desc">no</td></tr>
             <tr><td class="prop">MCP server for agents</td><td class="desc">yes, built in</td><td class="desc">no</td><td class="desc">no</td></tr>
             <tr><td class="prop">Runs headless / in CI</td><td class="desc">yes</td><td class="desc">no</td><td class="desc">partial</td></tr>
-            <tr><td class="prop">Upstream providers alive</td><td class="desc">7 providers · 4 independent stacks · automatic failover when one is down</td><td class="desc">varies</td><td class="desc">many wrap the dead 1secmail</td></tr>
+            <tr><td class="prop">Upstream providers alive</td><td class="desc">7 providers · 4 independent stacks · automatic failover when one is down · attachments on read</td><td class="desc">varies</td><td class="desc">many wrap the dead 1secmail</td></tr>
             <tr><td class="prop">Ads, trackers, popups</td><td class="desc">none</td><td class="desc">the business model</td><td class="desc">none</td></tr>
           </tbody>
         </table>

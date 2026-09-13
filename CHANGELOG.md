@@ -5,6 +5,43 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-09-13
+
+### Added
+- **Attachment support.** `read` now lists a message's attachments (name,
+  size, type) and can save them to disk:
+  - `tossinbox read <id>` prints an `attachments` block in human output and
+    includes attachment metadata in `--json`
+  - `tossinbox read <id> --save [dir]` downloads every attachment and writes
+    the HTML/plain-text bodies to `<dir>/<message-id>/` (default dir:
+    `./tossinbox-attachments`); `--json` gains a `saved` array with exact
+    paths, so agents can read the files afterwards
+  - the MCP `read_message` tool reports the same attachment metadata and
+    accepts an optional `save_dir` input
+  - `watch --json` events now include attachment names when a new message has
+    attachments
+  - provider coverage: **mailtm**, **mailgw** and **tempmailplus** list and
+    download attachments; **tempmailio** shows them when the upstream
+    response includes them (download only if it exposes a URL);
+    **tempmaillol**, **guerrillamail** and **maildrop** do not expose
+    attachments upstream — TossInbox tells you that instead of guessing
+- **`tossinbox read <id> --html`** prints the raw HTML body when the message
+  has one, with a clear warning when it does not.
+- Verified end to end with real mail: an email with PDF and PNG attachments
+  was delivered to a live tempmailplus inbox, read with the CLI, saved with
+  `--save`, and the downloaded files matched the originals byte-for-byte
+  (SHA-256 identical). The mailtm/mailgw download path is covered by tests
+  against a stub API, including Bearer auth on every attachment request.
+
+### Fixed
+- **tempmailplus message ids.** `list` mapped the wrong field, so every id
+  printed as `undefined` and `read` could not be addressed by id; ids now come
+  from the real `mail_id` field.
+- **tempmailplus sender addresses.** `list` showed `from: unknown`; the real
+  `from_mail` field is now used (list and read).
+- **tempmailplus timestamps.** Detail responses carry a string date instead of
+  an epoch; it is now surfaced as the message date.
+
 ## [0.1.5] - 2026-09-13
 
 ### Added

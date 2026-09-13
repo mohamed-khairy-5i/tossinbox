@@ -137,12 +137,26 @@ tossinbox inboxes" aria-label="Copy spawn variations">copy</button></div>
         <div class="code-head"><span>shell: read paths</span><button class="copy-chip" data-copy="tossinbox list
 tossinbox list -a qwd6996p1lbc@uberip.com
 tossinbox read 42
+tossinbox read 42 --save
+tossinbox read 42 --html
 tossinbox wait --code --from noreply@example-app.dev --timeout 120" aria-label="Copy read paths">copy</button></div>
         <pre class="block" tabindex="0"><span class="a">tossinbox</span> list                              <span class="c"># messages in the newest inbox</span>
 <span class="a">tossinbox</span> list -a qwd6996p1lbc@uberip.com   <span class="c"># messages for a specific address</span>
 <span class="a">tossinbox</span> read 42                           <span class="c"># full body + headers of message 42</span>
+<span class="a">tossinbox</span> read 42 --save                    <span class="c"># attachments + bodies → ./tossinbox-attachments/42/</span>
+<span class="a">tossinbox</span> read 42 --html                    <span class="c"># raw HTML body instead of the plain text</span>
 <span class="a">tossinbox</span> wait --code --from noreply@example-app.dev --timeout 120</pre>
       </div>
+      <p class="note">Messages can carry attachments: <code>read</code> prints an
+      <code>attachments</code> block (name, size, type), and <code>read --save [dir]</code>
+      downloads every attachment plus the HTML/plain-text bodies into
+      <code>&lt;dir&gt;/&lt;message-id&gt;/</code> (default dir: <code>./tossinbox-attachments</code>).
+      With <code>--json</code> a <code>saved</code> array lists the exact file paths.
+      <code>--html</code> prints the raw HTML body and warns when the message has none.
+      Attachment downloads are full on <code>mailtm</code>, <code>mailgw</code> and
+      <code>tempmailplus</code>, partial on <code>tempmailio</code> (only when its upstream
+      exposes a URL), and absent on <code>tempmaillol</code>, <code>guerrillamail</code> and
+      <code>maildrop</code> — their upstreams never expose attachments.</p>
       <p class="note">Code extraction handles digits-only and letter+digit OTPs (letters come back
       uppercased) and understands prompts in twelve languages — English and Arabic (رمز / كود / تفعيل / تحقق),
       plus French, Spanish, German, Portuguese, Italian, Russian, Turkish, Chinese, Japanese, and Korean.</p>
@@ -217,6 +231,16 @@ tossinbox clear" aria-label="Copy cleanup commands">copy</button></div>
         <div class="answer">v0.1.1 refuses to silently overwrite a damaged
         <code>~/.tossinbox/state.json</code> — fix it by deleting the file (losing saved inbox
         records, not your machine) or point <code>TOSSINBOX_STATE</code> at a fresh path.</div>
+      </details>
+      <details>
+        <summary><code>read --save</code> says the provider does not support attachment downloads</summary>
+        <div class="answer">The message has attachments, but that provider's upstream never
+        exposes them. Full download support: <code>mailtm</code>, <code>mailgw</code>,
+        <code>tempmailplus</code>; <code>tempmailio</code> only when upstream exposes a URL;
+        <code>tempmaillol</code>, <code>guerrillamail</code> and <code>maildrop</code> have none.
+        Re-read the message on a supported provider. Saving the bodies alone
+        (<code>body.html</code> / <code>body.txt</code>) works on every provider — the error
+        fires only when the message actually carries attachments.</div>
       </details>
       <details>
         <summary>Parallel test runs stomp on each other</summary>

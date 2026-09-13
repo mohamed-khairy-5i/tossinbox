@@ -54,6 +54,16 @@ async function fetchMessages(address) {
         throw err;
     }
 }
+/** The v3 API attachment objects vary between deployments; parse defensively. */
+function toAttachment(a) {
+    return {
+        id: a.id !== undefined ? String(a.id) : undefined,
+        filename: a.filename ?? a.name ?? "attachment.bin",
+        contentType: a.contentType ?? a.content_type ?? a.type,
+        size: a.size,
+        url: a.url,
+    };
+}
 export const tempmailIo = {
     name: "tempmailio",
     description: "temp-mail.io — disposable email with 10+ rotating domains, no API key required",
@@ -97,9 +107,27 @@ export const tempmailIo = {
             createdAt: email.created_at,
             text: email.body_text,
             html: email.body_html,
+            ...((email.attachments ?? []).length > 0
+                ? { attachments: (email.attachments ?? []).map(toAttachment) }
+                : {}),
         };
         message.code = extractCode(message.text) ?? extractCode(message.html);
         return message;
+    },
+    async downloadAttachment(_inbox, _messageId, attachment) {
+        if (!attachment.url) {
+            throw new ProviderError("tempmailio", `temp-mail.io did not expose a download URL for "${attachment.filename}" — open the message in the provider UI to retrieve it`);
+        }
+        const res = await fetch(attachment.url, {
+            headers: { Accept: "*/*", "User-Agent": `tossinbox/${VERSION}` },
+            signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        }).catch((err) => {
+            throw networkError(err, "tempmailio", HOST, REQUEST_TIMEOUT_MS);
+        });
+        if (!res.ok) {
+            throw new ProviderError("tempmailio", `HTTP ${res.status} while downloading "${attachment.filename}"`, res.status);
+        }
+        return Buffer.from(await res.arrayBuffer());
     },
     async destroyInbox(inbox) {
         if (!inbox.token)
