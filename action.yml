@@ -1,7 +1,7 @@
 name: "TossInbox"
 description: "Disposable email inboxes in CI — spawn an inbox, wait for the verification code, toss it"
 branding:
-  icon: "mail"
+  icon: "inbox"
   color: "green"
 
 inputs:
