@@ -4,6 +4,17 @@ Every notable TossInbox change, newest first. Generated from the repo's
 CHANGELOG.md (edit that file, not this page). Full diffs:
 https://github.com/mohamed-khairy-5i/tossinbox/releases
 
+## 0.1.4 - 2026-09-13
+
+### Added
+
+- **Four new providers, all zero-config.** TossInbox now speaks to seven
+- Same guarantees everywhere: hard 20-second timeouts, readable network-error
+
+### Fixed
+
+- **temp-mail.io eventual consistency.** A brand-new address can transiently
+
 ## 0.1.3 - 2026-09-13
 
 ### Added

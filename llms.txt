@@ -31,7 +31,7 @@ inboxes when done. It is designed agent-first: every CLI command supports
   (flags: `-f sender`, `-s subject`, `-t timeout`, `-i interval`)
 - `tossinbox inboxes` — list locally saved inboxes
 - `tossinbox toss` — delete an inbox server-side and wipe local state (`--all` for all)
-- `tossinbox providers` — list providers (default: `mailtm`, also `guerrillamail`)
+- `tossinbox providers` — list providers (default: `mailtm`; also `mailgw`, `guerrillamail`, `tempmaillol`, `tempmailio`, `tempmailplus`, `maildrop`)
 
 All commands accept `--json`. Exit codes: 0 success, 1 error, 2 timeout,
 3 not found, 4 usage error (bad flags / unknown provider).

@@ -5,6 +5,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com); versioning follo
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-09-13
+
+### Added
+- **Four new providers, all zero-config.** TossInbox now speaks to seven
+  upstreams across four independent stacks:
+  - **`tempmaillol`** (`spawn -p tempmaillol`) — tempmail.lol: random inbox on
+    rotating domains, token-based reads.
+  - **`tempmailio`** (`spawn -p tempmailio`) — temp-mail.io: server-generated
+    address, full-text bodies, and `toss` deletes the inbox server-side.
+  - **`tempmailplus`** (`spawn -p tempmailplus`) — tempmail.plus: pick-your-name
+    inbox on 9 public domains; messages clear server-side on `toss`.
+  - **`maildrop`** (`spawn -p maildrop`) — maildrop.cc: public inbox on one
+    stable domain, read over their GraphQL API.
+- Same guarantees everywhere: hard 20-second timeouts, readable network-error
+  translation, friendly 5xx messages, `--json` shapes and exit codes identical
+  across providers.
+
+### Fixed
+- **temp-mail.io eventual consistency.** A brand-new address can transiently
+  answer `400 Email not found` seconds after creation; TossInbox now retries
+  once before surfacing an error.
+
 ## [0.1.3] - 2026-09-13
 
 ### Added

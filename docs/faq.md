@@ -6,8 +6,9 @@ Markdown version of https://tossinbox.pages.dev/faq.html
 
 ## Is it really free?
 
-Yes. The tool is MIT-licensed and all three upstream providers (mail.tm,
-mail.gw, GuerrillaMail) are free with no API keys. There is no paid tier and nothing to
+Yes. The tool is MIT-licensed and all seven upstream providers (mail.tm,
+mail.gw, GuerrillaMail, tempmail.lol, temp-mail.io, tempmail.plus and
+maildrop.cc) are free with no API keys. There is no paid tier and nothing to
 sign up for.
 
 ## Can it send email?
@@ -53,9 +54,9 @@ local `~/.tossinbox/state.json`.
 ## A site blocked my disposable address
 
 Some sites keep blocklists of known disposable domains. That is their right,
-and no tool can promise around it. Try the other provider:
-`tossinbox spawn -p guerrillamail`. If both are blocked, the site wins that
-round.
+and no tool can promise around it. Try another provider:
+`tossinbox spawn -p tempmailio`. With seven providers, a blocked domain is
+rarely the end of the round.
 
 ## How do I uninstall it?
 

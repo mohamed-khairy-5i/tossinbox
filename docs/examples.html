@@ -122,7 +122,7 @@
         <span class="k">with:</span>
           <span class="k">node-version:</span> <span class="s">20</span>
       - <span class="k">name:</span> Install TossInbox
-        <span class="k">run:</span> npm install --global tossinbox@0.1.3
+        <span class="k">run:</span> npm install --global tossinbox@0.1.4
 
       - <span class="k">name:</span> Spawn inbox
         <span class="k">id:</span> inbox
@@ -218,19 +218,28 @@ run([<span class="s">"toss"</span>]);</pre>
   <section>
     <div class="wrap">
       <h2>5 · Second provider when the first is flaky</h2>
-      <p class="sec-lead">Three providers ship built in: <code>mailtm</code> (default),
-      <code>mailgw</code> (mail.tm-compatible API on independent infrastructure) and
-      <code>guerrillamail</code>. When one is having a bad day, switch with a flag — no config files.</p>
+      <p class="sec-lead">Seven providers ship built in: <code>mailtm</code> (default),
+      <code>mailgw</code> (mail.tm-compatible API on independent infrastructure),
+      <code>guerrillamail</code>, <code>tempmaillol</code>, <code>tempmailio</code>,
+      <code>tempmailplus</code> and <code>maildrop</code>. When one is having a bad day, switch with a flag — no config files.</p>
       <div class="codeblock">
         <div class="code-head"><span>shell: provider failover by hand</span><button class="copy-chip" data-copy="tossinbox providers
 tossinbox spawn -p mailgw
-tossinbox spawn -p guerrillamail" aria-label="Copy the provider failover example">copy</button></div>
+tossinbox spawn -p guerrillamail
+tossinbox spawn -p tempmaillol
+tossinbox spawn -p tempmailio
+tossinbox spawn -p tempmailplus
+tossinbox spawn -p maildrop" aria-label="Copy the provider failover example">copy</button></div>
         <pre class="block" tabindex="0"><span class="c"># what is available?</span>
 <span class="a">tossinbox</span> providers
 
 <span class="c"># default provider is down / slow? spawn on another one</span>
 <span class="a">tossinbox</span> spawn -p mailgw
-<span class="a">tossinbox</span> spawn -p guerrillamail</pre>
+<span class="a">tossinbox</span> spawn -p guerrillamail
+<span class="a">tossinbox</span> spawn -p tempmaillol
+<span class="a">tossinbox</span> spawn -p tempmailio
+<span class="a">tossinbox</span> spawn -p tempmailplus
+<span class="a">tossinbox</span> spawn -p maildrop</pre>
       </div>
       <p class="note">Automatic failover is on the <a href="roadmap">roadmap</a>.</p>
     </div>

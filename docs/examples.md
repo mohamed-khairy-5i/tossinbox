@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: 20
       - name: Install TossInbox
-        run: npm install --global tossinbox@0.1.3
+        run: npm install --global tossinbox@0.1.4
 
       - name: Spawn inbox
         id: inbox
@@ -143,9 +143,10 @@ the inbox.” The agent maps that to `create_inbox` → its own signup step →
 
 ## 5 · Second provider when the first is flaky
 
-Three providers ship built in: `mailtm` (default), `mailgw` (mail.tm-compatible
-API on independent infrastructure) and `guerrillamail`. When one is having a
-bad day, switch with a flag — no config files.
+Seven providers ship built in: `mailtm` (default), `mailgw` (mail.tm-compatible
+API on independent infrastructure), `guerrillamail`, `tempmaillol`,
+`tempmailio`, `tempmailplus` and `maildrop`. When one is having a bad day,
+switch with a flag — no config files.
 
 ```bash
 # what is available?
@@ -154,6 +155,10 @@ tossinbox providers
 # default provider is down / slow? spawn on another one
 tossinbox spawn -p mailgw
 tossinbox spawn -p guerrillamail
+tossinbox spawn -p tempmaillol
+tossinbox spawn -p tempmailio
+tossinbox spawn -p tempmailplus
+tossinbox spawn -p maildrop
 ```
 
 ## 6 · Wait flags: filter by sender, subject, timing

@@ -1,5 +1,9 @@
 import { mailTm, mailGw } from "./providers/mailtm.js";
 import { guerrillaMail } from "./providers/guerrillamail.js";
+import { tempmailLol } from "./providers/tempmaillol.js";
+import { tempmailIo } from "./providers/tempmailio.js";
+import { tempmailPlus } from "./providers/tempmailplus.js";
+import { maildrop } from "./providers/maildrop.js";
 export * from "./types.js";
 export { extractCode, htmlToText } from "./otp.js";
 export * from "./state.js";
@@ -8,6 +12,10 @@ export const providers = {
     [mailTm.name]: mailTm,
     [mailGw.name]: mailGw,
     [guerrillaMail.name]: guerrillaMail,
+    [tempmailLol.name]: tempmailLol,
+    [tempmailIo.name]: tempmailIo,
+    [tempmailPlus.name]: tempmailPlus,
+    [maildrop.name]: maildrop,
 };
 export const DEFAULT_PROVIDER = mailTm.name;
 export function getProvider(name) {

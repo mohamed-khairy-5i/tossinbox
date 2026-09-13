@@ -24,6 +24,9 @@ Markdown version of https://tossinbox.pages.dev/roadmap.html
 - **v0.1.3** — third provider `mailgw` (mail.tm-compatible, independent
   infrastructure), `tossinbox watch` live-polling mode with NDJSON output for
   agents, OTP keywords in twelve languages.
+- **v0.1.4** — four more zero-config providers: `tempmaillol`, `tempmailio`
+  (server-side toss), `tempmailplus` and `maildrop` — seven upstreams across
+  four independent stacks; temp-mail.io's transient post-create 400 now retries.
 
 ## Next up
 
@@ -31,7 +34,6 @@ Ordered by how likely they are to land first. Small, verifiable increments.
 
 | item | status | why |
 |------|--------|-----|
-| `tempmail.lol` provider | planned | free API, adds a fourth independent upstream |
 | Provider failover | planned | auto-retry spawn/wait on the next provider when one is down |
 | Attachments & HTML bodies | planned | `read` gains decoded HTML and downloadable attachments |
 

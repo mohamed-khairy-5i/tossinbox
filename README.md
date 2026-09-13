@@ -55,7 +55,7 @@ $ tossinbox toss
 | Documented exit codes  | 0–4                     | none                | no                          |
 | MCP server for agents  | yes, built in           | no                  | no                          |
 | Runs headless / in CI  | yes                     | no                  | partial                     |
-| Upstream alive         | mail.tm + mail.gw + GuerrillaMail | varies              | many wrap the dead 1secmail |
+| Upstream alive         | 7 providers, 4 stacks  | varies              | many wrap the dead 1secmail |
 | Ads, trackers, popups  | none                    | the business model  | none                        |
 
 Checked September 2026. If a cell is wrong, open an issue and win the argument.
@@ -218,6 +218,10 @@ machine-readable and kept up to date.
 | `mailtm` (default) | not required | mail.tm — reliable, fast |
 | `mailgw` | not required | mail.gw — mail.tm-compatible API on independent infrastructure |
 | `guerrillamail` | not required | GuerrillaMail — classic fallback |
+| `tempmaillol` | not required | tempmail.lol — random inbox on rotating domains |
+| `tempmailio` | not required | temp-mail.io — server-generated address, `toss` deletes server-side |
+| `tempmailplus` | not required | tempmail.plus — pick-your-name inbox on 9 public domains |
+| `maildrop` | not required | maildrop.cc — public inbox on one stable domain |
 
 Adding a provider means implementing a small interface (`createInbox`,
 `listMessages`, `readMessage`, optional `destroyInbox`) — PRs welcome.
@@ -225,7 +229,7 @@ Adding a provider means implementing a small interface (`createInbox`,
 ## FAQ
 
 **Is it really free?**
-Yes. MIT-licensed, and all three upstream providers are free with no API keys.
+Yes. MIT-licensed, and all seven upstream providers are free with no API keys.
 
 **Can it send email?**
 No — receive-only by design. TossInbox exists for privacy and testing and

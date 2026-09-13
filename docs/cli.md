@@ -39,6 +39,10 @@ A stable contract: agents script against these, not against stdout.
 | `mailtm`        | mail.tm, the default, no API key |
 | `mailgw`        | mail.gw — mail.tm-compatible API on independent infrastructure |
 | `guerrillamail` | GuerrillaMail, classic fallback |
+| `tempmaillol`   | tempmail.lol — random inbox on rotating domains |
+| `tempmailio`    | temp-mail.io — server-generated address, `toss` deletes server-side |
+| `tempmailplus`  | tempmail.plus — pick-your-name inbox on 9 public domains |
+| `maildrop`      | maildrop.cc — public inbox on one stable domain |
 
 New provider = one small file implementing `createInbox` / `listMessages` /
 `readMessage` / `destroyInbox` (optional).
